@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
+    "lucide-react": "^0.492.0",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.1.0",
