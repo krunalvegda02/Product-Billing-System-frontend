@@ -1,65 +1,44 @@
-import React, { useState } from "react";
-import loginSide from "../../assets/AuthImages/loginSide.jpg";
 import { Lock, User2Icon } from "lucide-react";
+import React from "react";
+import { IMAGES } from "../../../constants/Images";
 
-const Login = () => {
-  const [loginData, setLoginData] = useState({
-    username: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLoginData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const submitClick = (e) => {
-    e.preventDefault();
-    console.log("Login Data:", loginData);
-  };
-
+const LoginView = ({ loginData, handleChange, submitClick }) => {
   return (
     <div className="flex min-h-screen">
-      {/* Side Image for login */}
+      {/* Side Image */}
       <div className="hidden lg:flex h-screen w-2/3 shadow-black shadow-lg">
-        <img className="object-cover w-full h-full" src={loginSide} alt="login illustration" />
+        <img className="object-cover w-full h-full" src={IMAGES.LOGIN.SRC} alt={IMAGES.LOGIN.ALT} />
       </div>
 
-      {/* Input Fields Section */}
+      {/* Form Section */}
       <div className="flex flex-col flex-grow p-6 w-full">
-        
-        {/* Header Text at Top */}
         <div className="text-center lg:mt-6 lg:mb-8">
           <h2 className="text-3xl font-sans">Members Log in</h2>
         </div>
 
-        {/* Centered Login Form */}
         <div className="flex flex-col justify-center items-center gap-3 flex-grow">
-          {/* Username */}
+          {/* Username Input */}
           <div className="flex items-center border-b-2 border-slate-300 w-2/3">
             <User2Icon className="text-gray-600 h-10 mr-4 size-6" />
             <input
               type="text"
               name="username"
-              onChange={handleChange}
               placeholder="Username"
               value={loginData.username}
+              onChange={handleChange}
               className="w-full cursor-pointer focus:outline-none placeholder:text-xl py-2"
             />
           </div>
 
-          {/* Password */}
+          {/* Password Input */}
           <div className="flex items-center border-b-2 border-slate-300 w-2/3">
             <Lock className="text-gray-600 h-10 mr-4 size-6" />
             <input
               type="password"
               name="password"
-              onChange={handleChange}
               placeholder="Password"
               value={loginData.password}
+              onChange={handleChange}
               className="w-full cursor-pointer focus:outline-none placeholder:text-xl py-2"
             />
           </div>
@@ -69,7 +48,7 @@ const Login = () => {
             <p className="text-blue-300 cursor-pointer">Forgot Password?</p>
           </div>
 
-          {/* Login Button */}
+          {/* Submit Button */}
           <button
             onClick={submitClick}
             className="mt-5 bg-amber-300 text-xl px-9 py-[3px] text-white rounded-full"
@@ -77,7 +56,7 @@ const Login = () => {
             Log in
           </button>
 
-          {/* Register Link */}
+          {/* Register */}
           <div className="text-sm mt-4">
             <p>
               Don't have an Account?{" "}
@@ -92,4 +71,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginView;
