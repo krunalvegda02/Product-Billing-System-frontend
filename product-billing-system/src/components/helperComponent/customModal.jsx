@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "antd";
+// import { Modal } from "antd";
 
 const CustomModal = ({ isOpen, title, children, onOk, onCancel, footer, closable = true }) => {
   return (

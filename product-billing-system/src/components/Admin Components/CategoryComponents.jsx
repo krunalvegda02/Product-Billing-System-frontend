@@ -1,21 +1,26 @@
 import React from "react";
 import { THEME, THEME_CONFIG } from "../../../src/constants/Theme";
-import { DeleteIcon, Edit2, Lock, User2Icon } from "lucide-react";
 import { ICONS } from "../../constants/Icons";
+import useModal from "../../hooks/useModel";
+import customModal from "../helperComponent/customModal";
 
 const CategoryComponents = () => {
   const currentTheme = THEME.LIGHT;
-  const categories = ["Vegeterain", "non-vegiterian", "PAneer", "salad"];
+
   const EditIcon = ICONS.EDIT_ICON;
-  console.log(EditIcon);
-  
   const DeleteIcon = ICONS.DELETE_ICON;
+
+  const { isOpen, openModal, closeModal } = useModal();
+
+  const categories = ["Vegeterain", "non-vegiterian", "PAneer", "salad"];
 
   return (
     <div className="max-w-6xl  md:mx-5 mx-5">
       <div className="flex  justify-between my-4  ">
         <h1 className="font-semibold text-2xl">Add Category</h1>
-        <button className={`border-2 rounded-full px-6 py-2 ${THEME_CONFIG[currentTheme].BACKGROUND_COLOR} `}>Add Category +</button>
+        <button className={`border-2 rounded-full px-6 py-2 ${THEME_CONFIG[currentTheme].BACKGROUND_COLOR} `} onClick={openModal}>
+          Add Category +
+        </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
         {categories.map((category, index) => (
