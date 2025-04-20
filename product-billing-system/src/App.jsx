@@ -1,9 +1,10 @@
 import "./App.css";
-import Login from "./pages/auth/Login";
-import Home from "./pages/home";
+import CategoryComponents from "./components/Admin Components/CategoryComponents";
+import ProductManagement from "./components/Admin Components/ProductManagement";
+import Home from "./pages/admin/home";
 
 function App() {
-  return <Home />
+  return <ProductManagement />
 }
 
 export default App;

@@ -1,4 +1,4 @@
-import { THEME, THEME_CONFIG } from "../../constants/Theme";
+import { THEME, THEME_CONFIG } from "../../../constants/Theme";
 
 const currentTheme = THEME.LIGHT;
 
@@ -73,7 +73,7 @@ const HomeView = () => (
     </div>
 
     {/* Modal Example */}
-    {/* <div className={`${THEME_CONFIG[currentTheme].MODAL_OVERLAY} fixed inset-0 flex justify-center items-center`}>
+    <div className={`${THEME_CONFIG[currentTheme].MODAL_OVERLAY} fixed inset-0 flex justify-center items-center`}>
       <div className={`${THEME_CONFIG[currentTheme].MODAL_BG} w-1/2`}>
         <h2 className={`${THEME_CONFIG[currentTheme].TEXT_COLOR} text-2xl mb-4`}>
           Special Offer
@@ -85,7 +85,7 @@ const HomeView = () => (
           Claim Offer
         </button>
       </div>
-    </div> */}
+    </div>
   </div>
 );
 
