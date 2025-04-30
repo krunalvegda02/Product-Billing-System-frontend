@@ -1,6 +1,9 @@
 import React from "react";
+import { THEME, THEME_CONFIG } from "../../../src/constants/Theme";
 
-export default function CustomModal({ isOpen, onClose, title, children, onOk, onCancel, footer = true, closable = true }) {
+export default function CustomModal({ isOpen, onClose, title, children, onOk, onCancel, okDisabled, footer = true, closable = true }) {
+  const currentTheme = THEME.LIGHT;
+  // ${THEME_CONFIG[currentTheme].BACKGROUND_COLOR}
   if (!isOpen) return null;
 
   return (
@@ -27,7 +30,7 @@ export default function CustomModal({ isOpen, onClose, title, children, onOk, on
             <button onClick={onCancel || onClose} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
               Cancel
             </button>
-            <button onClick={onOk} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <button onClick={onOk} disabled={okDisabled} className={`px-4 py-2 rounded ${THEME_CONFIG[currentTheme].BUTTON}`}>
               OK
             </button>
           </div>
