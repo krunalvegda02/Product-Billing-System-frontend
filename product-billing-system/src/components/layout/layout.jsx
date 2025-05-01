@@ -54,7 +54,7 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
     </header>
 
     {/* Page Content */}
-    <main className={`flex-1 flex overflow-y-scroll hide-scrollbar  h-16 p-6 ${theme.TEXT_COLOR}`}>
+    <main className={`flex-1 flex overflow-y-scroll hide-scrollbar  py-3 px-2 ${theme.TEXT_COLOR}`}>
       {children}
     </main>
 
