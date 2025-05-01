@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import LoginView from "./LoginView";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "../../../constants/RouteNames";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -18,16 +21,10 @@ const Login = () => {
   const submitClick = (e) => {
     e.preventDefault();
     console.log("Login Data:", loginData);
-    // Add login logic here
+    navigate(PATHS.CATGORY_MANAGEMENT);
   };
 
-  return (
-    <LoginView
-      loginData={loginData}
-      handleChange={handleChange}
-      submitClick={submitClick}
-    />
-  );
+  return <LoginView loginData={loginData} handleChange={handleChange} submitClick={submitClick} />;
 };
 
 export default Login;

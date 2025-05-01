@@ -3,7 +3,6 @@ import { THEME, THEME_CONFIG } from "../../../src/constants/Theme";
 
 export default function CustomModal({ isOpen, onClose, title, children, onOk, onCancel, okDisabled, footer = true, closable = true }) {
   const currentTheme = THEME.LIGHT;
-  // ${THEME_CONFIG[currentTheme].BACKGROUND_COLOR}
   if (!isOpen) return null;
 
   return (

@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Layout from "../components/layout/layout";
 import pageData from "./pageData"; // Your page definitions
 import ProtectedRoutes from "./protectedRoutes"; // Protected route wrapper
+import Layout from "../components/layout/layout";
 
 // Themed fallback loader
 const Loader = () => (
@@ -16,13 +16,14 @@ const AppRouter = () => {
   return (
     <Router>
       <Suspense fallback={<Loader />}>
-        {/* <Routes>
+        <Routes>
           {pageData.map((page, index) => (
             <Route
               key={index}
               path={page.path}
               element={
-                <ProtectedRoutes page={page}>
+                // <ProtectedRoutes page={page}>
+                <>
                   {page.layout ? (
                     <Layout>
                       <page.component />
@@ -30,16 +31,17 @@ const AppRouter = () => {
                   ) : (
                     <page.component />
                   )}
-                </ProtectedRoutes>
+                </>
+                // </ProtectedRoutes>
               }
             />
           ))}
-        </Routes> */}
-        <Routes>
+        </Routes>
+        {/* <Routes>
           {pageData.map((page, index) => (
             <Route key={index} path={page.path} element={<page.component />} />
           ))}
-        </Routes>
+        </Routes> */}
       </Suspense>
     </Router>
   );

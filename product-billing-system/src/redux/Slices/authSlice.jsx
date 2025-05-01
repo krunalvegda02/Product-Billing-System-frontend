@@ -1,9 +1,8 @@
 // src/store/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { ROLE } from "../../constants/Role";
-import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
-import { _post } from "../../helper/ApiClient";
 import { API_ENDPOINT } from "../../constants/ApiEndPoints";
+import { _post } from "../../helper/ApiClient";
+import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
 
 export const loginUser = createAsyncThunkHandler("auth/login", _post, API_ENDPOINT.LOGIN);
 export const signUpUser = createAsyncThunkHandler("auth/signUp", _post, API_ENDPOINT.CREATE_USER);
