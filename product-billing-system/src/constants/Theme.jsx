@@ -1,7 +1,7 @@
 export const THEME = {
     DARK: "DARK",
     LIGHT: "LIGHT",
-    GENERAL: "GENERAL",  // General Theme for base settings
+    GENERAL: "GENERAL", 
   };
   
   export const THEME_CONFIG = {

@@ -1,13 +1,17 @@
 import React from "react";
-import loginSide from "../../assets/AuthImages/loginSide.jpg";
+import {IMAGES} from "../../../constants/Images";
 import { Lock, Mail, User2Icon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "../../../constants/RouteNames";
 
 const SignUpView = ({ formData, handleChange, submitClick }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex min-h-screen">
       {/* Left Image */}
       <div className="hidden lg:flex h-screen w-2/3 shadow-black shadow-lg">
-        <img className="object-cover w-full h-full" src={loginSide} alt="SignUp illustration" />
+        <img className="object-cover w-full h-full" src={IMAGES.LOGIN.SRC} alt="SignUp illustration" />
       </div>
 
       {/* Form Section */}
@@ -15,7 +19,7 @@ const SignUpView = ({ formData, handleChange, submitClick }) => {
         <div className="text-center lg:mt-24 lg:mb-8">
           <h1 className="text-4xl font-sans mb-2 font-semibold">Get Started</h1>
           <h3 className="text-gray-500 text-sm font-sans">
-            Already have account? <span className="text-blue-300 cursor-pointer"> Sign in</span>
+            Already have account? <span className="text-blue-300 cursor-pointer" onClick={()=>navigate(PATHS.LOGIN)}> Sign in</span>
           </h3>
         </div>
 
