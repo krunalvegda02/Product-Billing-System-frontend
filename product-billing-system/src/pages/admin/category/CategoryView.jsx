@@ -1,7 +1,7 @@
 import React from "react";
-import { THEME_CONFIG } from "../../../constants/Theme";
 import { ICONS } from "../../../constants/Icons";
-import AddCategoryModal from "../../../components/Admin Components/Modals/AddCategoryModal";
+import { THEME_CONFIG } from "../../../constants/Theme";
+import CategoryModal from "./categoryModal";
 
 const CategoryView = ({ currentTheme, categories, openModal, closeModal, isOpen }) => {
   const theme = THEME_CONFIG[currentTheme] || THEME_CONFIG.GENERAL;
@@ -41,7 +41,7 @@ const CategoryView = ({ currentTheme, categories, openModal, closeModal, isOpen 
           ))}
         </div>
       </div>
-      <AddCategoryModal isOpen={isOpen} onClose={closeModal} />
+      <CategoryModal isOpen={isOpen} onClose={closeModal} />
     </div>
   );
 };

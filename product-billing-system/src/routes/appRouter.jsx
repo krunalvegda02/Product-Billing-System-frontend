@@ -3,12 +3,13 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import pageData from "./pageData"; // Your page definitions
 import ProtectedRoutes from "./protectedRoutes"; // Protected route wrapper
 import Layout from "../components/layout/layout";
+import { THEME, THEME_CONFIG } from "../constants/Theme";
 
 // Themed fallback loader
 const Loader = () => (
-  <div className="flex items-center justify-center h-screen bg-[#FFDBC4E5]">
-    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-[#FF6200] border-solid shadow-lg"></div>
-    <span className="ml-4 text-[#FF6200] font-semibold text-lg">Loading...</span>
+  <div className={`flex items-center justify-center h-screen ${THEME_CONFIG[THEME.GENERAL].BACKGROUND_COLOR}`}>
+    <div className={`animate-spin rounded-full h-16 w-16 border-t-4  ${THEME_CONFIG[THEME.GENERAL].BORDER_COLOR} border-solid shadow-lg`}></div>
+    <span className={`ml-4 ${THEME_CONFIG[THEME.GENERAL].TEXT_COLOR} font-semibold text-lg`}>Loading...</span>
   </div>
 );
 

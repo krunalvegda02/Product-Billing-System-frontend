@@ -15,7 +15,7 @@ const HomeView = () => (
     </button>
 
     {/* Accent Element */}
-    <div className={`${THEME_CONFIG[currentTheme].ACCENT} p-4 rounded-lg mt-6`}>
+    <div className={`${THEME_CONFIG[currentTheme].BG_ACCENT} p-4 rounded-lg mt-6`}>
       <p className={`${THEME_CONFIG[currentTheme].TEXT_COLOR} text-lg`}>
         Enjoy the best flavors of India with a cozy atmosphere.
       </p>

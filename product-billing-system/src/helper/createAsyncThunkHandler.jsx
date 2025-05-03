@@ -1,11 +1,10 @@
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { _get, _post, _patch, _delete } from "./ApiClient";
 
 export const createAsyncThunkHandler = (typePrefix, apiMethod, urlResolver, isMultipart = false) =>
   createAsyncThunk(typePrefix, async (payload, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("CDToken");
+      const token = localStorage.getItem("ProductToken");
       const url = typeof urlResolver === "function" ? urlResolver(payload) : urlResolver;
       const response = await apiMethod(
         url,

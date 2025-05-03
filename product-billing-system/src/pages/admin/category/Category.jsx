@@ -4,7 +4,7 @@ import { THEME } from "../../../constants/Theme";
 import useModal from "../../../hooks/useModel";
 
 const Category = () => {
-  const currentTheme = THEME.LIGHT;
+  const currentTheme = THEME.GENERAL;
   const { openModal, closeModal, isOpen } = useModal();
   const categories = [
     {

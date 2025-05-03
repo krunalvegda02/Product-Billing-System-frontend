@@ -30,19 +30,19 @@ const DashboardView = ({ theme }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className={`p-6 ${theme.CARD_BG} border-2 rounded-lg ${theme.BORDER_COLOR} shadow-md`}>
           <h4 className={`text-xl font-semibold ${theme.TEXT_COLOR}`}>Manage Categories</h4>
-          <Link to="/admin/categories" className={`text-sm ${theme.LINK} hover:${theme.SECONDARY_ACCENT}`}>
+          <Link to="/admin/categories" className={`text-sm ${theme.LINK} hover:${theme.BG_SECONDARY_ACCENT}`}>
             View Categories
           </Link>
         </div>
         <div className={`p-6 ${theme.CARD_BG} border-2 rounded-lg ${theme.BORDER_COLOR} shadow-md`}>
           <h4 className={`text-xl font-semibold ${theme.TEXT_COLOR}`}>Manage Menu Items</h4>
-          <Link to="/admin/menu-items" className={`text-sm ${theme.LINK} hover:${theme.SECONDARY_ACCENT}`}>
+          <Link to="/admin/menu-items" className={`text-sm ${theme.LINK} hover:${theme.BG_SECONDARY_ACCENT}`}>
             View Menu Items
           </Link>
         </div>
         <div className={`p-6 ${theme.CARD_BG} border-2 rounded-lg ${theme.BORDER_COLOR} shadow-md`}>
           <h4 className={`text-xl font-semibold ${theme.TEXT_COLOR}`}>View Orders</h4>
-          <Link to="/admin/orders" className={`text-sm ${theme.LINK} hover:${theme.SECONDARY_ACCENT}`}>
+          <Link to="/admin/orders" className={`text-sm ${theme.LINK} hover:${theme.BG_SECONDARY_ACCENT}`}>
             View All Orders
           </Link>
         </div>
