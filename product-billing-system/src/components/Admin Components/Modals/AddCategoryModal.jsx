@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import useToast from "../../../hooks/useToast";
 import CustomModal from "../../helperComponent/customModal";
 
-const AddCategoryModal = ({ isOpen, onClose }) => {
+const AddCategoryModal = ({ isOpen, onCancel }) => {
   const [categoryName, setCategoryName] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -41,14 +41,14 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
     setCategoryName("");
     setThumbnail(null);
     setImagePreview(null);
-    onClose();
+    onCancel();
   };
 
   const handleCancel = () => {
     setCategoryName("");
     setThumbnail(null);
     setImagePreview(null);
-    onClose();
+    onCancel();
   };
 
   if (!isOpen) return null;
@@ -56,9 +56,9 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
   return (
     <CustomModal
       isOpen={isOpen}
-      onClose={onClose}
+      onCancel={onCancel}
       onCancel={handleCancel}
-      onOk={handleSave}
+      onSubmit={handleSave}
       title={<p className="font-sans font-semibold text-2xl">Add New Category</p>}
       okDisabled={!categoryName || !thumbnail}
     >

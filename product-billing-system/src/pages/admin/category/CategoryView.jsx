@@ -1,15 +1,13 @@
 import React from "react";
 import { ICONS } from "../../../constants/Icons";
 import { THEME_CONFIG } from "../../../constants/Theme";
-import CategoryModal from "./categoryModal";
 
-const CategoryView = ({ currentTheme, categories, openModal, closeModal, isOpen }) => {
+const CategoryView = ({ currentTheme, categories, openModal, handleDeleteClick, handleEditClick }) => {
   const theme = THEME_CONFIG[currentTheme] || THEME_CONFIG.GENERAL;
-
   return (
-    <div className={`w-full rounded-2xl mx-6 px-4 flex flex-col h-full  ${theme.BACKGROUND_COLOR}`}>
-      <div className="flex flex-wrap justify-between items-center my-6 shrink-0">
-        <h1 className={`${theme.TEXT_COLOR} ${theme.HEADER_TEXT_SIZE} font-bold`}>Menu Categories</h1>
+    <div className={`w-full rounded-2xl mx-4 flex flex-col h-full  ${theme.BACKGROUND_COLOR}`}>
+      <div className="flex flex-wrap justify-between items-center my-2 shrink-0">
+        <h1 className={`${theme.TEXT_COLOR} ${theme.HEADER_TEXT_SIZE} font-bold text-2xl`}>Menu Categories</h1>
         <button className={`rounded-full px-6 py-2 ${theme.BUTTON} transition duration-200`} onClick={openModal}>
           + Add Category
         </button>
@@ -22,17 +20,17 @@ const CategoryView = ({ currentTheme, categories, openModal, closeModal, isOpen 
               className={`${theme.CARD_BG} ${theme.SHADOW} ${theme.BORDER_COLOR} rounded-2xl overflow-hidden flex flex-col justify-between`}
             >
               <img
-                src={category.imageUrl || "https://via.placeholder.com/300x180?text=Category"}
-                alt={category.name}
-                className="w-full h-40 object-cover"
+                src={category.categoryThumbnail || "https://via.placeholder.com/300x180?text=Category"}
+                alt={category.categoryName}
+                className="w-full h-32 object-cover"
               />
-              <div className="p-4 flex flex-col justify-between grow">
-                <h3 className={`text-lg font-semibold mb-2 ${theme.TEXT_COLOR}`}>{category.name || "Unnamed"}</h3>
+              <div className="pt-1 flex flex-col justify-between grow">
+                <h3 className={`text-lg font-semibold mb-2 ${theme.TEXT_COLOR}`}>{category.categoryName || "Unnamed"}</h3>
                 <div className="flex justify-end gap-3 mt-auto">
-                  <button className={`${theme.SUCCESS} text-xl`} title="Edit">
+                  <button className={`${theme.SUCCESS} text-xl`} title="Edit" onClick={() => handleEditClick(category)}>
                     {ICONS.EDIT_ICON}
                   </button>
-                  <button className={`${theme.ERROR} text-xl`} title="Delete">
+                  <button className={`${theme.ERROR} text-xl`} title="Delete" onClick={() => handleDeleteClick(category)}>
                     {ICONS.DELETE_ICON}
                   </button>
                 </div>
@@ -41,7 +39,6 @@ const CategoryView = ({ currentTheme, categories, openModal, closeModal, isOpen 
           ))}
         </div>
       </div>
-      <CategoryModal isOpen={isOpen} onClose={closeModal} />
     </div>
   );
 };

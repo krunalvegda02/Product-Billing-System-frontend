@@ -1,16 +1,20 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import CategoryModalView from "./CategoryModalView";
+import store from "../../../../redux/Store/store";
+import { createCategory, deselectCategory, updateCategory } from "../../../../redux/Slices/categorySlice";
+import { removeNullValues } from "../../../../helper/helperFunction";
+import { useSelector } from "react-redux";
 
-const CategoryModal = ({ isOpen, onClose }) => {
+const CategoryModal = ({ isOpen, onCancel, fetchCategoryData }) => {
+  const [categoryId, setCategoryId] = useState(null);
   const [categoryName, setCategoryName] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-
+  const { selectedCategory } = useSelector((state) => state.category);
+  const { dispatch } = store;
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
-
     const file = e.target?.files[0];
 
     if (file && (file.type === "image/jpg" || file.type === "image/jpeg" || file.type === "image/png")) {
@@ -24,25 +28,53 @@ const CategoryModal = ({ isOpen, onClose }) => {
   };
 
   const handleSave = () => {
-    // TODO: Handle form submission, API FOR ADDING CATEGORY
-    // onSave({ name: categoryName, thumbnail });
-    setCategoryName("");
-    setThumbnail(null);
-    setImagePreview(null);
-    onClose();
+    handleCreateOrUpdateCategory();
+    handleCancel();
+  };
+
+  const handleCreateOrUpdateCategory = async () => {
+    let payload, action;
+    if (categoryId) {
+      payload = {
+        id: categoryId,
+        newCategoryName: categoryName,
+        newCategoryThumbnail: thumbnail,
+      };
+      action = updateCategory;
+    } else {
+      payload = {
+        categoryName: categoryName,
+        categoryThumbnail: thumbnail,
+      };
+      action = createCategory;
+    }
+    await dispatch(action(removeNullValues(payload)));
+    fetchCategoryData();
+    dispatch(deselectCategory());
   };
 
   const handleCancel = () => {
     setCategoryName("");
     setThumbnail(null);
     setImagePreview(null);
-    onClose();
+    dispatch(deselectCategory());
+    onCancel();
   };
 
   useEffect(() => {
-    console.log(imagePreview);
-  }, [imagePreview]);
+    setCategoryId(selectedCategory._id);
+    setCategoryName(selectedCategory.categoryName);
+    setImagePreview(selectedCategory.categoryThumbnail);
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(deselectCategory());
+    };
+  }, []);
+
   if (!isOpen) return null;
+
   return (
     <CategoryModalView
       isOpen={isOpen}
@@ -51,7 +83,7 @@ const CategoryModal = ({ isOpen, onClose }) => {
       handleFileChange={handleFileChange}
       handleSave={handleSave}
       imagePreview={imagePreview}
-      onClose={onClose}
+      categoryName={categoryName}
       setCategoryName={setCategoryName}
     />
   );

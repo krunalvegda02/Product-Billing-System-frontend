@@ -3,9 +3,9 @@ export const API_ENDPOINT = {
 
   CREATE_USER: "user/create_user",
 
-  CREATE_CATEGORY: "category/create_category",
-  GET_ALL_CATEGORY: "category/get_all_category",
-  GET_CATEGORY: "category/get_category",
-  UPDATE_CATEGORY: "category/update_category",
-  DELETE_CATEGORY: "category/delete_category",
+  CREATE_CATEGORY: "category/create",
+  GET_ALL_CATEGORY: "category/",
+  GET_CATEGORY: "category/",
+  UPDATE_CATEGORY: "category/update",
+  DELETE_CATEGORY: "category/delete",
 };

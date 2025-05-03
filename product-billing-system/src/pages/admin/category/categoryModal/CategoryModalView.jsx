@@ -1,13 +1,12 @@
 import React from "react";
 import CustomModal from "../../../../components/helperComponent/customModal";
 
-const CategoryModalView = ({ isOpen, onClose, handleCancel, handleSave, setCategoryName, imagePreview, fileInputRef, handleFileChange }) => {
+const CategoryModalView = ({ isOpen, handleCancel, handleSave, categoryName, setCategoryName, imagePreview, fileInputRef, handleFileChange }) => {
   return (
     <CustomModal
       isOpen={isOpen}
-      onClose={onClose}
       onCancel={handleCancel}
-      onOk={handleSave}
+      onSubmit={handleSave}
       title={<p className="font-sans font-semibold text-2xl">Add New Category</p>}
       okDisabled={false}
     >
@@ -21,6 +20,7 @@ const CategoryModalView = ({ isOpen, onClose, handleCancel, handleSave, setCateg
             id="categoryName"
             type="text"
             placeholder="Enter category name"
+            value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
             className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
           />

@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import useToast from "../../../hooks/useToast"; // Assuming this is your hook
 import CustomModal from "../../helperComponent/customModal";
 
-const AddProductModal = ({ isOpen, onClose }) => {
+const AddProductModal = ({ isOpen, onCancel }) => {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
@@ -51,7 +51,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
     setProductPrice("");
     setImagePreview(null);
     setThumbnail(null);
-    onClose();
+    onCancel();
   };
 
   const handleCancel = () => {
@@ -59,7 +59,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
     setProductPrice("");
     setImagePreview(null);
     setThumbnail(null);
-    onClose();
+    onCancel();
   };
 
   if (!isOpen) return null;
@@ -67,9 +67,9 @@ const AddProductModal = ({ isOpen, onClose }) => {
   return (
     <CustomModal
       isOpen={isOpen}
-      onClose={onClose}
+      onCancel={onCancel}
       onCancel={handleCancel}
-      onOk={onOkClick}
+      onSubmit={onOkClick}
       okDisabled={!productName || !productPrice || !thumbnail}
       title={<p className="font-sans font-semibold text-2xl">Add New Product</p>}
     >

@@ -4,7 +4,7 @@ import { _delete, _get, _patch, _post } from "../../helper/ApiClient";
 import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
 import { buildUrlWithParams } from "../../helper/helperFunction";
 
-export const createCategory = createAsyncThunkHandler(API_ENDPOINT.CREATE_CATEGORY, _post, API_ENDPOINT.CREATE_CATEGORY);
+export const createCategory = createAsyncThunkHandler(API_ENDPOINT.CREATE_CATEGORY, _post, API_ENDPOINT.CREATE_CATEGORY, true);
 export const getAllCategories = createAsyncThunkHandler(API_ENDPOINT.GET_ALL_CATEGORY, _get, (payload) => {
   const url = buildUrlWithParams(API_ENDPOINT.GET_ALL_CATEGORY, payload);
   return url;
@@ -13,7 +13,8 @@ export const getCatogory = createAsyncThunkHandler(API_ENDPOINT.GET_CATEGORY, _g
 export const updateCategory = createAsyncThunkHandler(
   API_ENDPOINT.UPDATE_CATEGORY,
   _patch,
-  (payload) => API_ENDPOINT.UPDATE_CATEGORY + "/" + payload.id
+  (payload) => API_ENDPOINT.UPDATE_CATEGORY + "/" + payload.id,
+  true
 );
 export const deleteCategory = createAsyncThunkHandler(API_ENDPOINT.DELETE_CATEGORY, _delete, (payload) => {
   return API_ENDPOINT.DELETE_CATEGORY + "/" + payload.id;
@@ -43,7 +44,7 @@ const categorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCategories.fulfilled, (state, action) => {
-      state.categories = action.payload.data.data;
+      state.categories = action.payload.data.categories;
       state.totalCategories = action.payload.data.total;
     });
   },

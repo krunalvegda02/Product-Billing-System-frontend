@@ -46,7 +46,7 @@ const ProductManagement = () => {
       </div>
 
       {/* Modal */}
-      <AddProductModal isOpen={isOpen} onClose={closeModal} />
+      <AddProductModal isOpen={isOpen} onCancel={closeModal} />
     </div>
   );
 };

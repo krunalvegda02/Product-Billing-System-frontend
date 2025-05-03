@@ -1,39 +1,56 @@
-import React from "react";
-import CategoryView from "./CategoryView";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { THEME } from "../../../constants/Theme";
+import { useToast } from "../../../context/ToastContext";
 import useModal from "../../../hooks/useModel";
+import { usePagination } from "../../../hooks/usePagination";
+import { getAllCategories, setCategory } from "../../../redux/Slices/categorySlice";
+import CategoryView from "./CategoryView";
+import store from "../../../redux/Store/store";
+import CategoryModal from "./categoryModal";
+import DeleteCategory from "./DeleteCategory";
 
 const Category = () => {
   const currentTheme = THEME.GENERAL;
   const { openModal, closeModal, isOpen } = useModal();
-  const categories = [
-    {
-      name: "Hot Beverages",
-      imageUrl: "https://via.placeholder.com/300x200?text=Hot+Beverages",
-    },
-    {
-      name: "Cold Drinks",
-      imageUrl: "https://via.placeholder.com/300x200?text=Cold+Drinks",
-    },
-    {
-      name: "Snacks",
-      imageUrl: "https://via.placeholder.com/300x200?text=Snacks",
-    },
-    {
-      name: "Desserts",
-      imageUrl: "https://via.placeholder.com/300x200?text=Desserts",
-    },
-    {
-      name: "Combo Meals",
-      imageUrl: "https://via.placeholder.com/300x200?text=Combo+Meals",
-    },
-    {
-      name: "Sandwiches",
-      imageUrl: "https://via.placeholder.com/300x200?text=Sandwiches",
-    },
-  ];
+  const { openModal: openDeleteModal, closeModal: closeDeleteModal, isOpen: isDeleteOpen } = useModal();
+  const { showToast } = useToast();
+  const { categories } = useSelector((state) => state.category);
+  const { dispatch } = store;
 
-  return <CategoryView categories={categories} openModal={openModal} closeModal={closeModal} isOpen={isOpen} currentTheme={currentTheme} />;
+  const { fetchData } = usePagination(
+    getAllCategories,
+    {},
+    () => {},
+    (err) => showToast(err, "error")
+  );
+
+  const handleEditClick = (category) => {
+    dispatch(setCategory(category));
+    openModal();
+  };
+  const handleDeleteClick = (category) => {
+    dispatch(setCategory(category));
+    openDeleteModal();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      <CategoryView
+        categories={categories}
+        openModal={openModal}
+        currentTheme={currentTheme}
+        handleEditClick={handleEditClick}
+        handleDeleteClick={handleDeleteClick}
+      />
+      <CategoryModal isOpen={isOpen} onCancel={closeModal} fetchCategoryData={fetchData} />
+      <DeleteCategory isOpen={isDeleteOpen} onCancel={closeDeleteModal} fetchCategoryData={fetchData} />
+    </>
+  );
 };
 
 export default Category;

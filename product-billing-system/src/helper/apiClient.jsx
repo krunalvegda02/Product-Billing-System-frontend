@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL + "v1/";
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -9,10 +9,12 @@ const apiClient = axios.create({
   },
 });
 
+// eslint-disable-next-line no-unused-vars
 const _get = (url, data = {}, config = {}) => {
   return apiClient.get(url, config);
 };
 
+// eslint-disable-next-line no-unused-vars
 const _delete = (url, data = {}, config = {}) => {
   return apiClient.delete(url, config);
 };
