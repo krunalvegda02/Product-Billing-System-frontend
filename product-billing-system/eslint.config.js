@@ -1,12 +1,13 @@
-import importPlugin from "eslint-plugin-import";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import unusedImports from "eslint-plugin-unused-imports";
+import eslintPluginImport from "eslint-plugin-import";
+import eslintPluginReact from "eslint-plugin-react";
+import eslintPluginReactHooks from "eslint-plugin-react-hooks";
+import eslintPluginUnusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 
 export default [
-  { ignores: ["dist", "node_modules"] },
+  {
+    ignores: ["dist", "node_modules"],
+  },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
@@ -21,24 +22,17 @@ export default [
       react: { version: "detect" },
     },
     plugins: {
-      react,
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
-      "unused-imports": unusedImports,
-      import: importPlugin,
+      react: eslintPluginReact,
+      "react-hooks": eslintPluginReactHooks,
+      import: eslintPluginImport,
+      "unused-imports": eslintPluginUnusedImports,
     },
     rules: {
-      // React specific
-      "react/jsx-no-target-blank": "off",
+      // React
       "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
 
-      // General JS safety
-      "no-undef": "warn",
-      "no-console": "warn",
-      "no-debugger": "warn",
-      "no-unused-vars": "off", // Turned off in favor of unused-imports
-
-      // Clean up unused code
+      // Unused cleanup
       "unused-imports/no-unused-imports": "warn",
       "unused-imports/no-unused-vars": [
         "warn",
@@ -49,6 +43,50 @@ export default [
           argsIgnorePattern: "^_",
         },
       ],
+
+      // Safety & clean code
+      "no-console": "warn",
+      "no-debugger": "warn",
+      "no-undef": "warn",
+      "no-unused-vars": "off", // Handled by unused-imports
+      "no-redeclare": "warn",
+      "no-dupe-keys": "warn",
+      "no-duplicate-case": "warn",
+      "no-empty": "warn",
+      // "no-fallthrough": "warn",
+      // "no-unreachable": "warn",
+      // "no-unexpected-multiline": "warn",
+      // "no-self-compare": "warn",
+      // "no-unsafe-negation": "warn",
+      // "no-useless-escape": "warn",
+      // "no-irregular-whitespace": "warn",
+      // "no-cond-assign": ["warn", "always"],
+
+      // // Best practices
+      // eqeqeq: ["warn", "always"],
+      // "prefer-const": "warn",
+      // "no-var": "warn",
+      // "object-shorthand": ["warn", "always"],
+      // "no-lonely-if": "warn",
+      // "no-else-return": "warn",
+      // "consistent-return": "warn",
+      // "arrow-body-style": ["warn", "as-needed"],
+      // "prefer-arrow-callback": "warn",
+
+      // // Imports
+      // "import/no-unresolved": "warn",
+      // "import/no-duplicates": "warn",
+      // "import/order": [
+      //   "warn",
+      //   {
+      //     groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
+      //     "newlines-between": "always",
+      //   },
+      // ],
+
+      // // Hooks
+      // "react-hooks/rules-of-hooks": "error",
+      // "react-hooks/exhaustive-deps": "warn",
     },
   },
 ];

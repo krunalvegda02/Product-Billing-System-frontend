@@ -8,7 +8,7 @@ export const PATHS = {
   HOME: "/home",
   ADMIN_DASHBOARD: "/admin/dashboard",
   CATGORY_MANAGEMENT: "/admin/categories",
-  PRODUCT_MANAGEMENT: "/productmanagement",
+  PRODUCT_MANAGEMENT: "/admin/product",
 
   PAGE_NOT_FOUND: "/PageNotFound",
 };

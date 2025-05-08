@@ -6,6 +6,7 @@ const ForgotPassword = React.lazy(() => import("../pages/auth/ForgotPassword"));
 const Home = React.lazy(() => import("../pages/admin/home"));
 const AdminDashboard = React.lazy(() => import("../pages/admin/dashboard"));
 const CategoryManagement = React.lazy(() => import("../pages/admin/category"));
+const ProductManagement = React.lazy(() => import("../pages/admin/product"));
 
 import { ROLE } from "../constants/Role";
 import { PATHS } from "../constants/RouteNames";
@@ -19,6 +20,7 @@ const PageData = [
   { path: PATHS.HOME, component: Home, isPublic: true, layout: true },
   { path: PATHS.ADMIN_DASHBOARD, component: AdminDashboard, isPublic: true, layout: true },
   { path: PATHS.CATGORY_MANAGEMENT, component: CategoryManagement, isPublic: true, layout: true },
+  { path: PATHS.PRODUCT_MANAGEMENT, component: ProductManagement, isPublic: true, layout: true },
   //   { path: PATHS.PAGE_NOT_FOUND, component: PageNotFound, isPublic: true, layout: false },
 ];
 

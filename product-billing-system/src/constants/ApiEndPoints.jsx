@@ -8,4 +8,10 @@ export const API_ENDPOINT = {
   GET_CATEGORY: "category/",
   UPDATE_CATEGORY: "category/update",
   DELETE_CATEGORY: "category/delete",
+
+  CREATE_PRODUCT: "products/create",
+  GET_ALL_PRODUCT: "products/",
+  GET_PRODUCT: "products/",
+  UPDATE_PRODUCT: "products/update",
+  DELETE_PRODUCT: "products/delete",
 };

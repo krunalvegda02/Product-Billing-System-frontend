@@ -3,6 +3,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Use localStorage
 import authReducer from "../Slices/authSlice";
 import categoryReducer from "../Slices/categorySlice";
+import productReducer from "../Slices/productSlice";
 
 const persistConfig = {
   key: "root",
@@ -15,6 +16,7 @@ const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
     category: categoryReducer,
+    product: productReducer,
   },
 });
 

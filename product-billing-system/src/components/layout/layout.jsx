@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { PATHS } from "../../constants/RouteNames";
 import { THEME_CONFIG } from "../../constants/Theme";
 
 const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
@@ -7,9 +8,9 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
 
   const menus = {
     admin: [
-      { path: "/admin/dashboard", label: "📊 Dashboard" },
-      { path: "/admin/categories", label: "🗂 Categories" },
-      { path: "/admin/menu-items", label: "🍽 Menu Items" },
+      { path: PATHS.ADMIN_DASHBOARD, label: "📊 Dashboard" },
+      { path: PATHS.CATGORY_MANAGEMENT, label: "🗂 Categories" },
+      { path: PATHS.PRODUCT_MANAGEMENT, label: "🍽 Menu Items" },
     ],
     manager: [
       { path: "/manager/orders", label: "📦 Orders" },
