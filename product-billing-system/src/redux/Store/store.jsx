@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
+import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Use localStorage
 import authReducer from "../Slices/authSlice";
 import categoryReducer from "../Slices/categorySlice";
@@ -18,6 +18,13 @@ const store = configureStore({
     category: categoryReducer,
     product: productReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore non-serializable redux-persist actions
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export const persistor = persistStore(store);

@@ -7,6 +7,7 @@ import { PATHS } from "../../../constants/RouteNames";
 const LoginView = ({ loginData, handleChange, submitClick }) => {
   const navigate = useNavigate();
 
+
   return (
     <div className="flex min-h-screen">
       {/* Side Image */}
@@ -49,14 +50,14 @@ const LoginView = ({ loginData, handleChange, submitClick }) => {
 
           {/* Forgot Password */}
           <div className="text-sm flex justify-end w-2/3">
-            <p className="text-blue-300 cursor-pointer" onClick={()=> navigate(PATHS.FORGOT_PASSWORD)} > Forgot Password?</p>
+            <p className="text-blue-300 cursor-pointer" onClick={() => navigate(PATHS.FORGOT_PASSWORD)}>
+              {" "}
+              Forgot Password?
+            </p>
           </div>
 
           {/* Submit Button */}
-          <button
-            onClick={submitClick}
-            className="mt-5 bg-amber-300 text-xl px-9 py-[3px] text-white rounded-full"
-          >
+          <button onClick={submitClick} className="mt-5 bg-amber-300 text-xl px-9 py-[3px] text-white rounded-full">
             Log in
           </button>
 
@@ -64,7 +65,7 @@ const LoginView = ({ loginData, handleChange, submitClick }) => {
           <div className="text-sm mt-4">
             <p>
               Don't have an Account?{" "}
-              <span className="text-amber-300 underline cursor-pointer" onClick={()=>navigate(PATHS.SIGN_UP)}>
+              <span className="text-amber-300 underline cursor-pointer" onClick={() => navigate(PATHS.SIGN_UP)}>
                 REGISTER HERE
               </span>
             </p>
