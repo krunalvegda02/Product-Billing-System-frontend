@@ -11,6 +11,8 @@ import ProductView from "./ProductView";
 import ProductModal from "./productModal";
 
 const Product = () => {
+  console.log("getAllProducts",getAllProducts);
+  
   const currentTheme = THEME.GENERAL;
   const { openModal, closeModal, isOpen } = useModal();
   const { openModal: openDeleteModal, closeModal: closeDeleteModal, isOpen: isDeleteOpen } = useModal();

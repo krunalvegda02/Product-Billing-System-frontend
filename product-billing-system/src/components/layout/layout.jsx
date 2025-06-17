@@ -1,15 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PATHS } from "../../constants/RouteNames";
 import { THEME_CONFIG } from "../../constants/Theme";
+import { useDispatch } from "react-redux";
+import {  logout } from "../../redux/Slices/authSlice";
 
 const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logOutHandler = async () => {
+    const res = await dispatch(logout());
+
+    if (logout.fulfilled.match(response)) {
+      navigate(PATHS.LOGIN);
+    } else {
+      showToast(res.payload);
+    }
+  };
+
   const theme = THEME_CONFIG[currentTheme];
 
   const menus = {
     admin: [
       { path: PATHS.ADMIN_DASHBOARD, label: "📊 Dashboard" },
-      { path: PATHS.CATGORY_MANAGEMENT, label: "🗂 Categories" },
+      { path: PATHS.CATEGORY_MANAGEMENT, label: "🗂 Categories" },
       { path: PATHS.PRODUCT_MANAGEMENT, label: "🍽 Menu Items" },
     ],
     manager: [
@@ -51,7 +66,10 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
         {/* Header */}
         <header className={`p-5 flex justify-between items-center ${theme.BG_HEADER} text-black  shrink-0`}>
           <h1 className="text-2xl font-semibold">{titleMap[role]}</h1>
-          <button className={`text-sm px-3 py-1 rounded ${theme.BUTTON}`}>Logout</button>
+
+          <button className={`text-sm px-3 py-1 rounded ${theme.BUTTON}`} onClick={logOutHandler}>
+            Logout
+          </button>
         </header>
 
         {/* Page Content */}
