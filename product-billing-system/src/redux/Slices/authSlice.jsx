@@ -1,7 +1,7 @@
 // src/store/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import { API_ENDPOINT } from "../../constants/ApiEndPoints";
-import { _post } from "../../helper/ApiClient";
+import { _get, _post } from "../../helper/ApiClient";
 import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
 
 export const loginUser = createAsyncThunkHandler("auth/login", _post, API_ENDPOINT.LOGIN);
@@ -28,7 +28,7 @@ const authSlice = createSlice({
       state.userData = null;
       state.token = null;
     },
-    signUpUser: (state,action) => {
+    signUpUser: (state, action) => {
       state.isAuthenticated = true;
       state.userData = action.payload.userData;
       state.token = action.payload.token;
@@ -36,7 +36,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    // For Login
+      // For Login
       .addCase(loginUser.pending, (state) => {
         state.isAuthenticated = false;
       })

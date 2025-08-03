@@ -35,6 +35,9 @@ const categorySlice = createSlice({
       state.totalCategories = 0;
       state.selectedCategory = {};
     },
+    resetCategories: (state) => {
+      state.categories = [];
+    },
     setCategory: (state, action) => {
       state.selectedCategory = action.payload;
     },
@@ -44,7 +47,7 @@ const categorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCategories.fulfilled, (state, action) => {
-      state.categories = action.payload.data.categories;
+      state.categories = [...state.categories,...action.payload.data.categories];
       state.totalCategories = action.payload.data.total;
     });
   },

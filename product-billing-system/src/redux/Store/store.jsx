@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage"; // Use localStorage
 import authReducer from "../Slices/authSlice";
 import categoryReducer from "../Slices/categorySlice";
 import productReducer from "../Slices/productSlice";
+import orderManagementReducer from "../Slices/orderManagementSlice"
 
 const persistConfig = {
   key: "root",
@@ -17,6 +18,7 @@ const store = configureStore({
     auth: persistedAuthReducer,
     category: categoryReducer,
     product: productReducer,
+    order: orderManagementReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,12 +1,13 @@
 import React from "react";
 import { IMAGES } from "../../../constants/Images";
-import {ICONS} from "../../../constants/Icons"
+import { ICONS } from "../../../constants/Icons";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../constants/RouteNames";
+import { useSelector } from "react-redux";
 
 const SignUpView = ({ formData, handleChange, submitClick }) => {
   const navigate = useNavigate();
-
+  
   return (
     <div className="flex min-h-screen">
       {/* Left Image */}

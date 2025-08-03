@@ -32,7 +32,7 @@ const Login = () => {
     console.log("Login Data:", loginData, response);
 
     if (loginUser.fulfilled.match(response)) {
-      navigate(PATHS.CATGORY_MANAGEMENT);
+      navigate(PATHS.CATEGORY_MANAGEMENT);
     } else {
       showToast(response.payload);
     }

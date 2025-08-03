@@ -14,8 +14,12 @@ export const API_ENDPOINT = {
   DELETE_CATEGORY: "category/delete",
 
   CREATE_PRODUCT: "products/create",
-  GET_ALL_PRODUCT: "products/",
+  GET_ALL_PRODUCT: "products/all",
   GET_PRODUCT: "products/",
   UPDATE_PRODUCT: "products/update",
   DELETE_PRODUCT: "products/delete",
+  GET_PRODUCT_BY_CATEGORY: "products/category",
+
+  GET_LIKED_PRODUCTS: "products/liked-products",
+  TOGGLE_LIKE_PRODUCT: "products/toggle-like",
 };
