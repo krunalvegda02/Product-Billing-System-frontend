@@ -1,31 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import OrderView from "./OrderView";
 
-
 const Order = () => {
+  const { order } = useSelector((state) => state.order);
 
-  
-  return (
-    <OrderView
-      orderItems={[
-        {
-          id: 1,
-          name: "Veg Burger",
-          quantity: 2,
-          price: 120,
-          thumbnail: "https://via.placeholder.com/60",
-        },
-        {
-          id: 2,
-          name: "Fries",
-          quantity: 1,
-          price: 60,
-          thumbnail: "https://via.placeholder.com/60",
-        },
-      ]}
-      onPlaceOrder={() => console.log("Order placed!")}
-    />
-  );
+  return <OrderView orderItems={order} onPlaceOrder={() => console.log("Order placed!")} />;
 };
 
 export default Order;
