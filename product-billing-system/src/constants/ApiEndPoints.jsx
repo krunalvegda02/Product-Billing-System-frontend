@@ -29,5 +29,9 @@ export const API_ENDPOINT = {
     DELETE_ORDER: "order/delete/:id",
     UPDATE_ORDER: "order/update/:id",
     GET_ORDERBY_ID: "order/:id",
+
+    CANCEL_ORDER: "order/cancel/:id",
+    UPDATE_ORDER_STATUS_BY_STAFF: "order/update-status/:id",
+    UPDATE_ORDER_STATUS_BY_CUSTOMER: "order/update-status-customer/:id",
   },
 };

@@ -4,38 +4,56 @@ import { _get, _post, _delete, _patch } from "../../helper/ApiClient";
 import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
 
 // Thunks
-export const fetchAllOrders = createAsyncThunkHandler(
-  "order/fetchAllOrders",
-  _get,
-  API_ENDPOINT.ORDER.GET_ALL_ORDER
+export const fetchAllOrders = createAsyncThunkHandler("order/fetchAllOrders", _get, API_ENDPOINT.ORDER.GET_ALL_ORDER);
+
+
+
+export const createOrder = createAsyncThunkHandler("order/createOrder", _post, API_ENDPOINT.ORDER.CREATE_ORDER);
+
+
+
+
+export const deleteOrder = createAsyncThunkHandler("order/deleteOrder", _delete, (payload) =>
+  API_ENDPOINT.ORDER.DELETE_ORDER.replace(":id", payload)
 );
 
-export const createOrder = createAsyncThunkHandler(
-  "order/createOrder",
-  _post,
-  API_ENDPOINT.ORDER.CREATE_ORDER
-);
 
-export const deleteOrder = createAsyncThunkHandler(
-  "order/deleteOrder",
-  _delete,
-  (payload) => API_ENDPOINT.ORDER.DELETE_ORDER.replace(":id", payload)
-);
 
-export const updateOrder = createAsyncThunkHandler(
-  "order/updateOrder",
-  _patch,
-  (payload) => ({
-    url: API_ENDPOINT.ORDER.UPDATE_ORDER.replace(":id", payload.id),
-    data: payload.data,
-  })
-);
+export const updateOrder = createAsyncThunkHandler("order/updateOrder", _patch, (payload) => ({
+  url: API_ENDPOINT.ORDER.UPDATE_ORDER.replace(":id", payload.id),
+  data: payload.data,
+}));
 
-export const getOrderById = createAsyncThunkHandler(
-  "order/getOrderById",
-  _get,
-  (id) => API_ENDPOINT.ORDER.GET_ORDERBY_ID.replace(":id", id)
-);
+
+
+export const getOrderById = createAsyncThunkHandler("order/getOrderById", _get, (id) => API_ENDPOINT.ORDER.GET_ORDERBY_ID.replace(":id", id));
+
+
+
+
+// ✅ New Thunk for Staff status update
+export const updateOrderStatusByStaff = createAsyncThunkHandler("order/updateOrderStatusByStaff", _patch, (payload) => ({
+  url: API_ENDPOINT.ORDER.UPDATE_ORDER_STATUS_BY_STAFF.replace(":id", payload.id),
+  data: payload.data,
+}));
+
+
+
+
+// ✅ New Thunk for Customer status update
+export const updateOrderStatusByCustomer = createAsyncThunkHandler("order/updateOrderStatusByCustomer", _patch, (payload) => ({
+  url: API_ENDPOINT.ORDER.UPDATE_ORDER_STATUS_BY_CUSTOMER.replace(":id", payload.id),
+  data: payload.data,
+}));
+
+
+
+
+// ✅ Cancel Order
+export const cancelOrder = createAsyncThunkHandler("order/cancelOrder", _patch, (id) => API_ENDPOINT.ORDER.CANCEL_ORDER.replace(":id", id));
+
+
+
 
 // Initial State
 const initialState = {
@@ -44,6 +62,9 @@ const initialState = {
   loading: false,
   error: null,
 };
+
+
+
 
 // Slice
 const orderSlice = createSlice({
@@ -56,9 +77,7 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      
-    
-    // Fetch All Orders
+      // Fetch All Orders
       .addCase(fetchAllOrders.pending, (state) => {
         state.loading = true;
       })
@@ -69,6 +88,7 @@ const orderSlice = createSlice({
       .addCase(fetchAllOrders.rejected, (state) => {
         state.loading = false;
       })
+
 
 
 
@@ -108,9 +128,7 @@ const orderSlice = createSlice({
       .addCase(updateOrder.fulfilled, (state, action) => {
         state.loading = false;
         const updatedOrder = action.payload.data.order;
-        state.orders = state.orders.map((o) =>
-          o._id === updatedOrder._id ? updatedOrder : o
-        );
+        state.orders = state.orders.map((o) => (o._id === updatedOrder._id ? updatedOrder : o));
       })
       .addCase(updateOrder.rejected, (state) => {
         state.loading = false;
@@ -128,6 +146,51 @@ const orderSlice = createSlice({
       })
       .addCase(getOrderById.rejected, (state) => {
         state.loading = false;
+      })
+
+
+
+      // ✅ Update Order Status By Staff
+      .addCase(updateOrderStatusByStaff.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateOrderStatusByStaff.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedOrder = action.payload.data.order;
+        state.orders = state.orders.map((o) => (o._id === updatedOrder._id ? updatedOrder : o));
+      })
+      .addCase(updateOrderStatusByStaff.rejected, (state) => {
+        state.loading = false;
+      })
+
+
+
+      // ✅ Update Order Status By Customer
+      .addCase(updateOrderStatusByCustomer.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateOrderStatusByCustomer.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedOrder = action.payload.data.order;
+        state.orders = state.orders.map((o) => (o._id === updatedOrder._id ? updatedOrder : o));
+      })
+      .addCase(updateOrderStatusByCustomer.rejected, (state) => {
+        state.loading = false;
+      })
+
+
+
+      // ✅ Cancel Order
+      .addCase(cancelOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedOrder = action.payload.data; // since your backend returns updated order directly
+        state.orders = state.orders.map((o) => (o._id === updatedOrder._id ? updatedOrder : o));
+      })
+      .addCase(cancelOrder.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
@@ -135,3 +198,7 @@ const orderSlice = createSlice({
 // Exports
 export const { resetCurrentOrder } = orderSlice.actions;
 export default orderSlice.reducer;
+
+// dispatch(updateOrderStatusByStaff({ id: orderId, data: { status: "Preparing", served_by: "John" } }));
+
+// dispatch(updateOrderStatusByCustomer({ id: orderId, data: { status: "Cancelled" } }));
