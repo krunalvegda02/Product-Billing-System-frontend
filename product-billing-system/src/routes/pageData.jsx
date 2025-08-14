@@ -7,6 +7,7 @@ const Home = React.lazy(() => import("../pages/admin/home"));
 const AdminDashboard = React.lazy(() => import("../pages/admin/dashboard"));
 const CategoryManagement = React.lazy(() => import("../pages/admin/category"));
 const ProductManagement = React.lazy(() => import("../pages/admin/product"));
+const OrderManagement = React.lazy(() => import("../pages/admin/DashboardOrders"));
 const ChangePassword = React.lazy(() => import("../pages/auth/ChangePassword"));
 const updateProfile = React.lazy(() => import("../pages/auth/Profile/index"));
 
@@ -33,6 +34,8 @@ const PageData = [
   { path: PATHS.ADMIN_DASHBOARD, component: AdminDashboard, isPublic: true, layout: true },
   { path: PATHS.CATEGORY_MANAGEMENT, component: CategoryManagement, isPublic: true, layout: true },
   { path: PATHS.PRODUCT_MANAGEMENT, component: ProductManagement, isPublic: true, layout: true },
+  { path: PATHS.ORDER_MANAGEMENT, component: OrderManagement, isPublic: true, layout: true },
+
   //   { path: PATHS.PAGE_NOT_FOUND, component: PageNotFound, isPublic: true, layout: false },
 
   { path: PATHS.MENU, component: menu, isPublic: true, layout: false, MenuLayout: true },

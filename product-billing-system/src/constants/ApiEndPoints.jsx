@@ -22,4 +22,12 @@ export const API_ENDPOINT = {
 
   GET_LIKED_PRODUCTS: "products/liked-products",
   TOGGLE_LIKE_PRODUCT: "products/toggle-like",
+
+  ORDER: {
+    GET_ALL_ORDER: "order/",
+    CREATE_ORDER: "order/create",
+    DELETE_ORDER: "order/delete/:id",
+    UPDATE_ORDER: "order/update/:id",
+    GET_ORDERBY_ID: "order/:id",
+  },
 };

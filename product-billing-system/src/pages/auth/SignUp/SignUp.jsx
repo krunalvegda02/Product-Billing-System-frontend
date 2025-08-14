@@ -28,17 +28,28 @@ const SignUp = () => {
   const submitClick = async (e) => {
     e.preventDefault();
 
-    const response = await dispatch(signUpUser(formData));
-    console.log("SignUp Data:", formData);
+    try {
+      const response = await dispatch(signUpUser(formData));
+      console.log("SignUp Data:", formData);
 
-    if (signUpUser.fulfilled.match(response)) {
-        navigate(PATHS.CATGORY_MANAGEMENT);
+      if (signUpUser.fulfilled.match(response)) {
+        showToast("Signup successful!", "success");
+        navigate(PATHS.CATEGORY_MANAGEMENT);
       } else {
-        showToast(response.payload);
+        showToast(response.payload?.message || "Signup failed", "error");
       }
+    } catch (error) {
+      showToast("An unexpected error occurred", "error");
+    }
   };
 
-  return <SignUpView formData={formData} handleChange={handleChange} submitClick={submitClick} />;
+  return (
+    <SignUpView
+      formData={formData}
+      handleChange={handleChange}
+      submitClick={submitClick}
+    />
+  );
 };
 
 export default SignUp;

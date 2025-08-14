@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import ProductCard from "../../../components/commonComponent/ProductCard";
 import MenuHeader from "../../../components/commonComponent/MenuHeader";
-import Order from "../Order"
+import Order from "../Order";
 import { X } from "lucide-react";
 
-const MenuView = ({
-  products = [],
-  categories = [],
-  selectedCategoryID,
-  handleCategorySelect,
-}) => {
+const MenuView = ({ products = [], categories = [], selectedCategoryID, handleCategorySelect }) => {
   const [siderOpen, setSiderOpen] = useState(false);
 
   return (
@@ -17,10 +12,7 @@ const MenuView = ({
       {/* Top Header */}
       <div className="flex justify-between items-center px-4 py-4 max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold">Hotel Menu</h1>
-        <button
-          onClick={() => setSiderOpen(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
+        <button onClick={() => setSiderOpen(true)} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
           My Order
         </button>
       </div>
@@ -52,13 +44,9 @@ const MenuView = ({
         {/* Products */}
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.length > 0 ? (
-            products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))
+            products.map((product) => <ProductCard key={product._id} product={product} />)
           ) : (
-            <p className="text-center text-gray-500 col-span-full">
-              No products available.
-            </p>
+            <p className="text-center text-gray-500 col-span-full">No products available.</p>
           )}
         </div>
       </div>

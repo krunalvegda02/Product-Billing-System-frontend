@@ -1,10 +1,10 @@
-import React from "react";
 
-const OrderView = ({ orderItems = [], onPlaceOrder }) => {
-  const totalAmount = orderItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+
+
+
+const OrderView = ({ orderItems = [], placeOrder, clearOrderItems }) => {
+  const totalAmount = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  console.log(orderItems);
 
   return (
     <div className="w-full max-w-md p-4 bg-white rounded-xl shadow-lg">
@@ -16,20 +16,14 @@ const OrderView = ({ orderItems = [], onPlaceOrder }) => {
         <div className="space-y-4">
           {orderItems.map((item) => (
             <div key={item.id} className="flex items-center gap-4">
-              <img
-                src={item.thumbnail || "https://via.placeholder.com/60"}
-                alt={item.name}
-                className="w-16 h-16 object-cover rounded"
-              />
+              <img src={item.thumbnail || "https://via.placeholder.com/60"} alt={item.name} className="w-16 h-16 object-cover rounded" />
               <div className="flex-1">
                 <p className="font-medium">{item.name}</p>
                 <p className="text-sm text-gray-600">
                   {item.quantity} x ₹{item.price}
                 </p>
               </div>
-              <div className="font-semibold">
-                ₹{item.quantity * item.price}
-              </div>
+              <div className="font-semibold">₹{item.quantity * item.price}</div>
             </div>
           ))}
         </div>
@@ -43,7 +37,7 @@ const OrderView = ({ orderItems = [], onPlaceOrder }) => {
       </div>
 
       <button
-        onClick={onPlaceOrder}
+        onClick={placeOrder}
         disabled={orderItems.length === 0}
         className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
       >

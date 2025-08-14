@@ -36,12 +36,12 @@ const DashboardView = ({ theme }) => {
         </div>
         <div className={`p-6 ${theme.CARD_BG} border-2 rounded-lg ${theme.BORDER_COLOR} shadow-md`}>
           <h4 className={`text-xl font-semibold ${theme.TEXT_COLOR}`}>Manage Menu Items</h4>
-          <Link to="/admin/menu-items" className={`text-sm ${theme.LINK} hover:${theme.BG_SECONDARY_ACCENT}`}>
+          <Link to="/admin/product" className={`text-sm ${theme.LINK} hover:${theme.BG_SECONDARY_ACCENT}`}>
             View Menu Items
           </Link>
         </div>
         <div className={`p-6 ${theme.CARD_BG} border-2 rounded-lg ${theme.BORDER_COLOR} shadow-md`}>
-          <h4 className={`text-xl font-semibold ${theme.TEXT_COLOR}`}>View Orders</h4>
+          <h4 className={`text-xl font-semibold ${theme.TEXT_COLOR}`}>View Orders</h4>  
           <Link to="/admin/orders" className={`text-sm ${theme.LINK} hover:${theme.BG_SECONDARY_ACCENT}`}>
             View All Orders
           </Link>

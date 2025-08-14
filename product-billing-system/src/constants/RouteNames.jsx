@@ -12,7 +12,7 @@ export const PATHS = {
   ADMIN_DASHBOARD: "/admin/dashboard",
   CATEGORY_MANAGEMENT: "/admin/categories",
   PRODUCT_MANAGEMENT: "/admin/product",
-
+  ORDER_MANAGEMENT: "/admin/orders",
   PAGE_NOT_FOUND: "/PageNotFound",
 
   MENU: "/menu",

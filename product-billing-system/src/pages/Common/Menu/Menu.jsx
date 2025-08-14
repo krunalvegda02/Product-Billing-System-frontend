@@ -5,6 +5,7 @@ import { fetchCategoryProducts, getAllProducts } from "../../../redux/Slices/pro
 import { useToast } from "../../../context/ToastContext";
 import MenuView from "./MenuView";
 
+
 const Menu = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
