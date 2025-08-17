@@ -7,6 +7,8 @@ export const API_ENDPOINT = {
 
   CREATE_USER: "users/create_user",
 
+  GET_SERVER: "users/get_servant_staff",
+
   CREATE_CATEGORY: "category/create",
   GET_ALL_CATEGORY: "category/",
   GET_CATEGORY: "category/",

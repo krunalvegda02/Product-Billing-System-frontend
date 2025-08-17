@@ -5,6 +5,7 @@ import { THEME_CONFIG } from "../../../constants/Theme";
 const Dashboard = () => {
   const currentTheme = "GENERAL";
   const theme = THEME_CONFIG[currentTheme];
+  
   return <DashboardView theme={theme} />;
 };
 

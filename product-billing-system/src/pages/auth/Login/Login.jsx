@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../constants/RouteNames";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../redux/Slices/authSlice";
-import { ToastProvider } from "../../../context/ToastContext";
 import { useToast } from "../../../context/ToastContext";
 
 const Login = () => {

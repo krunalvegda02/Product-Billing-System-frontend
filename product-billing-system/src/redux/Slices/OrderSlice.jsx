@@ -6,30 +6,18 @@ import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
 // Thunks
 export const fetchAllOrders = createAsyncThunkHandler("order/fetchAllOrders", _get, API_ENDPOINT.ORDER.GET_ALL_ORDER);
 
-
-
 export const createOrder = createAsyncThunkHandler("order/createOrder", _post, API_ENDPOINT.ORDER.CREATE_ORDER);
-
-
-
 
 export const deleteOrder = createAsyncThunkHandler("order/deleteOrder", _delete, (payload) =>
   API_ENDPOINT.ORDER.DELETE_ORDER.replace(":id", payload)
 );
-
-
 
 export const updateOrder = createAsyncThunkHandler("order/updateOrder", _patch, (payload) => ({
   url: API_ENDPOINT.ORDER.UPDATE_ORDER.replace(":id", payload.id),
   data: payload.data,
 }));
 
-
-
 export const getOrderById = createAsyncThunkHandler("order/getOrderById", _get, (id) => API_ENDPOINT.ORDER.GET_ORDERBY_ID.replace(":id", id));
-
-
-
 
 // ✅ New Thunk for Staff status update
 export const updateOrderStatusByStaff = createAsyncThunkHandler("order/updateOrderStatusByStaff", _patch, (payload) => ({
@@ -37,38 +25,27 @@ export const updateOrderStatusByStaff = createAsyncThunkHandler("order/updateOrd
   data: payload.data,
 }));
 
-
-
-
 // ✅ New Thunk for Customer status update
 export const updateOrderStatusByCustomer = createAsyncThunkHandler("order/updateOrderStatusByCustomer", _patch, (payload) => ({
   url: API_ENDPOINT.ORDER.UPDATE_ORDER_STATUS_BY_CUSTOMER.replace(":id", payload.id),
   data: payload.data,
 }));
 
-
-
-
 // ✅ Cancel Order
 export const cancelOrder = createAsyncThunkHandler("order/cancelOrder", _patch, (id) => API_ENDPOINT.ORDER.CANCEL_ORDER.replace(":id", id));
-
-
-
 
 // Initial State
 const initialState = {
   orders: [],
+  served_by: null,
   currentOrder: null,
   loading: false,
   error: null,
 };
 
-
-
-
 // Slice
 const orderSlice = createSlice({
-  name: "order",
+  name: "tableorder",
   initialState,
   reducers: {
     resetCurrentOrder: (state) => {
@@ -89,9 +66,6 @@ const orderSlice = createSlice({
         state.loading = false;
       })
 
-
-
-
       // Create Order
       .addCase(createOrder.pending, (state) => {
         state.loading = true;
@@ -103,8 +77,6 @@ const orderSlice = createSlice({
       .addCase(createOrder.rejected, (state) => {
         state.loading = false;
       })
-
-
 
       // Delete Order
       .addCase(deleteOrder.pending, (state) => {
@@ -119,8 +91,6 @@ const orderSlice = createSlice({
         state.loading = false;
       })
 
-
-
       // Update Order
       .addCase(updateOrder.pending, (state) => {
         state.loading = true;
@@ -134,8 +104,6 @@ const orderSlice = createSlice({
         state.loading = false;
       })
 
-
-
       // Get Order by ID
       .addCase(getOrderById.pending, (state) => {
         state.loading = true;
@@ -147,8 +115,6 @@ const orderSlice = createSlice({
       .addCase(getOrderById.rejected, (state) => {
         state.loading = false;
       })
-
-
 
       // ✅ Update Order Status By Staff
       .addCase(updateOrderStatusByStaff.pending, (state) => {
@@ -163,8 +129,6 @@ const orderSlice = createSlice({
         state.loading = false;
       })
 
-
-
       // ✅ Update Order Status By Customer
       .addCase(updateOrderStatusByCustomer.pending, (state) => {
         state.loading = true;
@@ -177,8 +141,6 @@ const orderSlice = createSlice({
       .addCase(updateOrderStatusByCustomer.rejected, (state) => {
         state.loading = false;
       })
-
-
 
       // ✅ Cancel Order
       .addCase(cancelOrder.pending, (state) => {
