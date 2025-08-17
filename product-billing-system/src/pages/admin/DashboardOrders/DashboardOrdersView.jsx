@@ -14,8 +14,12 @@ const DashboardOrdersView = ({
   getStatusColor,
   staffList,
   onAssignStaff,
-  statusOptions = COMMON.ORDER_STATUS,
-  onUpdateStatus
+  statusOptions,
+  assignedStaff,
+  onUpdateStatus,
+  status,
+  handleSubmit,
+  isLoading,
 }) => {
   console.log(currentOrders);
 
@@ -48,73 +52,97 @@ const DashboardOrdersView = ({
             <table className="min-w-full w-full divide-y divide-gray-200">
               <thead className="bg-gray-100">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Order ID</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12"> ID</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-3/12">Item</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Qty</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Status</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Served By</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Total</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {currentOrders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-1/12">{order._id}</td>
-
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500 w-3/12">
-                      {order.menuItems.map((item, idx) => (
-                        <div key={idx}>
-                          {item.productId?.name} × {item.quantity}
+                <>
+                  {isLoading && (
+                    <tr>
+                      <td colSpan="6" className="text-center py-4">
+                        <div className="flex justify-center items-center space-x-2">
+                          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
                         </div>
-                      ))}
-                    </td>
+                      </td>
+                    </tr>
+                  )}
+                  {!isLoading &&
+                    currentOrders.map((order) => (
+                      <tr key={order._id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-1/12">{order.orderId}</td>
 
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12">
-                      {order.menuItems.reduce((sum, item) => sum + item.quantity, 0)}
-                    </td>
+                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500 w-3/12">
+                          {order.menuItems.map((item, idx) => (
+                            <div key={idx}>
+                              {item.productId?.name} × {item.quantity}
+                            </div>
+                          ))}
+                        </td>
 
-                    <td className="px-4 py-4 whitespace-nowrap w-2/12">
-                      <select
-                        value={order.status}
-                        onChange={(e) => onUpdateStatus(order._id, e.target.value)}
-                        className={`border rounded-md px-1 py-0.5  text-sm focus:outline-none focus:ring-2 ${getStatusColor(order.status)}`}
-                      >
-                        {Object.entries(statusOptions).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
+                        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500 w-1/12">
+                          {order.menuItems.reduce((sum, item) => sum + item.quantity, 0)}
+                        </td>
 
-                    <td className="pr-10 py-4 whitespace-nowrap text-sm text-gray-500 w-2/12">
-                      <select
-                        value={order.servedBy?._id || ""}
-                        onChange={(e) => onAssignStaff(order._id, e.target.value)}
-                        className=" border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 w-full"
-                      >
-                        <option value="">Served By</option>
-                        {staffList.map((staff) => (
-                          <option key={staff._id} value={staff._id}>
-                            {staff.username}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
+                        <td className="px-1 py-1 whitespace-nowrap w-2/12">
+                          <select
+                            value={status[order._id] || order.status}
+                            onChange={(e) => {
+                              onUpdateStatus(order._id, e.target.value);
+                            }}
+                            className={`border rounded-md px-2  py-0.5 text-sm focus:outline-none  transition-colors  focus:ring-1 ${getStatusColor(
+                              status[order._id] || order.status
+                            )} appearance-none`}
+                          >
+                            {Object.entries(statusOptions).map(([key, label]) => (
+                              <option key={key} value={key} className="bg-white text-gray-900">
+                                {label.charAt(0) + label.slice(1).toLowerCase()}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
 
-                    {/* Actions */}
-                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium w-2/12">
-                      <div className="flex space-x-2">
-                        <button className="px-3 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
-                          Update
-                        </button>
-                        <button className="px-3 py-1 bg-green-600 text-white text-xs rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
-                          Assign
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        <td className="pr-16 py-4 whitespace-nowrap text-sm text-gray-500 w-2/12">
+                          <select
+                            value={assignedStaff[order._id]?._id || ""}
+                            onChange={(e) => {
+                              const staffId = e.target.value;
+                              const selectedStaff = staffList.find((s) => s._id === staffId);
+                              onAssignStaff(order._id, staffId, selectedStaff?.username);
+                            }}
+                            className="border-gray-300 border-2  rounded-md px-1 py-0.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 w-full"
+                          >
+                            {staffList.map((staff) => (
+                              <option key={staff._id} value={staff._id}>
+                                {staff.username}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+
+                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-2/12">
+                          ₹ {order.total?.toFixed(2) || "0.00"}
+                        </td>
+
+                        {/* Actions */}
+                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium w-2/12">
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => handleSubmit(order._id)}
+                              className="px-5 py-1 bg-green-600 text-white text-SM rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+                            >
+                              Assign
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                </>
               </tbody>
             </table>
           </div>

@@ -6,13 +6,12 @@ export const COMMON = {
     OTHER: "Other",
   },
 
-  
   ORDER_STATUS: {
-    PENDING: "Pending",
-    PREPARING: "Preparing",
-    READY: "Ready",
-    COMPLETED: "Completed",
-    FAILED: "Failed",
-    CANCELLED: "Cancelled",
+    PENDING: "PENDING",
+    PREPARING: "PREPARING",
+    READY: "READY",
+    COMPLETED: "COMPLETED",
+    FAILED: "FAILED",
+    CANCELLED: "CANCELLED",
   },
 };
