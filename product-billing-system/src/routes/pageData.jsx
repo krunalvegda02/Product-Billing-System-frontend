@@ -10,7 +10,7 @@ const ProductManagement = React.lazy(() => import("../pages/admin/product"));
 const OrderManagement = React.lazy(() => import("../pages/admin/DashboardOrders"));
 const ChangePassword = React.lazy(() => import("../pages/auth/ChangePassword"));
 const updateProfile = React.lazy(() => import("../pages/auth/Profile/index"));
-
+const BillingManagement = React.lazy(() => import("../pages/admin/Billing"));
 const menu = React.lazy(() => import("../pages/Common/Menu/Menu"));
 const menuLayout = React.lazy(() => import("../pages/Common/LayoutOfMenu/index"));
 const cart = React.lazy(() => import("../pages/Common/Cart/index"));
@@ -19,6 +19,7 @@ const customerProfile = React.lazy(() => import("../pages/Common/Profile/index")
 
 import { ROLE } from "../constants/Role";
 import { PATHS } from "../constants/RouteNames";
+import StaffManagement from "../pages/admin/StaffManagement";
 
 const PageData = [
   { path: PATHS._, component: Login, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: true, layout: false },
@@ -35,6 +36,8 @@ const PageData = [
   { path: PATHS.CATEGORY_MANAGEMENT, component: CategoryManagement, isPublic: true, layout: true },
   { path: PATHS.PRODUCT_MANAGEMENT, component: ProductManagement, isPublic: true, layout: true },
   { path: PATHS.ORDER_MANAGEMENT, component: OrderManagement, isPublic: true, layout: true },
+  { path: PATHS.ADD_STAFF, component: StaffManagement, isPublic: true, layout: true },
+  { path: PATHS.BILLING_MANAGEMENT, component: BillingManagement, isPublic: true, layout: true },
 
   //   { path: PATHS.PAGE_NOT_FOUND, component: PageNotFound, isPublic: true, layout: false },
 

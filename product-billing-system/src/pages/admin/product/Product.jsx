@@ -7,16 +7,21 @@ import { usePagination } from "../../../hooks/usePagination";
 import { getAllProducts, setProduct } from "../../../redux/Slices/productSlice";
 import store from "../../../redux/Store/store";
 import ProductView from "./ProductView";
-import ProductModal from "./productModal";
+import DeleteModalView from "../../../components/helperComponent/DeleteModal";
+import AddProductModal from "../../../components/Admin Components/Modals/AddProductModal";
 
 const ITEMS_PER_PAGE = 8;
 
 const Product = () => {
   const currentTheme = THEME.GENERAL;
   const { openModal, closeModal, isOpen } = useModal();
-  const { openModal: openDeleteModal, closeModal: closeDeleteModal, isOpen: isDeleteOpen } = useModal();
+  const {
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+    isOpen: isDeleteOpen,
+  } = useModal();
   const { showToast } = useToast();
-  const { products } = useSelector((state) => state.product);
+  const { products, selectedProduct } = useSelector((state) => state.product); // ✅ pull selected product from redux
   const { dispatch } = store;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +38,7 @@ const Product = () => {
     dispatch(setProduct(product));
     openModal();
   };
+
   const handleDeleteClick = (product) => {
     dispatch(setProduct(product));
     openDeleteModal();
@@ -44,13 +50,11 @@ const Product = () => {
 
   // Sorting Logic
   const sortedProducts = useMemo(() => {
-    return [...products].sort((a, b) => {
-      if (sortOrder === "asc") {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
+    return [...products].sort((a, b) =>
+      sortOrder === "asc"
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    );
   }, [products, sortOrder]);
 
   // Pagination Logic
@@ -66,6 +70,14 @@ const Product = () => {
     }
   };
 
+  const handleDelete = () => {
+    if (!selectedProduct) return;
+    // TODO: call delete API here
+    showToast(`${selectedProduct.name} deleted successfully`, "success");
+    closeDeleteModal();
+    fetchData();
+  };
+
   return (
     <>
       <ProductView
@@ -74,15 +86,28 @@ const Product = () => {
         currentTheme={currentTheme}
         handleEditClick={handleEditClick}
         handleDeleteClick={handleDeleteClick}
-       
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
         currentPage={currentPage}
         totalPages={totalPages}
         changePage={changePage}
       />
-      <ProductModal isOpen={isOpen} onCancel={closeModal} fetchCategoryData={fetchData} />
-      {/* <DeleteCategory isOpen={isDeleteOpen} onCancel={closeDeleteModal} fetchCategoryData={fetchData} /> */}
+
+      {/* ✅ Add Product Modal */}
+      <AddProductModal
+        isOpen={isOpen}
+        onCancel={closeModal}
+        fetchCategoryData={fetchData}
+      />
+
+      {/* ✅ Delete Product Modal */}
+      <DeleteModalView
+        isOpen={isDeleteOpen}
+        onCancel={closeDeleteModal}
+        onDelete={handleDelete}
+        itemName={selectedProduct?.name || "this product"}
+        fetchCategoryData={fetchData}
+      />
     </>
   );
 };

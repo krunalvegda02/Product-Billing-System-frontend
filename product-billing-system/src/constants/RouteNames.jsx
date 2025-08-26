@@ -5,7 +5,7 @@ export const PATHS = {
 
   FORGOT_PASSWORD: "/forgotPassword",
 
-  PROFILE_UPDATE: "/profile",
+  PROFILE_UPDATE: "/adminProfile",
   UPDATE_PASSWORD: "/updatePassword",
 
   HOME: "/home",
@@ -13,10 +13,14 @@ export const PATHS = {
   CATEGORY_MANAGEMENT: "/admin/categories",
   PRODUCT_MANAGEMENT: "/admin/product",
   ORDER_MANAGEMENT: "/admin/orders",
+  ADD_STAFF: "/admin/staff",
+  BILLING_MANAGEMENT: "/admin/billing",
+
   PAGE_NOT_FOUND: "/PageNotFound",
 
   MENU: "/menu",
   CART: "/cart",
   FAV_PROD: "/favouriteProducts",
   CUST_PROFILE: "/customerProfile",
+
 };

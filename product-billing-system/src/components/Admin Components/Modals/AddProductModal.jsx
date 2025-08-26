@@ -1,65 +1,130 @@
-import React, { useState, useRef } from "react";
-import useToast from "../../../hooks/useToast"; // Assuming this is your hook
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { removeNullValues } from "../../../helper/helperFunction";
+import {
+  createProduct,   // ✅ should be product, not category
+  updateProduct,
+  deselectProduct, // ✅ same here
+} from "../../../redux/Slices/productSlice";
+import { getAllCategories } from "../../../redux/Slices/categorySlice"; // ✅ for category dropdown
+import store from "../../../redux/Store/store";
 import CustomModal from "../../helperComponent/customModal";
 
-const AddProductModal = ({ isOpen, onCancel }) => {
-  const [productName, setProductName] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
-  const [thumbnail, setThumbnail] = useState(null);
+const AddProductModal = ({ isOpen, onCancel, onSave }) => {
+  const [formValue, setFormValue] = useState({
+    id: null,
+    name: "",
+    description: "",
+    price: 0,
+    inStock: true,
+    thumbnail: null,
+    thumbnailPreview: null,
+    categoryOfProduct: "", // ✅ now single category instead of array
+    isDiscountActive: false,
+    ActiveDiscount: null,
+  });
 
+  const { selectedProduct } = useSelector((state) => state.product);
+  const { categories } = useSelector((state) => state.category);
+  const { dispatch } = store;
   const fileInputRef = useRef(null);
-  const { showToast } = useToast(); // Toast hook
 
   const handleFileChange = (e) => {
     const file = e.target?.files[0];
-
-    if (!file) return;
-
-    const fileSizeKB = file.size / 1024;
-
-    if (fileSizeKB > 10) {
-      showToast("Image size must be less than or equal to 10KB.", "error");
-      e.target.value = "";
-      return;
-    }
-
-    if (
-      file &&
-      (file.type === "image/jpg" ||
-        file.type === "image/jpeg" ||
-        file.type === "image/png")
-    ) {
+    if (file && ["image/jpg", "image/jpeg", "image/png"].includes(file.type)) {
       const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-      setThumbnail(file);
+      setFormValue((prev) => ({
+        ...prev,
+        thumbnailPreview: imageUrl,
+        thumbnail: file,
+      }));
     } else {
-      setImagePreview(null);
-      setThumbnail(null);
+      setFormValue((prev) => ({
+        ...prev,
+        thumbnailPreview: null,
+        thumbnail: null,
+      }));
     }
   };
 
-  const onOkClick = () => {
-    // TODO: Handle form submission, API FOR ADDING Product
-    console.log({
-      name: productName,
-      price: productPrice,
-      thumbnail,
-    });
-
-    setProductName("");
-    setProductPrice("");
-    setImagePreview(null);
-    setThumbnail(null);
-    onCancel();
+  const handleSaveModal = async () => {
+    const payload = formValue;
+    const action = formValue.id ? updateProduct : createProduct;
+    await dispatch(action(removeNullValues(payload)));
+    dispatch(deselectProduct());
+    onSave?.();
+    onCancel?.();
   };
 
-  const handleCancel = () => {
-    setProductName("");
-    setProductPrice("");
-    setImagePreview(null);
-    setThumbnail(null);
-    onCancel();
+  const handleCancelModal = () => {
+    setFormValue({
+      id: null,
+      name: "",
+      description: "",
+      price: 0,
+      inStock: true,
+      thumbnail: null,
+      thumbnailPreview: null,
+      categoryOfProduct: "",
+      isDiscountActive: false,
+      ActiveDiscount: null,
+    });
+    dispatch(deselectProduct());
+    onCancel?.();
+  };
+
+  // When product is selected, load it into form
+  useEffect(() => {
+    if (selectedProduct?._id) {
+      setFormValue((prev) => ({
+        ...prev,
+        id: selectedProduct._id,
+        name: selectedProduct.name || "",
+        description: selectedProduct.description || "",
+        price: selectedProduct.price || 0,
+        inStock: selectedProduct.inStock ?? true,
+        thumbnail: null,
+        thumbnailPreview: selectedProduct.thumbnail || null,
+        categoryOfProduct: selectedProduct.categoryOfProduct?._id || "", // ✅ pre-fill category
+        isDiscountActive: selectedProduct.isDiscountActive ?? false,
+        ActiveDiscount: selectedProduct.ActiveDiscount || null,
+      }));
+    }
+  }, [selectedProduct]);
+
+  // Fetch categories when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(getAllCategories());
+    }
+  }, [isOpen, dispatch]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      dispatch(deselectProduct());
+    };
+  }, []);
+
+  // Controlled input handler
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    let newValue;
+
+    if (type === "checkbox") {
+      newValue = checked;
+    } else if (type === "number") {
+      const num = Number(value);
+      newValue =
+        name === "ActiveDiscount" ? Math.min(100, Math.max(1, num)) : num;
+    } else {
+      newValue = value;
+    }
+
+    setFormValue((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
   };
 
   if (!isOpen) return null;
@@ -67,72 +132,177 @@ const AddProductModal = ({ isOpen, onCancel }) => {
   return (
     <CustomModal
       isOpen={isOpen}
-      onCancel={onCancel}
-      onCancel={handleCancel}
-      onSubmit={onOkClick}
-      okDisabled={!productName || !productPrice || !thumbnail}
+      onCancel={handleCancelModal}
+      onSubmit={handleSaveModal}
       title={<p className="font-sans font-semibold text-2xl">Add New Product</p>}
+      okDisabled={false}
     >
-      <div className="space-y-4 my-4">
-        {/* Name Input */}
+      <div className="space-y-6 my-4">
+        {/* Product Details */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Name */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-left text-lg font-medium text-gray-700"
+            >
+              Name:
+            </label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              placeholder="Enter product name"
+              value={formValue.name}
+              onChange={handleInputChange}
+              className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+            />
+          </div>
+
+          {/* Price */}
+          <div>
+            <label
+              htmlFor="price"
+              className="block text-left text-lg font-medium text-gray-700"
+            >
+              Price:
+            </label>
+            <input
+              id="price"
+              name="price"
+              type="number"
+              min={0}
+              step={0.1}
+              placeholder="Enter price"
+              value={formValue.price}
+              onChange={handleInputChange}
+              className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+            />
+          </div>
+        </div>
+
+        {/* Category */}
         <div>
           <label
-            htmlFor="productName"
+            htmlFor="categoryOfProduct"
             className="block text-left text-lg font-medium text-gray-700"
           >
-            Name:
+            Category:
           </label>
-          <input
-            id="productName"
-            type="text"
-            placeholder="Enter product name"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+          <select
+            id="categoryOfProduct"
+            name="categoryOfProduct"
+            value={formValue.categoryOfProduct}
+            onChange={handleInputChange}
+            className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 py-1 hover:border-blue-400"
+          >
+            <option value="">-- Select Category --</option>
+            {categories?.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Description */}
+        <div>
+          <label
+            htmlFor="description"
+            className="block text-left text-lg font-medium text-gray-700"
+          >
+            Description:
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Enter product description"
+            value={formValue.description}
+            onChange={handleInputChange}
             className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
           />
         </div>
 
-        {/* Price Input */}
-        <div>
-          <label
-            htmlFor="productPrice"
-            className="block text-left text-lg font-medium text-gray-700"
-          >
-            Price:
-          </label>
-          <input
-            id="productPrice"
-            type="number"
-            placeholder="Enter product price"
-            value={productPrice}
-            onChange={(e) => setProductPrice(e.target.value)}
-            className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
-          />
+        {/* Checkboxes & Discount */}
+        <div className="flex flex-wrap gap-8 items-center">
+          <div className="flex items-center space-x-2">
+            <input
+              id="inStock"
+              name="inStock"
+              type="checkbox"
+              checked={formValue.inStock}
+              onChange={handleInputChange}
+              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label
+              htmlFor="inStock"
+              className="text-lg font-medium text-gray-700"
+            >
+              In Stock
+            </label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              id="isDiscountActive"
+              name="isDiscountActive"
+              type="checkbox"
+              checked={formValue.isDiscountActive}
+              onChange={handleInputChange}
+              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label
+              htmlFor="isDiscountActive"
+              className="text-lg font-medium text-gray-700"
+            >
+              Discount Active
+            </label>
+          </div>
+
+          {formValue.isDiscountActive && (
+            <div className="flex items-center space-x-2">
+              <label
+                htmlFor="ActiveDiscount"
+                className="text-lg font-medium text-gray-700"
+              >
+                Discount (%):
+              </label>
+              <input
+                id="ActiveDiscount"
+                name="ActiveDiscount"
+                type="number"
+                min={1}
+                max={100}
+                placeholder="Discount"
+                value={formValue.ActiveDiscount || ""}
+                onChange={handleInputChange}
+                className="block w-24 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+              />
+            </div>
+          )}
         </div>
 
-        {/* Thumbnail Upload */}
+        {/* Thumbnail */}
         <div>
           <label
-            htmlFor="productThumbnail"
+            htmlFor="thumbnail"
             className="block text-left text-lg font-medium text-gray-700"
           >
             Thumbnail:
           </label>
           <div className="flex items-center justify-center w-full">
             <label className="w-full cursor-pointer">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-500 transition-colors">
-                {imagePreview ? (
-                  <div className="bg-gray-200">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="mx-auto h-32 w-32 object-cover rounded-lg"
-                    />
-                  </div>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-500 transition-colors bg-gray-200">
+                {formValue?.thumbnailPreview ? (
+                  <img
+                    src={formValue.thumbnailPreview}
+                    alt="Preview"
+                    className="mx-auto h-32 w-32 object-cover rounded-lg"
+                  />
                 ) : (
                   <div className="text-gray-500">
                     <p>Click to upload image</p>
-                    <p className="text-sm">PNG, JPG, JPEG up to 10KB</p>
+                    <p className="text-sm">PNG, JPG, JPEG up to 10MB</p>
                   </div>
                 )}
               </div>
@@ -140,7 +310,7 @@ const AddProductModal = ({ isOpen, onCancel }) => {
                 ref={fileInputRef}
                 type="file"
                 className="hidden"
-                accept=".jpg,.jpeg,.png"
+                accept="image/*"
                 onChange={handleFileChange}
               />
             </label>

@@ -82,6 +82,7 @@ const Category = () => {
         totalPages={totalPages}
         changePage={changePage}
       />
+      
       <CategoryModal isOpen={isOpen} onCancel={closeModal} fetchCategoryData={fetchData} />
       <DeleteCategory isOpen={isDeleteOpen} onCancel={closeDeleteModal} fetchCategoryData={fetchData} />
     </>

@@ -2,6 +2,9 @@ import React from "react";
 import { ICONS } from "../../../constants/Icons";
 import { THEME_CONFIG } from "../../../constants/Theme";
 
+
+
+
 const ProductView = ({
   currentTheme,
   products,
