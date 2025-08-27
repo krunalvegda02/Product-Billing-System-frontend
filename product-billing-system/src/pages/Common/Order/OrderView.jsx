@@ -1,7 +1,3 @@
-
-
-
-
 const OrderView = ({ orderItems = [], placeOrder, clearOrderItems }) => {
   const totalAmount = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   console.log(orderItems);
