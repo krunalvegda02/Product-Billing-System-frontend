@@ -14,71 +14,66 @@ const DashboardOrders = () => {
   const { showToast } = useToast();
   const APIURL = import.meta.env.VITE_BASE_URL;
 
-  // ✅ Get orders directly from Redux
+  // ✅ Redux state
   const reduxOrders = useSelector((state) => state.tableorder.orders);
   const isLoading = useSelector((state) => state.tableorder.loading);
 
+  // ✅ Local states for UI only
   const [assignedStaff, setAssignedStaff] = useState({});
   const [status, setStatus] = useState({});
-
-  const [orders, setOrders] = useState([]);
   const [servers, setServers] = useState([]);
   const [sortOrder, setSortOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
 
-  useEffect(() => {
-    if (reduxOrders && reduxOrders.length > 0) {
-      setOrders(reduxOrders);
-    }
-  }, [reduxOrders]);
-
-  const handleStatusUpdate = (orderId, newStatus) => {
-    console.log(newStatus);
-
-    setStatus((prev) => ({
-      ...prev,
-      [orderId]: newStatus,
-    }));
-  };
-
-  const handleAssignStaff = (orderId, staffId, username) => {
-    setAssignedStaff((prev) => ({
-      ...prev,
-      [orderId]: { _id: staffId, name: username },
-    }));
-    console.log("Assigning staff", staffId, "to order", orderId);
-  };
-
-  // ✅ Fetch servers list from API
+  // Fetch servers list
   const fetchServers = async () => {
     try {
       const { data } = await axios.get(`${APIURL}v1/${API_ENDPOINT.GET_SERVER}`);
       if (!data.success) {
         showToast(data.message, "error");
+      } else {
+        setServers(data.data);
       }
-      setServers(data.data);
     } catch (error) {
       console.error("Error fetching servers:", error);
+      showToast("Failed to fetch servers", "error");
     }
   };
 
-  // ✅ Initial fetch (orders + servers)
+  // Initial fetch
   useEffect(() => {
     dispatch(fetchAllOrders());
     fetchServers();
   }, [dispatch]);
 
+  // 🔹 Listen for real-time new orders via socket
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewOrder = (order) => {
+      console.log("New order received:", order);
+      dispatch(fetchAllOrders());
+      showToast("New order received!", "success");
+    };
+
+    socket.on("new-order", handleNewOrder);
+
+    return () => {
+      socket.off("new-order", handleNewOrder);
+    };
+  }, [socket, dispatch, showToast]);
+
   // 🔹 Sorting
-  const sortedOrders = [...orders].sort((a, b) => {
-    return sortOrder === "desc" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt);
-  });
+  const sortedOrders = [...reduxOrders].sort((a, b) =>
+    sortOrder === "desc" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt)
+  );
 
   // 🔹 Pagination
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = sortedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(orders.length / ordersPerPage);
+  const totalPages = Math.ceil(reduxOrders.length / ordersPerPage);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -86,10 +81,52 @@ const DashboardOrders = () => {
     }
   };
 
-  const getStatusColor = (status) => {
-    if (!status) return "bg-gray-200 text-gray-900 border-gray-400 focus:ring-gray-400";
+  // Update local status state
+  const handleStatusUpdate = (orderId, newStatus) => {
+    setStatus((prev) => ({ ...prev, [orderId]: newStatus }));
+  };
 
-    switch (status) {
+  // Update assigned staff locally
+  const handleAssignStaff = (orderId, staffId, username) => {
+    setAssignedStaff((prev) => ({
+      ...prev,
+      [orderId]: { _id: staffId, name: username },
+    }));
+  };
+
+  // Assign staff + update status
+  const handleAssignOrder = (orderId) => {
+    if (!status[orderId] || status[orderId] === COMMON.ORDER_STATUS.PENDING) {
+      showToast("Please select a valid status before assigning.", "error");
+      return;
+    }
+    if (!assignedStaff[orderId]?._id) {
+      showToast("Please select a staff before assigning.", "error");
+      return;
+    }
+
+    dispatch(
+      updateOrderStatusByStaff({
+        id: orderId,
+        data: {
+          status: status[orderId],
+          served_by: assignedStaff[orderId]._id,
+        },
+      })
+    ).then((res) => {
+      if (res.meta.requestStatus === "fulfilled") {
+        showToast(res.payload.message, "success");
+      } else {
+        showToast("Cannot change order status or assign order!", "error");
+      }
+    });
+  };
+
+  // Helper: get color for status
+  const getStatusColor = (statusValue) => {
+    if (!statusValue) return "bg-gray-200 text-gray-900 border-gray-400 focus:ring-gray-400";
+
+    switch (statusValue) {
       case COMMON.ORDER_STATUS.PENDING:
         return "bg-yellow-300 text-yellow-900 border-yellow-500 focus:ring-yellow-500";
       case COMMON.ORDER_STATUS.PREPARING:
@@ -107,31 +144,6 @@ const DashboardOrders = () => {
     }
   };
 
-  const handleAssignOrder = (orderId) => {
-    if (!status[orderId] || status[orderId] === COMMON.ORDER_STATUS.PENDING) {
-      alert("Please select a status before assigning.");
-      return;
-    }
-
-    dispatch(
-      updateOrderStatusByStaff({
-        id: orderId,
-        data: {
-          status: status[orderId],
-          served_by: assignedStaff[orderId]?._id,
-        },
-      })
-    ).then((res) => {
-      console.log(res);
-
-      if (res.meta.requestStatus === "fulfilled") {
-        showToast(res.payload.message, "success");
-      } else {
-        showToast("Cannot change order status or assign Order!", "error");
-      }
-    });
-  };
-
   return (
     <DashboardOrdersView
       currentOrders={currentOrders}
@@ -141,7 +153,7 @@ const DashboardOrders = () => {
       totalPages={totalPages}
       indexOfFirstOrder={indexOfFirstOrder}
       indexOfLastOrder={indexOfLastOrder}
-      totalOrders={orders.length}
+      totalOrders={reduxOrders.length}
       handlePageChange={handlePageChange}
       statusOptions={COMMON.ORDER_STATUS}
       getStatusColor={getStatusColor}
