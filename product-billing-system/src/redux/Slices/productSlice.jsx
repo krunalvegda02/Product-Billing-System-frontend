@@ -32,7 +32,7 @@ export const deleteProduct = createAsyncThunkHandler(
   (payload) => `${API_ENDPOINT.DELETE_PRODUCT}/${payload.id}`
 );
 
-export const getLikedProducts = createAsyncThunkHandler(API_ENDPOINT.GET_LIKED_PRODUCTS, _get);
+export const getLikedProducts = createAsyncThunkHandler(API_ENDPOINT.GET_LIKED_PRODUCTS, _get, API_ENDPOINT.GET_LIKED_PRODUCTS);
 
 export const toggleProductLiked = createAsyncThunkHandler(
   API_ENDPOINT.TOGGLE_LIKE_PRODUCT,

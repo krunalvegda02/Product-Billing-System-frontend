@@ -1,6 +1,5 @@
-const OrderView = ({ orderItems = [], placeOrder, clearOrderItems }) => {
-  const totalAmount = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  console.log(orderItems);
+const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }) => {
+  // console.log(orderItems);
 
   return (
     <div className="w-full max-w-md p-4 bg-white rounded-xl shadow-lg">
