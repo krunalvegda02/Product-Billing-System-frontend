@@ -2,15 +2,19 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PATHS } from "../../constants/RouteNames";
 import { THEME_CONFIG } from "../../constants/Theme";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/Slices/authSlice";
-import { Bell, Search, User, LogOut } from "lucide-react";
+import { Bell, Search, User, LogOut, Menu, X } from "lucide-react";
 
 const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const dropdownRef = useRef(null);
+  const sidebarRef = useRef(null);
+
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   const logOutHandler = async () => {
     const res = await dispatch(logout());
@@ -24,6 +28,16 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowMenu(false);
+      }
+
+      // Close mobile sidebar when clicking outside on small screens
+      if (
+        window.innerWidth < 768 &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        !event.target.closest(".mobile-menu-button")
+      ) {
+        setShowMobileSidebar(false);
       }
     };
 
@@ -60,14 +74,35 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
     waiter: "Waiter Panel",
   };
 
+  // Toggle mobile sidebar
+  const toggleMobileSidebar = () => {
+    setShowMobileSidebar(!showMobileSidebar);
+  };
+
+  // Close mobile sidebar when a menu item is clicked
+  const handleMenuItemClick = () => {
+    if (window.innerWidth < 768) {
+      setShowMobileSidebar(false);
+    }
+  };
+
   return (
     <div className={`flex min-h-screen ${theme.BACKGROUND_GRADIENT}`}>
-      {/* Sidebar */}
+      {/* Desktop Sidebar - Hidden on mobile */}
       <aside
-        className={`w-56 min-h-screen p-4 ${theme.BG_ASIDE} flex flex-col shadow-xl border-r ${theme.BORDER_COLOR} transition-all duration-300 fixed md:relative z-40`}
+        ref={sidebarRef}
+        className={`w-56 min-h-screen p-4 ${theme.BG_ASIDE} flex flex-col shadow-xl border-r ${theme.BORDER_COLOR} transition-all duration-300 fixed md:relative z-40
+          ${showMobileSidebar ? "left-0" : "-left-56"} md:left-0`}
       >
+        {/* Close button for mobile */}
+        <div className="flex justify-end md:hidden ">
+          <button onClick={() => setShowMobileSidebar(false)} className={`rounded-full ${theme.TEXT_COLOR} hover:bg-white hover:bg-opacity-10`}>
+            <X size={20} />
+          </button>
+        </div>
+
         {/* Compact Header */}
-        <div className="mb-6 pt-2">
+        <div className="mb-6 ">
           <h2 className={`text-xl font-bold ${theme.TEXT_COLOR} text-center`}>{titleMap[role]}</h2>
           <div className={`h-0.5 w-12 mx-auto ${theme.BG_ACCENT} rounded-full opacity-80 mt-2`}></div>
         </div>
@@ -80,6 +115,7 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={handleMenuItemClick}
                 className={`
             flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 
             hover:transform hover:translate-x-0.5
@@ -115,12 +151,20 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
         </div>
       </aside>
 
+      {/* Mobile Sidebar Overlay - Only visible on mobile when sidebar is open */}
+      {showMobileSidebar && <div className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden" onClick={() => setShowMobileSidebar(false)}></div>}
+
       {/* Main Content */}
-      <div className="flex-1 flex flex-col h-screen">
+      <div className="flex-1 flex flex-col h-screen w-full md:w-auto">
         {/* Header */}
         <header className={`p-4 flex justify-between items-center ${theme.BG_HEADER} shadow-md shrink-0`}>
-          {/* Left Side - Title */}
-          <h1 className="text-xl font-semibold">{titleMap[role]}</h1>
+          {/* Left Side - Menu Button and Title */}
+          <div className="flex items-center gap-3">
+            <button className="mobile-menu-button md:hidden" onClick={toggleMobileSidebar}>
+              <Menu className="w-6 h-6" />
+            </button>
+            <h1 className="text-xl font-semibold">{titleMap[role]}</h1>
+          </div>
 
           {/* Middle - Search */}
           <div className="hidden md:flex items-center bg-gray-100 px-3 py-1 rounded-full w-1/3">
@@ -130,39 +174,76 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
 
           {/* Right Side */}
           <div className="flex items-center gap-6">
-            {/* Notifications */}
-            <div className="relative cursor-pointer">
-              <Bell className="w-6 h-6 text-gray-600 hover:text-gray-900" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">3</span>
-            </div>
-
-            {/* Avatar Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <img
-                src="https://i.pravatar.cc/40"
-                alt="User Avatar"
-                className="w-10 h-10 rounded-full cursor-pointer border-2 border-gray-300"
-                onClick={() => setShowMenu(!showMenu)}
-              />
-
-              {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
-                  <Link
-                    to={PATHS.PROFILE_UPDATE}
-                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-sm"
-                    onClick={() => setShowMenu(false)}
-                  >
-                    <User className="w-4 h-4" /> Profile
-                  </Link>
-                  <button
-                    onClick={logOutHandler}
-                    className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-600"
-                  >
-                    <LogOut className="w-4 h-4" /> Logout
-                  </button>
+            {isAuthenticated ? (
+              <>
+                {/* Notifications */}
+                <div className="relative cursor-pointer">
+                  <Bell className="w-6 h-6 text-gray-600 hover:text-gray-900" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">3</span>
                 </div>
-              )}
-            </div>
+
+                {/* Avatar Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <div className="relative" ref={dropdownRef}>
+                    {user?.Avatar ? (
+                      <img
+                        src={user.Avatar}
+                        alt="User Avatar"
+                        className="w-10 h-10 rounded-full cursor-pointer border-2 border-gray-300"
+                        onClick={() => setShowMenu(!showMenu)}
+                      />
+                    ) : (
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer border-2 border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        onClick={() => setShowMenu(!showMenu)}
+                      >
+                        <User className="w-6 h-6" />
+                      </div>
+                    )}
+
+                    {showMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+                        <Link
+                          to={PATHS.PROFILE_UPDATE}
+                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-sm"
+                          onClick={() => setShowMenu(false)}
+                        >
+                          <User className="w-4 h-4" /> Profile
+                        </Link>
+                        <button
+                          onClick={logOutHandler}
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-600"
+                        >
+                          <LogOut className="w-4 h-4" /> Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {showMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+                      <Link
+                        to={PATHS.PROFILE_UPDATE}
+                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-sm"
+                        onClick={() => setShowMenu(false)}
+                      >
+                        <User className="w-4 h-4" /> Profile
+                      </Link>
+                      <button
+                        onClick={logOutHandler}
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-600"
+                      >
+                        <LogOut className="w-4 h-4" /> Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <Link to={PATHS.LOGIN} className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
+                Login
+              </Link>
+            )}
           </div>
         </header>
 
