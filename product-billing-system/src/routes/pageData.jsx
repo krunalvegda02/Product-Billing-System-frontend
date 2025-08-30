@@ -22,29 +22,29 @@ import { PATHS } from "../constants/RouteNames";
 import StaffManagement from "../pages/admin/StaffManagement";
 
 const PageData = [
-  { path: PATHS._, component: Login, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: true, layout: false },
+  { path: PATHS._, component: Login, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: false, layout: false },
   { path: PATHS.LOGIN, component: Login, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: true, layout: false },
   { path: PATHS.SIGN_UP, component: SignUp, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: true, layout: false },
 
-  { path: PATHS.PROFILE_UPDATE, component: updateProfile, isPublic: true, layout: true },
+  { path: PATHS.PROFILE_UPDATE, component: updateProfile, isPublic: false, layout: true },
 
-  { path: PATHS.FORGOT_PASSWORD, component: ForgotPassword, isPublic: true, layout: true },
-  { path: PATHS.UPDATE_PASSWORD, component: ChangePassword, isPublic: true, layout: true },
+  { path: PATHS.FORGOT_PASSWORD, component: ForgotPassword, isPublic: false, layout: true },
+  { path: PATHS.UPDATE_PASSWORD, component: ChangePassword, isPublic: false, layout: true },
 
   { path: PATHS.HOME, component: Home, isPublic: true, layout: true },
-  { path: PATHS.ADMIN_DASHBOARD, component: AdminDashboard, isPublic: true, layout: true },
-  { path: PATHS.CATEGORY_MANAGEMENT, component: CategoryManagement, isPublic: true, layout: true },
-  { path: PATHS.PRODUCT_MANAGEMENT, component: ProductManagement, isPublic: true, layout: true },
-  { path: PATHS.ORDER_MANAGEMENT, component: OrderManagement, isPublic: true, layout: true },
-  { path: PATHS.ADD_STAFF, component: StaffManagement, isPublic: true, layout: true },
-  { path: PATHS.BILLING_MANAGEMENT, component: BillingManagement, isPublic: true, layout: true },
+  { path: PATHS.ADMIN_DASHBOARD, component: AdminDashboard, isPublic: false, layout: true },
+  { path: PATHS.CATEGORY_MANAGEMENT, component: CategoryManagement, isPublic: false, layout: true },
+  { path: PATHS.PRODUCT_MANAGEMENT, component: ProductManagement, isPublic: false, layout: true },
+  { path: PATHS.ORDER_MANAGEMENT, component: OrderManagement, isPublic: false, layout: true },
+  { path: PATHS.ADD_STAFF, component: StaffManagement, isPublic: false, layout: true },
+  { path: PATHS.BILLING_MANAGEMENT, component: BillingManagement, isPublic: false, layout: true },
 
   //   { path: PATHS.PAGE_NOT_FOUND, component: PageNotFound, isPublic: true, layout: false },
 
-  { path: PATHS.MENU, component: menu, isPublic: true, layout: false, MenuLayout: true },
+  { path: PATHS.MENU, component: menu, isPublic: true, layout: true, MenuLayout: true },
   { path: PATHS.CART, component: cart, isPublic: true, layout: false, MenuLayout: true },
-  { path: PATHS.FAV_PROD, component: favouriteProducts, isPublic: true, layout: false, MenuLayout: true },
-  { path: PATHS.CUST_PROFILE, component: customerProfile, isPublic: true, layout: false, MenuLayout: true },
+  { path: PATHS.FAV_PROD, component: favouriteProducts, isPublic: false, MenuLayout: true },
+  { path: PATHS.CUST_PROFILE, component: customerProfile, isPublic: false, MenuLayout: true },
 ];
-
+  
 export default PageData;
