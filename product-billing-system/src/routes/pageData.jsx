@@ -16,35 +16,135 @@ const menuLayout = React.lazy(() => import("../pages/Common/LayoutOfMenu/index")
 const cart = React.lazy(() => import("../pages/Common/Cart/index"));
 const favouriteProducts = React.lazy(() => import("../pages/Common/FavouriteProducts/index"));
 const customerProfile = React.lazy(() => import("../pages/Common/Profile/index"));
+const StaffManagement = React.lazy(() => import("../pages/admin/StaffManagement"));
 
 import { ROLE } from "../constants/Role";
 import { PATHS } from "../constants/RouteNames";
-import StaffManagement from "../pages/admin/StaffManagement";
 
 const PageData = [
-  { path: PATHS._, component: Login, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: false, layout: false },
-  { path: PATHS.LOGIN, component: Login, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: true, layout: false },
-  { path: PATHS.SIGN_UP, component: SignUp, roles: [ROLE.ADMIN, ROLE.MANAGER], isPublic: true, layout: false },
+  {
+    path: PATHS._,
+    component: Home,
+    roles: [ROLE.ADMIN, ROLE.MANAGER, ROLE.CUSTOMER, ROLE.WAITER],
+    isPublic: true,
+    layout: false,
+  },
+  {
+    path: PATHS.LOGIN,
+    component: Login,
+    isPublic: true,
+    layout: false,
+  },
+  {
+    path: PATHS.SIGN_UP,
+    component: SignUp,
+    isPublic: true,
+    layout: false,
+  },
 
-  { path: PATHS.PROFILE_UPDATE, component: updateProfile, isPublic: false, layout: true },
+  {
+    //TODO: PROFILE FOR STAFF MEMBER, I NEED TO VERIFY THAT IS IS WORKING FOR OTHER STAFS THEN ADMIN
+    path: PATHS.PROFILE_UPDATE,
+    component: updateProfile,
+    roles: [ROLE.ADMIN, ROLE.MANAGER, ROLE.WAITER],
+    isPublic: false,
+    layout: true,
+  },
 
-  { path: PATHS.FORGOT_PASSWORD, component: ForgotPassword, isPublic: false, layout: true },
-  { path: PATHS.UPDATE_PASSWORD, component: ChangePassword, isPublic: false, layout: true },
+  {
+    path: PATHS.FORGOT_PASSWORD,
+    component: ForgotPassword,
+    roles: [ROLE.ADMIN, ROLE.MANAGER, ROLE.WAITER],
+    isPublic: false,
+    layout: true,
+  },
+  {
+    path: PATHS.UPDATE_PASSWORD,
+    component: ChangePassword,
+    roles: [ROLE.ADMIN, ROLE.MANAGER, ROLE.WAITER],
+    isPublic: false,
+    layout: true,
+  },
 
-  { path: PATHS.HOME, component: Home, isPublic: true, layout: true },
-  { path: PATHS.ADMIN_DASHBOARD, component: AdminDashboard, isPublic: false, layout: true },
-  { path: PATHS.CATEGORY_MANAGEMENT, component: CategoryManagement, isPublic: false, layout: true },
-  { path: PATHS.PRODUCT_MANAGEMENT, component: ProductManagement, isPublic: false, layout: true },
-  { path: PATHS.ORDER_MANAGEMENT, component: OrderManagement, isPublic: false, layout: true },
-  { path: PATHS.ADD_STAFF, component: StaffManagement, isPublic: false, layout: true },
-  { path: PATHS.BILLING_MANAGEMENT, component: BillingManagement, isPublic: false, layout: true },
+  {
+    path: PATHS.HOME,
+    component: Home,
+    isPublic: true,
+    layout: false,
+  },
+  {
+    path: PATHS.ADMIN_DASHBOARD,
+    component: AdminDashboard,
+    roles: [ROLE.ADMIN],
+    isPublic: false,
+    layout: true,
+  },
+  {
+    path: PATHS.CATEGORY_MANAGEMENT,
+    component: CategoryManagement,
+    roles: [ROLE.ADMIN, ROLE.MANAGER],
+    isPublic: false,
+    layout: true,
+  },
+  {
+    path: PATHS.PRODUCT_MANAGEMENT,
+    component: ProductManagement,
+    roles: [ROLE.ADMIN, ROLE.MANAGER],
+    isPublic: false,
+    layout: true,
+  },
+  {
+    path: PATHS.ORDER_MANAGEMENT,
+    component: OrderManagement,
+    roles: [ROLE.ADMIN, ROLE.MANAGER, ROLE.WAITER],
+    isPublic: false,
+    layout: true,
+  },
+  {
+    path: PATHS.ADD_STAFF,
+    component: StaffManagement,
+    roles: [ROLE.ADMIN],
+    isPublic: false,
+    layout: true,
+  },
+  {
+    path: PATHS.BILLING_MANAGEMENT,
+    component: BillingManagement,
+    roles: [ROLE.ADMIN, ROLE.MANAGER],
+    isPublic: false,
+    layout: true,
+  },
 
   //   { path: PATHS.PAGE_NOT_FOUND, component: PageNotFound, isPublic: true, layout: false },
 
-  { path: PATHS.MENU, component: menu, isPublic: true, layout: true, MenuLayout: true },
-  { path: PATHS.CART, component: cart, isPublic: true, layout: false, MenuLayout: true },
-  { path: PATHS.FAV_PROD, component: favouriteProducts, isPublic: false, MenuLayout: true },
-  { path: PATHS.CUST_PROFILE, component: customerProfile, isPublic: false, MenuLayout: true },
+  {
+    path: PATHS.MENU,
+    component: menu,
+    isPublic: true,
+    layout: true,
+    MenuLayout: true,
+  },
+  {
+    path: PATHS.CART,
+    component: cart,
+    isPublic: true,
+    layout: false,
+    MenuLayout: true,
+  },
+  {
+    path: PATHS.FAV_PROD,
+    component: favouriteProducts,
+    roles: [ROLE.CUSTOMER],
+    isPublic: false,
+    MenuLayout: true,
+  },
+  {
+    path: PATHS.CUST_PROFILE,
+    component: customerProfile,
+    roles: [ROLE.CUSTOMER],
+    isPublic: false,
+    MenuLayout: true,
+  },
 ];
-  
+
 export default PageData;

@@ -32,16 +32,20 @@ const Dashboard = () => {
       total: 42,
       popular: 12
     },
-    tables: {
-      total: 25,
-      occupied: 18,
-      available: 7
+    staff: {
+      total: 15,
+      onDuty: 8
     },
     topCategories: [
       { name: 'Main Courses', value: 38, color: 'bg-gradient-to-r from-blue-500 to-indigo-600' },
       { name: 'Appetizers', value: 24, color: 'bg-gradient-to-r from-green-500 to-emerald-600' },
       { name: 'Desserts', value: 18, color: 'bg-gradient-to-r from-amber-500 to-orange-500' },
       { name: 'Beverages', value: 20, color: 'bg-gradient-to-r from-purple-500 to-fuchsia-600' }
+    ],
+    topPerformers: [
+      { name: 'Sarah Johnson', role: 'Server', orders: 42, initials: 'SJ' },
+      { name: 'Michael Chen', role: 'Bartender', orders: 38, initials: 'MC' },
+      { name: 'Emma Rodriguez', role: 'Server', orders: 35, initials: 'ER' }
     ],
     recentOrders: [
       { id: 1, customer: 'Table #5', items: 3, total: 86.50, status: 'served', time: '12 min ago' },
@@ -51,7 +55,8 @@ const Dashboard = () => {
     ],
     reviews: [
       { id: 1, customer: 'Emily Johnson', rating: 5, comment: 'Excellent food and service!', date: 'Yesterday' },
-      { id: 2, customer: 'Michael Chen', rating: 4, comment: 'Great atmosphere, will come back', date: '2 days ago' }
+      { id: 2, customer: 'Michael Chen', rating: 4, comment: 'Great atmosphere, will come back', date: '2 days ago' },
+      { id: 3, customer: 'David Wilson', rating: 5, comment: 'Sarah provided exceptional service!', date: 'Today' }
     ]
   };
 

@@ -1,14 +1,20 @@
-import React from "react";
+import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
-// Mock auth check — replace with actual auth logic
-const isAuthenticated = () => {
-  // Example: check localStorage or a token
-  return localStorage.getItem("authToken") !== null;
-};
+const ProtectedRoutes = ({ allowedRoles }) => {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-const ProtectedRoutes = () => {
-  return isAuthenticated() ? <Outlet /> : <Navigate to="/login" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    // 🚫 Logged in but role not allowed → redirect to home or unauthorized page
+    return <Navigate to="/home" replace />;
+  }
+
+  // ✅ Allowed → render children
+  return <Outlet />;
 };
 
 export default ProtectedRoutes;

@@ -10,7 +10,9 @@ import {
   ShoppingCart,
   ArrowUp,
   ArrowDown,
-  PieChart
+  PieChart,
+  UserCheck,
+  Target
 } from "lucide-react";
 
 const DashboardView = ({ 
@@ -38,7 +40,7 @@ const DashboardView = ({
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Revenue Card */}
-        <div className={`p-6 rounded-2xl shadow-lg ${cardColors[0]} border border-blue-200`}>
+        <div className={`p-6 rounded-2xl shadow-lg bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 transition-transform hover:scale-[1.02]`}>
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-blue-700">Total Revenue</p>
@@ -61,7 +63,7 @@ const DashboardView = ({
         </div>
 
         {/* Customers Card */}
-        <div className={`p-6 rounded-2xl shadow-lg ${cardColors[1]} border border-green-200`}>
+        <div className={`p-6 rounded-2xl shadow-lg bg-gradient-to-br from-green-50 to-green-100 border border-green-200 transition-transform hover:scale-[1.02]`}>
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-green-700">Customers Served</p>
@@ -84,7 +86,7 @@ const DashboardView = ({
         </div>
 
         {/* Orders Card */}
-        <div className={`p-6 rounded-2xl shadow-lg ${cardColors[2]} border border-amber-200`}>
+        <div className={`p-6 rounded-2xl shadow-lg bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 transition-transform hover:scale-[1.02]`}>
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-amber-700">Total Orders</p>
@@ -107,7 +109,7 @@ const DashboardView = ({
         </div>
 
         {/* Average Order Value Card */}
-        <div className={`p-6 rounded-2xl shadow-lg ${cardColors[3]} border border-purple-200`}>
+        <div className={`p-6 rounded-2xl shadow-lg bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 transition-transform hover:scale-[1.02]`}>
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-purple-700">Avg Order Value</p>
@@ -130,10 +132,10 @@ const DashboardView = ({
         </div>
       </div>
 
-      {/* Second Row - Menu and Table Status */}
+      {/* Second Row - Menu and Staff Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Menu Overview */}
-        <div className={`p-6 rounded-2xl shadow-lg ${cardColors[4]} border border-pink-200`}>
+        <div className={`p-6 rounded-2xl shadow-lg bg-gradient-to-br from-rose-50 to-pink-100 border border-pink-200`}>
           <h3 className="text-xl font-semibold text-rose-800 mb-4 flex items-center">
             <Utensils size={20} className="mr-2" /> Menu Overview
           </h3>
@@ -164,38 +166,41 @@ const DashboardView = ({
           </div>
         </div>
 
-        {/* Table Status */}
-        <div className={`p-6 rounded-2xl shadow-lg ${cardColors[5]} border border-cyan-200`}>
+        {/* Staff Performance */}
+        <div className={`p-6 rounded-2xl shadow-lg bg-gradient-to-br from-teal-50 to-cyan-100 border border-cyan-200`}>
           <h3 className="text-xl font-semibold text-cyan-800 mb-4 flex items-center">
-            <Utensils size={20} className="mr-2" /> Table Status
+            <UserCheck size={20} className="mr-2" /> Staff Performance
           </h3>
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="text-center p-4 bg-gradient-to-br from-green-100 to-green-200 rounded-xl border border-green-200">
-              <div className="text-3xl font-bold text-green-700">{dashboardData.tables.available}</div>
-              <p className="text-sm text-green-600 mt-1 font-medium">Available</p>
+              <div className="text-3xl font-bold text-green-700">{dashboardData.staff.onDuty}</div>
+              <p className="text-sm text-green-600 mt-1 font-medium">On Duty</p>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl border border-blue-200">
-              <div className="text-3xl font-bold text-blue-700">{dashboardData.tables.occupied}</div>
-              <p className="text-sm text-blue-600 mt-1 font-medium">Occupied</p>
-            </div>
-            <div className="text-center p-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl border border-gray-300">
-              <div className="text-3xl font-bold text-gray-700">{dashboardData.tables.total}</div>
-              <p className="text-sm text-gray-600 mt-1 font-medium">Total Tables</p>
+              <div className="text-3xl font-bold text-blue-700">{dashboardData.staff.total}</div>
+              <p className="text-sm text-blue-600 mt-1 font-medium">Total Staff</p>
             </div>
           </div>
           
-          <div className="mt-6">
-            <h4 className="font-medium text-cyan-700 mb-2">Table Occupancy</h4>
-            <div className="bg-gray-100 h-2 rounded-full overflow-hidden">
-              <div 
-                className="bg-gradient-to-r from-green-400 to-green-500 h-full rounded-full" 
-                style={{ width: `${(dashboardData.tables.available / dashboardData.tables.total) * 100}%` }}
-              ></div>
-              <div 
-                className="bg-gradient-to-r from-blue-400 to-blue-500 h-full -mt-2 rounded-full" 
-                style={{ width: `${(dashboardData.tables.occupied / dashboardData.tables.total) * 100}%` }}
-              ></div>
-            </div>
+          <h4 className="font-medium text-cyan-700 mb-2">Top Performers</h4>
+          <div className="space-y-3">
+            {dashboardData.topPerformers.map((staff, index) => (
+              <div key={index} className="flex items-center justify-between p-2 bg-white rounded-lg border border-cyan-100">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center mr-3">
+                    <span className="text-cyan-700 font-medium text-sm">{staff.initials}</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-cyan-900">{staff.name}</p>
+                    <p className="text-xs text-cyan-600">{staff.role}</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <Target size={14} className="text-cyan-600 mr-1" />
+                  <span className="text-sm font-medium text-cyan-800">{staff.orders} orders</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -209,7 +214,7 @@ const DashboardView = ({
           </h3>
           <div className="space-y-4">
             {dashboardData.recentOrders.map(order => (
-              <div key={order.id} className="flex justify-between items-center p-3 bg-white rounded-lg border border-indigo-100 shadow-sm">
+              <div key={order.id} className="flex justify-between items-center p-3 bg-white rounded-lg border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
                 <div>
                   <p className="font-medium text-indigo-900">{order.customer}</p>
                   <p className="text-sm text-indigo-600">{order.items} items • ${order.total.toFixed(2)}</p>
@@ -239,7 +244,7 @@ const DashboardView = ({
           </h3>
           <div className="space-y-4">
             {dashboardData.reviews.map(review => (
-              <div key={review.id} className="p-3 bg-white rounded-lg border border-amber-100 shadow-sm">
+              <div key={review.id} className="p-3 bg-white rounded-lg border border-amber-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start">
                   <p className="font-medium text-amber-900">{review.customer}</p>
                   <div className="flex items-center">
@@ -267,25 +272,25 @@ const DashboardView = ({
       <div className={`p-6 rounded-2xl shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200`}>
         <h3 className="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link to="/admin/orders" className="p-4 text-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg">
+          <Link to="/admin/orders" className="p-4 text-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
             <div className="flex flex-col items-center">
               <ShoppingCart size={24} />
               <span className="mt-2 text-sm font-medium">New Order</span>
             </div>
           </Link>
-          <Link to="/admin/menu" className="p-4 text-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg">
+          <Link to="/admin/menu" className="p-4 text-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
             <div className="flex flex-col items-center">
               <Utensils size={24} />
               <span className="mt-2 text-sm font-medium">Manage Menu</span>
             </div>
           </Link>
-          <Link to="/admin/staff" className="p-4 text-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg">
+          <Link to="/admin/staff" className="p-4 text-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
             <div className="flex flex-col items-center">
               <Users size={24} />
               <span className="mt-2 text-sm font-medium">Staff</span>
             </div>
           </Link>
-          <Link to="/admin/reports" className="p-4 text-center rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white hover:from-purple-600 hover:to-fuchsia-700 transition-all shadow-md hover:shadow-lg">
+          <Link to="/admin/reports" className="p-4 text-center rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white hover:from-purple-600 hover:to-fuchsia-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1">
             <div className="flex flex-col items-center">
               <PieChart size={24} />
               <span className="mt-2 text-sm font-medium">Reports</span>

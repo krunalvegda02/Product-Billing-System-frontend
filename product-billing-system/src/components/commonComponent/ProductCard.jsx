@@ -9,7 +9,7 @@ const ProductCard = ({ product = {} }) => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
-  const userId = useSelector((state) => state.auth.user._id);
+  const userId = useSelector((state) => state.auth.user._id) ;
 
   // Local state to refresh icon immediately
   const [liked, setLiked] = useState(product?.likedBy?.includes(userId));
