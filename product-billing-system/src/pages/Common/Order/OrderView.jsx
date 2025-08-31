@@ -1,7 +1,13 @@
+import { useState } from "react";
+import FeedBackModal from "../../../components/helperComponent/FeedBackModal";
+
+
+
 const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }) => {
   // console.log(orderItems);
-
+  const [isFeedbackModalOpen, setFeedbackModalOpen] = useState(false);
   return (
+    
     <div className="w-full max-w-md p-4 bg-white rounded-xl shadow-lg">
       <h3 className="text-xl font-semibold mb-4 text-center border-b pb-2">Your Order</h3>
 
@@ -38,6 +44,15 @@ const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }
       >
         Place Order
       </button>
+
+
+      <div>
+        <button onClick={() => setFeedbackModalOpen(true)} className="bg-blue-500 text-white px-4 py-2 rounded">
+          Open Feedback
+        </button>
+
+        <FeedBackModal isOpen={isFeedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
+      </div>
     </div>
   );
 };
