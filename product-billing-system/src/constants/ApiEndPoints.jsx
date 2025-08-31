@@ -5,10 +5,6 @@ export const API_ENDPOINT = {
   FORGOT_PASSWORD: "users/forgot_password",
   CHANGE_PASSWORD: "users/change_password",
 
-  CREATE_USER: "users/create_user",
-
-  GET_SERVER: "users/get_servant_staff",
-
   CREATE_CATEGORY: "category/create",
   GET_ALL_CATEGORY: "category/",
   GET_CATEGORY: "category/",
@@ -25,6 +21,8 @@ export const API_ENDPOINT = {
   GET_LIKED_PRODUCTS: "products/liked-products",
   TOGGLE_LIKE_PRODUCT: "products/toggle-like",
 
+  GET_DASHBOARD_DATA: "dashboard/",
+
   ORDER: {
     GET_ALL_ORDER: "order/",
     CREATE_ORDER: "order/create",
@@ -35,5 +33,13 @@ export const API_ENDPOINT = {
     CANCEL_ORDER: "order/cancel/:id",
     UPDATE_ORDER_STATUS_BY_STAFF: "order/update-status/:id",
     UPDATE_ORDER_STATUS_BY_CUSTOMER: "order/update-status-customer/:id",
+  },
+
+  STAFF: {
+    GET_SERVER: "users/get-servant-staff",
+    GET_STAFF: "users/get-staff",
+    CREATE_STAFF: "users/create-staff",
+    UPDATE_STAFF: "users/update-staff/:id",
+    DELETE_STAFF: "users/delete-staff/:id",
   },
 };
