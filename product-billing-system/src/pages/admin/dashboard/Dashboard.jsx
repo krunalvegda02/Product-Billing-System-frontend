@@ -1,30 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardView from "./DashboardView";
+import axios from "axios";
 import { THEME_CONFIG } from "../../../constants/Theme";
 import { useDispatch } from "react-redux";
-import { fetchDashboardData } from "../../../redux/Slices/dashboardSlice";
+import { fetchDashboardData, fetchDashStaffData } from "../../../redux/Slices/dashboardSlice";
+import { API_ENDPOINT } from "../../../constants/ApiEndPoints";
 
 const Dashboard = () => {
   const currentTheme = "GENERAL";
   const theme = THEME_CONFIG[currentTheme];
-
+  const APIURL = import.meta.env.VITE_API_URL;
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await dispatch(fetchDashboardData({ duration: "lastMonth" })).unwrap();
-        console.log("✅ Dashboard Data Response:", res);
-      } catch (error) {
-        console.error("❌ Failed to fetch dashboard data:", error);
-      }
-    };
+  const categoryColors = [
+    "bg-gradient-to-r from-blue-500 to-indigo-600",
+    "bg-gradient-to-r from-green-500 to-emerald-600",
+    "bg-gradient-to-r from-amber-500 to-orange-500",
+    "bg-gradient-to-r from-purple-500 to-fuchsia-600",
+  ];
 
-    fetchData();
-  }, []);   
-
-  // Sample data for the restaurant dashboard
-  const dashboardData = {
+  const [dashboardData, setDashboardData] = useState({
     revenue: {
       current: 12500,
       previous: 10800,
@@ -53,11 +48,12 @@ const Dashboard = () => {
       total: 15,
       onDuty: 8,
     },
+
     topCategories: [
-      { name: "Main Courses", value: 38, color: "bg-gradient-to-r from-blue-500 to-indigo-600" },
-      { name: "Appetizers", value: 24, color: "bg-gradient-to-r from-green-500 to-emerald-600" },
-      { name: "Desserts", value: 18, color: "bg-gradient-to-r from-amber-500 to-orange-500" },
-      { name: "Beverages", value: 20, color: "bg-gradient-to-r from-purple-500 to-fuchsia-600" },
+      { name: "Main Courses", value: 38, color: categoryColors[0] },
+      { name: "Appetizers", value: 24, color: categoryColors[1] },
+      { name: "Desserts", value: 18, color: categoryColors[2] },
+      { name: "Beverages", value: 20, color: categoryColors[3] },
     ],
     topPerformers: [
       { name: "Sarah Johnson", role: "Server", orders: 42, initials: "SJ" },
@@ -75,7 +71,29 @@ const Dashboard = () => {
       { id: 2, customer: "Michael Chen", rating: 4, comment: "Great atmosphere, will come back", date: "2 days ago" },
       { id: 3, customer: "David Wilson", rating: 5, comment: "Sarah provided exceptional service!", date: "Today" },
     ],
+  });
+
+  console.log(dashboardData);
+
+    const [staffData, setStaffData] = useState(null);
+    const [feedback, setFeedback] = useState({});
+
+  const initDashboard = async () => {
+    try {
+      const dashboard = await dispatch(fetchDashboardData({ duration: "lastMonth" })).unwrap();
+
+      const feedbacks = await axios.get(`${APIURL}v1/${API_ENDPOINT.GET_FEEDBACKS}`);
+      setFeedback(feedbacks.data);
+
+      console.log("✅ Dashboard Data Response:", dashboard, "staff", staffData, "feedback", feedback);
+    } catch (error) {
+      console.error("❌ Failed to fetch dashboard data:", error);
+    }
   };
+
+  useEffect(() => {
+    initDashboard();
+  }, []);
 
   // Calculate percentage change
   const calculateChange = (current, previous) => {
@@ -92,6 +110,8 @@ const Dashboard = () => {
     "bg-gradient-to-br from-cyan-50 to-teal-100",
   ];
 
+
+  
   // Get current date
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",

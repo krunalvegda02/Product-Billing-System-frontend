@@ -6,7 +6,7 @@ import {
   updateProduct,
   deselectProduct, // ✅ same here
 } from "../../../redux/Slices/productSlice";
-import { getAllCategories } from "../../../redux/Slices/categorySlice"; // ✅ for category dropdown
+import { getAllCategories, resetCategorySlice } from "../../../redux/Slices/categorySlice"; // ✅ for category dropdown
 import store from "../../../redux/Store/store";
 import CustomModal from "../../helperComponent/customModal";
 
@@ -95,6 +95,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
   // Fetch categories when modal opens
   useEffect(() => {
     if (isOpen) {
+      dispatch(resetCategorySlice())
       dispatch(getAllCategories());
     }
   }, [isOpen, dispatch]);
@@ -199,7 +200,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
             <option value="">-- Select Category --</option>
             {categories?.map((cat) => (
               <option key={cat._id} value={cat._id}>
-                {cat.name}
+                {cat.categoryName}
               </option>
             ))}
           </select>

@@ -22,6 +22,7 @@ export const API_ENDPOINT = {
   TOGGLE_LIKE_PRODUCT: "products/toggle-like",
 
   GET_DASHBOARD_DATA: "dashboard/",
+  GET_BILLING_DATA: "dashboard/billing",
 
   GET_FEEDBACKS: "feedback/all-feedback",
   ADD_FEEDBACK: "feedback/",

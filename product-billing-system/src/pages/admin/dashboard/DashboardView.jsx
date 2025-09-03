@@ -29,7 +29,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
             <div>
               <p className="text-sm font-medium text-blue-700">Total Revenue</p>
               <h3 className="text-2xl font-bold text-blue-900 mt-1">${dashboardData.revenue.current.toLocaleString()}</h3>
-              <div className="flex items-center mt-2">
+              {/* <div className="flex items-center mt-2">
                 {dashboardData.revenue.trend === "up" ? (
                   <ArrowUp size={14} className="text-green-600 mr-1" />
                 ) : (
@@ -38,7 +38,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
                 <span className={`text-sm ${dashboardData.revenue.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.revenue.current, dashboardData.revenue.previous)}% from last week
                 </span>
-              </div>
+              </div> */}
             </div>
             <div className="p-3 rounded-full bg-blue-100">
               <DollarSign size={20} className="text-blue-600" />
@@ -54,7 +54,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
             <div>
               <p className="text-sm font-medium text-green-700">Customers Served</p>
               <h3 className="text-2xl font-bold text-green-900 mt-1">{dashboardData.customers.current}</h3>
-              <div className="flex items-center mt-2">
+              {/* <div className="flex items-center mt-2">
                 {dashboardData.customers.trend === "up" ? (
                   <ArrowUp size={14} className="text-green-600 mr-1" />
                 ) : (
@@ -63,7 +63,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
                 <span className={`text-sm ${dashboardData.customers.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.customers.current, dashboardData.customers.previous)}% from last week
                 </span>
-              </div>
+              </div> */}
             </div>
             <div className="p-3 rounded-full bg-green-100">
               <Users size={20} className="text-green-600" />
@@ -79,7 +79,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
             <div>
               <p className="text-sm font-medium text-amber-700">Total Orders</p>
               <h3 className="text-2xl font-bold text-amber-900 mt-1">{dashboardData.orders.current}</h3>
-              <div className="flex items-center mt-2">
+              {/* <div className="flex items-center mt-2">
                 {dashboardData.orders.trend === "up" ? (
                   <ArrowUp size={14} className="text-green-600 mr-1" />
                 ) : (
@@ -88,7 +88,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
                 <span className={`text-sm ${dashboardData.orders.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.orders.current, dashboardData.orders.previous)}% from last week
                 </span>
-              </div>
+              </div> */}
             </div>
             <div className="p-3 rounded-full bg-amber-100">
               <ShoppingCart size={20} className="text-amber-600" />
@@ -104,7 +104,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
             <div>
               <p className="text-sm font-medium text-purple-700">Avg Order Value</p>
               <h3 className="text-2xl font-bold text-purple-900 mt-1">${dashboardData.avgOrderValue?.current.toFixed(2)}</h3>
-              <div className="flex items-center mt-2">
+              {/* <div className="flex items-center mt-2">
                 {dashboardData.avgOrderValue?.trend === "up" ? (
                   <ArrowUp size={14} className="text-green-600 mr-1" />
                 ) : (
@@ -113,7 +113,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
                 <span className={`text-sm ${dashboardData.avgOrderValue?.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.avgOrderValue?.current, dashboardData.avgOrderValue?.previous)}% from last week
                 </span>
-              </div>
+              </div> */}
             </div>
             <div className="p-3 rounded-full bg-purple-100">
               <TrendingUp size={20} className="text-purple-600" />
