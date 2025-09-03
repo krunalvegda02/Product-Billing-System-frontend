@@ -113,28 +113,28 @@
           </div>
         )}
 
-        <CustomModal isOpen={isOpen} onCancel={closeModal} onSubmit={handleFinalOrderSubmit} title="Confirm Order">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium">Payment Method</label>
-              <select className="w-full p-2 border rounded" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-                <option value={COMMON.PAYMENT_METHOD.CASH}>{COMMON.PAYMENT_METHOD.CASH}</option>
-                <option value={COMMON.PAYMENT_METHOD.UPI}>{COMMON.PAYMENT_METHOD.UPI}</option>
-              </select>
-            </div>
+          <CustomModal isOpen={isOpen} onCancel={closeModal} onSubmit={handleFinalOrderSubmit} title="Confirm Order">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium">Payment Method</label>
+                <select className="w-full p-2 border rounded" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                  <option value={COMMON.PAYMENT_METHOD.CASH}>{COMMON.PAYMENT_METHOD.CASH}</option>
+                  <option value={COMMON.PAYMENT_METHOD.UPI}>{COMMON.PAYMENT_METHOD.UPI}</option>
+                </select>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium">Referral Code (optional)</label>
-              <input
-                type="text"
-                className="w-full p-2 border rounded"
-                placeholder="Enter referral code"
-                value={referralCode}
-                onChange={(e) => setReferralCode(e.target.value)}
-              />
+              <div>
+                <label className="block text-sm font-medium">Referral Code (optional)</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded"
+                  placeholder="Enter referral code"
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
-        </CustomModal>
+          </CustomModal>
       </>
     );
   };

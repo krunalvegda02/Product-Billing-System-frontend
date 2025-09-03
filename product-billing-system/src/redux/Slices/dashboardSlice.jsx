@@ -8,7 +8,7 @@ import { API_ENDPOINT } from "../../constants/ApiEndPoints";
 
 // ✅ Thunk: fetch dashboard data
 export const fetchDashboardData = createAsyncThunkHandler(
-  "dashboard/fetch",
+  API_ENDPOINT.GET_DASHBOARD_DATA,
   _get,
   (payload) => buildUrlWithParams(API_ENDPOINT.GET_DASHBOARD_DATA, payload) // /dashboard?duration=lastMonth
 );

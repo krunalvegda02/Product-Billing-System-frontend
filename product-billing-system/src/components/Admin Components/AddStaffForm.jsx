@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
 import { Upload, X, User, Mail, Phone, Lock, ChevronDown } from "lucide-react";
 
-const AddStaffForm = ({ staffData, onChange }) => {
+const AddStaffForm = ({ staffData, onChange, isEdit }) => {
+  // console.log(staffData);
+
   const fileInputRef = useRef(null);
   const [avatarPreview, setAvatarPreview] = useState(staffData.avatar || "");
 
@@ -13,7 +15,7 @@ const AddStaffForm = ({ staffData, onChange }) => {
         alert("File size exceeds 5MB limit. Please choose a smaller file.");
         return;
       }
-      
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const imageDataUrl = e.target.result;
@@ -41,11 +43,7 @@ const AddStaffForm = ({ staffData, onChange }) => {
           <div className="relative">
             {avatarPreview ? (
               <>
-                <img
-                  src={avatarPreview}
-                  alt="Avatar preview"
-                  className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
-                />
+                <img src={avatarPreview} alt="Avatar preview" className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md" />
                 <button
                   type="button"
                   onClick={removeImage}
@@ -60,16 +58,9 @@ const AddStaffForm = ({ staffData, onChange }) => {
               </div>
             )}
           </div>
-          
+
           <div className="flex-1">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-              id="avatar-upload"
-            />
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="avatar-upload" />
             <label
               htmlFor="avatar-upload"
               className="cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all duration-200 inline-flex items-center gap-2 shadow-sm hover:shadow-md"
@@ -132,8 +123,8 @@ const AddStaffForm = ({ staffData, onChange }) => {
             <input
               type="tel"
               className="w-full p-3.5 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 bg-white shadow-sm"
-              value={staffData.mobile}
-              onChange={(e) => onChange({ ...staffData, mobile: e.target.value })}
+              value={staffData.contact}
+              onChange={(e) => onChange({ ...staffData, contact: e.target.value })}
               required
               placeholder="+91 23456 78900"
             />
@@ -143,9 +134,7 @@ const AddStaffForm = ({ staffData, onChange }) => {
 
         {/* Role Field */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Role *
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Role *</label>
           <div className="relative">
             <select
               className="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 bg-white appearance-none shadow-sm"
@@ -154,18 +143,18 @@ const AddStaffForm = ({ staffData, onChange }) => {
               required
             >
               <option value="">Select a role</option>
-              <option value="Manager">Manager</option>
-              <option value="Cashier">Cashier</option>
-              <option value="Chef">Chef</option>
-              <option value="Wait Staff">Wait Staff</option>
-              <option value="Bartender">Bartender</option>
+              <option value="MANAGER">Manager</option>
+              <option value="WAITER">Waiter</option>
+              {/* <option value="CHEF">Chef</option>
+              <option value="WAIT_STAFF">Wait Staff</option>
+              <option value="BARTENDER">Bartender</option> */}
             </select>
             <ChevronDown size={18} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
           </div>
         </div>
 
         {/* Optional: Password Field for new staff */}
-        {!staffData.id && (
+        {!staffData.id && !isEdit && (
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
               <Lock size={16} className="text-blue-500" />
@@ -182,7 +171,6 @@ const AddStaffForm = ({ staffData, onChange }) => {
               />
               <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
-           
           </div>
         )}
       </div>
@@ -192,11 +180,11 @@ const AddStaffForm = ({ staffData, onChange }) => {
         <div className="bg-blue-50 p-4 rounded-xl border border-blue-200 mt-2">
           <h4 className="text-sm font-medium text-blue-800 mb-2">Role Description:</h4>
           <p className="text-xs text-blue-600">
-            {staffData.role === "Manager" && "Manages overall operations, staff scheduling, and inventory."}
-            {staffData.role === "Cashier" && "Handles customer transactions, payments, and order processing."}
-            {staffData.role === "Chef" && "Prepares food items, manages kitchen inventory, and ensures food quality."}
-            {staffData.role === "Wait Staff" && "Takes orders, serves customers, and maintains dining area cleanliness."}
-            {staffData.role === "Bartender" && "Prepares beverages, manages bar inventory, and serves customers at the bar."}
+            {staffData.role === "MANAGER" && "Manages overall operations, staff scheduling, and inventory."}
+            {/* {staffData.role === "Waiter" && "Handles customer transactions, payments, and order processing."} */}
+            {/* {staffData.role === "Chef" && "Prepares food items, manages kitchen inventory, and ensures food quality."} */}
+            {staffData.role === "WAITER" && "Takes orders, serves customers, and maintains dining area cleanliness."}
+            {/* {staffData.role === "Bartender" && "Prepares beverages, manages bar inventory, and serves customers at the bar."} */}
           </p>
         </div>
       )}

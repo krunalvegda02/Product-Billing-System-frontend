@@ -6,7 +6,9 @@ import authReducer from "../Slices/authSlice";
 import categoryReducer from "../Slices/categorySlice";
 import productReducer from "../Slices/productSlice";
 import orderManagementReducer from "../Slices/orderManagementSlice";
-import tableOrderReducer from "../Slices/OrderSlice"; 
+import tableOrderReducer from "../Slices/OrderSlice";
+import staffReducer from "../Slices/StaffSlice";
+import dashboardReducer from "../Slices/dashboardSlice";
 
 // Persist only the auth slice for clarity
 const persistConfig = {
@@ -23,6 +25,8 @@ const store = configureStore({
     product: productReducer,
     order: orderManagementReducer,
     tableorder: tableOrderReducer,
+    staff: staffReducer,
+    dashboard: dashboardReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,50 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStaffs, addStaff, updateStaff, deleteStaff, fetchServants } from "../../../redux/Slices/StaffSlice";
 import StaffManagementView from "./StaffManagementView";
+import AddStaffForm from "../../../components/Admin Components/AddStaffForm";
+import CustomModal from "../../../components/helperComponent/customModal";
+import DeleteModalView from "../../../components/helperComponent/DeleteModal";
 
 const StaffManagement = () => {
-  // Sample staff data
-  const [staff, setStaff] = useState([
-    {
-      id: 1,
-      avatar: "https://i.pravatar.cc/50?img=1",
-      username: "John Doe",
-      mobile: "9876543210",
-      email: "john@example.com",
-      role: "Manager",
-    },
-    {
-      id: 2,
-      avatar: "https://i.pravatar.cc/50?img=2",
-      username: "Jane Smith",
-      mobile: "9123456780",
-      email: "jane@example.com",
-      role: "Cashier",
-    },
-    {
-      id: 3,
-      avatar: "https://i.pravatar.cc/50?img=3",
-      username: "Mike Lee",
-      mobile: "9988776655",
-      email: "mike@example.com",
-      role: "Chef",
-    },
-    {
-      id: 4,
-      avatar: "https://i.pravatar.cc/50?img=4",
-      username: "Sarah Johnson",
-      mobile: "9234567890",
-      email: "sarah@example.com",
-      role: "Wait Staff",
-    },
-    {
-      id: 5,
-      avatar: "https://i.pravatar.cc/50?img=5",
-      username: "David Wilson",
-      mobile: "9345678901",
-      email: "david@example.com",
-      role: "Bartender",
-    },
-  ]);
+  const dispatch = useDispatch();
+  const { list: staff, loading, actionLoading, error } = useSelector((state) => state.staff);
+
+  useEffect(() => {
+    dispatch(fetchStaffs());
+    // dispatch(fetchServants());
+  }, [dispatch]);
 
   // Search state
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,7 +25,7 @@ const StaffManagement = () => {
     id: null,
     avatar: "",
     username: "",
-    mobile: "",
+    contact: "",
     email: "",
     role: "",
     password: "",
@@ -69,13 +38,16 @@ const StaffManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  // Safely handle staff data
+  const staffData = Array.isArray(staff) ? staff : [];
+
   // Filter staff based on search term
-  const filteredStaff = staff.filter(
+  const filteredStaff = staffData.filter(
     (member) =>
-      member.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.mobile.includes(searchTerm)
+      member.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.contact?.includes(searchTerm)
   );
 
   const totalPages = Math.ceil(filteredStaff.length / itemsPerPage);
@@ -100,7 +72,7 @@ const StaffManagement = () => {
       id: null,
       avatar: "",
       username: "",
-      mobile: "",
+      contact: "",
       email: "",
       role: "",
       password: "",
@@ -129,45 +101,63 @@ const StaffManagement = () => {
 
   // Add new staff member
   const addStaffMember = () => {
-    const newStaff = {
-      ...currentStaff,
-      id: Math.max(...staff.map((s) => s.id), 0) + 1,
-      avatar: currentStaff.avatar || `https://i.pravatar.cc/50?img=${Math.floor(Math.random() * 50)}`,
-    };
-
-    setStaff([...staff, newStaff]);
-    closeAllModals();
+    dispatch(addStaff(currentStaff))
+      .unwrap()
+      .then(() => {
+        closeAllModals();
+        // Refresh staff list after successful addition
+        dispatch(fetchStaffs());
+      })
+      .catch((error) => {
+        console.error("Failed to add staff:", error);
+      });
   };
 
   // Update existing staff member
   const updateStaffMember = () => {
-    setStaff(
-      staff.map((s) =>
-        s.id === currentStaff.id
-          ? {
-              ...s,
-              username: currentStaff.username,
-              mobile: currentStaff.mobile,
-              email: currentStaff.email,
-              role: currentStaff.role,
-              avatar: currentStaff.avatar || s.avatar,
-            }
-          : s
-      )
-    );
-    closeAllModals();
+    dispatch(
+      updateStaff({
+        id: currentStaff._id,
+        username: currentStaff.username,
+        email: currentStaff.email,
+        contact: currentStaff.contact,
+        role: currentStaff.role,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        closeAllModals();
+        // Refresh staff list after successful update
+        dispatch(fetchStaffs());
+      })
+      .catch((error) => {
+        console.error("Failed to update staff:", error);
+      });
   };
 
   // Delete staff member
   const confirmDeleteStaff = () => {
-    setStaff(staff.filter((s) => s.id !== staffToDelete.id));
-    closeAllModals();
-    setStaffToDelete(null);
+    dispatch(deleteStaff({ id: staffToDelete._id }))
+      .unwrap()
+      .then(() => {
+        console.log("called");
+        
+        closeAllModals();
+        setStaffToDelete(null);
+        // Refresh staff list after successful deletion
+        dispatch(fetchStaffs());
+      })
+      .catch((error) => {
+        console.error("Failed to delete staff:", error);
+      });
   };
 
   // Props to pass to the view component
   const viewProps = {
-    staff,
+    loading,
+    actionLoading,
+    error,
+    staff: staffData,
     searchTerm,
     filteredStaff,
     paginatedData,
@@ -188,10 +178,48 @@ const StaffManagement = () => {
     addStaffMember,
     updateStaffMember,
     confirmDeleteStaff,
-    closeAllModals
+    closeAllModals,
   };
 
-  return <StaffManagementView {...viewProps} />;
+  return (
+    <>
+      <StaffManagementView {...viewProps} />
+
+      {/* Add Staff Modal */}
+      <CustomModal
+        isOpen={isAddModalOpen}
+        title="Add New Staff Member"
+        onSubmit={addStaffMember}
+        onCancel={closeAllModals}
+        okDisabled={!currentStaff.username || !currentStaff.email || !currentStaff.contact || !currentStaff.role || !currentStaff.password}
+        isLoading={actionLoading}
+      >
+        <AddStaffForm staffData={currentStaff} onChange={setCurrentStaff} isEdit={false} />
+      </CustomModal>
+
+      {/* Edit Staff Modal */}
+      <CustomModal
+        isOpen={isEditModalOpen}
+        title="Edit Staff Member"
+        onSubmit={updateStaffMember}
+        onCancel={closeAllModals}
+        okDisabled={!currentStaff.username || !currentStaff.email || !currentStaff.contact || !currentStaff.role}
+        isLoading={actionLoading}
+      >
+        <AddStaffForm staffData={currentStaff} onChange={setCurrentStaff} isEdit={true} />
+      </CustomModal>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteModalView
+        isOpen={isDeleteModalOpen}
+        onCancel={closeAllModals}
+        onDelete={confirmDeleteStaff}
+        itemName={staffToDelete?.username}
+        message="Are you sure you want to delete the staff member"
+        isLoading={actionLoading}
+      />
+    </>
+  );
 };
 
 export default StaffManagement;

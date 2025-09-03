@@ -1,32 +1,21 @@
 import React from "react";
-import { Pencil, Trash2, UserPlus, Search, ChevronLeft, ChevronRight } from "lucide-react";
-import AddStaffForm from "../../../components/Admin Components/AddStaffForm";
-import CustomModal from "../../../components/helperComponent/customModal";
-import DeleteModalView from "../../../components/helperComponent/DeleteModal";
+import { Pencil, Trash2, UserPlus, Search, ChevronLeft, ChevronRight, Loader } from "lucide-react";
 
 const StaffManagementView = ({
   staff,
+  loading,
+  actionLoading,
   searchTerm,
   filteredStaff,
   paginatedData,
   totalPages,
   currentPage,
   itemsPerPage,
-  currentStaff,
-  staffToDelete,
-  isAddModalOpen,
-  isEditModalOpen,
-  isDeleteModalOpen,
   handleSearchChange,
   handlePageChange,
   handleAddStaff,
   handleEditStaff,
   handleDeleteStaff,
-  setCurrentStaff,
-  addStaffMember,
-  updateStaffMember,
-  confirmDeleteStaff,
-  closeAllModals
 }) => {
   return (
     <div className="p-6 w-full bg-gray-50 min-h-screen">
@@ -50,103 +39,119 @@ const StaffManagementView = ({
 
         <button
           onClick={handleAddStaff}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg w-full sm:w-auto justify-center"
+          disabled={actionLoading}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg w-full sm:w-auto justify-center"
         >
-          <UserPlus size={18} /> Add Staff Member
+          {actionLoading ? <Loader size={18} className="animate-spin" /> : <UserPlus size={18} />}
+          {actionLoading ? "Processing..." : "Add Staff Member"}
         </button>
       </div>
 
+      {/* Loading state */}
+      {loading && (
+        <div className="flex justify-center items-center py-12">
+          <Loader size={32} className="animate-spin text-blue-600" />
+          <span className="ml-2 text-gray-600">Loading staff data...</span>
+        </div>
+      )}
+
       {/* Staff Table */}
-      <div className="overflow-x-auto bg-white shadow-lg rounded-2xl">
-        <table className="w-full">
-          <thead className="bg-gray-50 text-left">
-            <tr>
-              <th className="p-4 font-medium text-gray-600">#</th>
-              <th className="p-4 font-medium text-gray-600">Staff Member</th>
-              <th className="p-4 font-medium text-gray-600">Contact</th>
-              <th className="p-4 font-medium text-gray-600">Role</th>
-              <th className="p-4 font-medium text-gray-600 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {paginatedData.map((member, index) => (
-              <tr key={member.id} className="hover:bg-gray-50 transition-colors">
-                <td className="p-4 text-gray-500">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                <td className="p-4">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={member.avatar}
-                      alt={member.username}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-white shadow"
-                    />
-                    <span className="font-medium text-gray-800">{member.username}</span>
-                  </div>
-                </td>
-                <td className="p-4">
-                  <div className="flex flex-col">
-                    <a href={`tel:${member.mobile}`} className="text-gray-700 hover:text-blue-600 transition">
-                      {member.mobile}
-                    </a>
-                    <a
-                      href={`mailto:${member.email}`}
-                      className="text-gray-600 text-sm hover:text-blue-600 transition"
-                    >
-                      {member.email}
-                    </a>
-                  </div>
-                </td>
-                <td className="p-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      member.role === "Manager"
-                        ? "bg-purple-100 text-purple-800"
-                        : member.role === "Cashier"
-                        ? "bg-blue-100 text-blue-800"
-                        : member.role === "Chef"
-                        ? "bg-orange-100 text-orange-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {member.role}
-                  </span>
-                </td>
-                <td className="p-4">
-                  <div className="flex justify-center gap-2">
-                    <button
-                      onClick={() => handleEditStaff(member)}
-                      className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
-                    >
-                      <Pencil size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteStaff(member)}
-                      className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {paginatedData.length === 0 && (
+      {!loading && (
+        <div className="overflow-x-auto bg-white shadow-lg rounded-2xl">
+          <table className="w-full">
+            <thead className="bg-gray-50 text-left">
               <tr>
-                <td colSpan="5" className="p-8 text-center">
-                  <div className="flex flex-col items-center justify-center text-gray-400">
-                    <UserPlus size={48} className="mb-2 opacity-50" />
-                    <p className="text-lg">No staff members found</p>
-                    <p className="text-sm mt-1">
-                      {searchTerm ? "Try adjusting your search" : "Get started by adding your first team member"}
-                    </p>
-                  </div>
-                </td>
+                <th className="p-4 font-medium text-gray-600">#</th>
+                <th className="p-4 font-medium text-gray-600">Staff Member</th>
+                <th className="p-4 font-medium text-gray-600">Contact</th>
+                <th className="p-4 font-medium text-gray-600">Role</th>
+                <th className="p-4 font-medium text-gray-600 text-center">Actions</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {paginatedData.map((member, index) => (
+                <tr key={member._id || member.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="p-4 text-gray-500">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={member.avatar || `https://ui-avatars.com/api/?name=${member.username}&background=random`}
+                        alt={member.username}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-white shadow"
+                      />
+                      <span className="font-medium text-gray-800">{member.username}</span>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex flex-col">
+                      <a href={`tel:${member.mobile || member.contact}`} className="text-gray-700 hover:text-blue-600 transition">
+                        {member.mobile || member.contact}
+                      </a>
+                      <a
+                        href={`mailto:${member.email}`}
+                        className="text-gray-600 text-sm hover:text-blue-600 transition"
+                      >
+                        {member.email}
+                      </a>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        member.role === "Manager" || member.role === "MANAGER"
+                          ? "bg-purple-100 text-purple-800"
+                          : member.role === "Cashier" || member.role === "CASHIER"
+                          ? "bg-blue-100 text-blue-800"
+                          : member.role === "Chef" || member.role === "CHEF"
+                          ? "bg-orange-100 text-orange-800"
+                          : member.role === "WAITER" || member.role === "Waiter"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {member.role}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex justify-center gap-2">
+                      <button
+                        onClick={() => handleEditStaff(member)}
+                        disabled={actionLoading}
+                        className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteStaff(member)}
+                        disabled={actionLoading}
+                        className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50 transition-colors"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {paginatedData.length === 0 && !loading && (
+                <tr>
+                  <td colSpan="5" className="p-8 text-center">
+                    <div className="flex flex-col items-center justify-center text-gray-400">
+                      <UserPlus size={48} className="mb-2 opacity-50" />
+                      <p className="text-lg">No staff members found</p>
+                      <p className="text-sm mt-1">
+                        {searchTerm ? "Try adjusting your search" : "Get started by adding your first team member"}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Pagination Controls */}
-      {filteredStaff.length > 0 && (
+      {filteredStaff.length > 0 && !loading && (
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
           <div className="text-sm text-gray-600">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
@@ -194,43 +199,6 @@ const StaffManagementView = ({
           </div>
         </div>
       )}
-
-      {/* Add Staff Modal */}
-      <CustomModal
-        isOpen={isAddModalOpen}
-        title="Add New Staff Member"
-        onSubmit={addStaffMember}
-        onCancel={closeAllModals}
-        okDisabled={
-          !currentStaff.username ||
-          !currentStaff.email ||
-          !currentStaff.mobile ||
-          !currentStaff.role ||
-          !currentStaff.password
-        }
-      >
-        <AddStaffForm staffData={currentStaff} onChange={setCurrentStaff} isEdit={false} />
-      </CustomModal>
-
-      {/* Edit Staff Modal */}
-      <CustomModal
-        isOpen={isEditModalOpen}
-        title="Edit Staff Member"
-        onSubmit={updateStaffMember}
-        onCancel={closeAllModals}
-        okDisabled={!currentStaff.username || !currentStaff.email || !currentStaff.mobile || !currentStaff.role}
-      >
-        <AddStaffForm staffData={currentStaff} onChange={setCurrentStaff} isEdit={true} />
-      </CustomModal>
-
-      {/* Delete Confirmation Modal */}
-      <DeleteModalView
-        isOpen={isDeleteModalOpen}
-        onCancel={closeAllModals}
-        onDelete={confirmDeleteStaff}
-        itemName={staffToDelete?.username}
-        message="Are you sure you want to delete the staff member"
-      />
     </div>
   );
 };

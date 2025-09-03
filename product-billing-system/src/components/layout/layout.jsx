@@ -57,6 +57,7 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
       { path: PATHS.ADD_STAFF, label: "Staff Management", icon: "👥" },
       { path: PATHS.ORDER_MANAGEMENT, label: "Orders", icon: "📦" },
       { path: PATHS.BILLING_MANAGEMENT, label: "Billing", icon: "💰" },
+      { path: PATHS.FEEDBACK_MANAGEMENT, label: "Feedback", icon: "💬" },
     ],
     manager: [
       { path: PATHS.CATEGORY_MANAGEMENT, label: "Categories", icon: "🗂️" },
@@ -64,6 +65,7 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
       { path: PATHS.ADD_STAFF, label: "Staff Management", icon: "👥" },
       { path: PATHS.ORDER_MANAGEMENT, label: "Orders", icon: "📦" },
       { path: PATHS.BILLING_MANAGEMENT, label: "Billing", icon: "💰" },
+      { path: PATHS.FEEDBACK_MANAGEMENT, label: "Feedback", icon: "💬" },
     ],
     waiter: [{ path: "/waiter/orders", label: "Orders to Serve", icon: "🛎️" }],
   };
@@ -166,59 +168,36 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
             <h1 className="text-xl font-semibold">{titleMap[role]}</h1>
           </div>
 
-          {/* Middle - Search */}
-          <div className="hidden md:flex items-center bg-gray-100 px-3 py-1 rounded-full w-1/3">
-            <Search className="w-4 h-4 text-gray-500" />
-            <input type="text" placeholder="Search..." className="ml-2 w-full bg-transparent outline-none text-sm" />
-          </div>
-
           {/* Right Side */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <>
-                {/* Notifications */}
-                <div className="relative cursor-pointer">
-                  <Bell className="w-6 h-6 text-gray-600 hover:text-gray-900" />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">3</span>
+                {/* User role display - Now visible on all screen sizes */}
+                <div className="flex items-center">
+                  <span
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold ${theme.BG_ACCENT} bg-opacity-20 ${theme.TEXT_COLOR} border ${theme.BORDER_COLOR} shadow-sm`}
+                  >
+                    {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : role.charAt(0).toUpperCase() + role.slice(1)}
+                  </span>
                 </div>
 
                 {/* Avatar Dropdown */}
                 <div className="relative" ref={dropdownRef}>
-                  <div className="relative" ref={dropdownRef}>
-                    {user?.Avatar ? (
-                      <img
-                        src={user.Avatar}
-                        alt="User Avatar"
-                        className="w-10 h-10 rounded-full cursor-pointer border-2 border-gray-300"
-                        onClick={() => setShowMenu(!showMenu)}
-                      />
-                    ) : (
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer border-2 border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
-                        onClick={() => setShowMenu(!showMenu)}
-                      >
-                        <User className="w-6 h-6" />
-                      </div>
-                    )}
-
-                    {showMenu && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
-                        <Link
-                          to={PATHS.PROFILE_UPDATE}
-                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-sm"
-                          onClick={() => setShowMenu(false)}
-                        >
-                          <User className="w-4 h-4" /> Profile
-                        </Link>
-                        <button
-                          onClick={logOutHandler}
-                          className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-600"
-                        >
-                          <LogOut className="w-4 h-4" /> Logout
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                  {user?.Avatar ? (
+                    <img
+                      src={user.Avatar}
+                      alt="User Avatar"
+                      className="w-10 h-10 rounded-full cursor-pointer border-2 border-gray-300"
+                      onClick={() => setShowMenu(!showMenu)}
+                    />
+                  ) : (
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer border-2 border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      onClick={() => setShowMenu(!showMenu)}
+                    >
+                      <User className="w-6 h-6" />
+                    </div>
+                  )}
 
                   {showMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">

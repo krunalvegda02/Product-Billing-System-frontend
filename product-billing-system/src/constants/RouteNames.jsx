@@ -15,6 +15,7 @@ export const PATHS = {
   ORDER_MANAGEMENT: "/admin/orders",
   ADD_STAFF: "/admin/staff",
   BILLING_MANAGEMENT: "/admin/billing",
+  FEEDBACK_MANAGEMENT: "/admin/reviews",
 
   PAGE_NOT_FOUND: "/PageNotFound",
 

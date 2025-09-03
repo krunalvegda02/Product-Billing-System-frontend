@@ -6,6 +6,7 @@ import { useSocket } from "../../../context/SocketContext";
 import { useToast } from "../../../context/ToastContext";
 import { COMMON } from "../../../constants/Common";
 import { fetchAllOrders, updateOrderStatusByStaff } from "../../../redux/Slices/OrderSlice";
+import { fetchServants } from "../../../redux/Slices/StaffSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const DashboardOrders = () => {
@@ -26,25 +27,31 @@ const DashboardOrders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
 
-  // Fetch servers list
-  const fetchServers = async () => {
-    try {
-      const { data } = await axios.get(`${APIURL}v1/${API_ENDPOINT.GET_SERVER}`);
-      if (!data.success) {
-        showToast(data.message, "error");
-      } else {
-        setServers(data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching servers:", error);
-      showToast("Failed to fetch servers", "error");
-    }
-  };
-
-  // Initial fetch
   useEffect(() => {
-    dispatch(fetchAllOrders());
-    fetchServers();
+    const loadData = async () => {
+      try {
+        const ordersData = await dispatch(fetchAllOrders()).unwrap();
+        const servantsData = await dispatch(fetchServants()).unwrap();
+
+        // // assuming both thunks return { success, data, message }
+        // if (ordersData.success) {
+        //   setOrders(ordersData.data);
+        // } else {
+        //   showToast(ordersData.message, "error");
+        // }
+
+        if (servantsData.success) {
+          setServers(servantsData.data);
+        } else {
+          showToast(servantsData.message, "error");
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+        showToast("Failed to load data", "error");
+      }
+    };
+
+    loadData();
   }, [dispatch]);
 
   // 🔹 Listen for real-time new orders via socket
@@ -52,7 +59,7 @@ const DashboardOrders = () => {
     if (!socket) return;
 
     const handleNewOrder = (order) => {
-      console.log("New order received:", order);
+      // console.log("New order received:", order);
       dispatch(fetchAllOrders());
       showToast("New order received!", "success");
     };

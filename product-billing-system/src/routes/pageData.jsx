@@ -17,6 +17,7 @@ const cart = React.lazy(() => import("../pages/Common/Cart/index"));
 const favouriteProducts = React.lazy(() => import("../pages/Common/FavouriteProducts/index"));
 const customerProfile = React.lazy(() => import("../pages/Common/Profile/index"));
 const StaffManagement = React.lazy(() => import("../pages/admin/StaffManagement"));
+const Feedback = React.lazy(() => import("../pages/admin/Feedback"));
 
 import { ROLE } from "../constants/Role";
 import { PATHS } from "../constants/RouteNames";
@@ -110,6 +111,13 @@ const PageData = [
   {
     path: PATHS.BILLING_MANAGEMENT,
     component: BillingManagement,
+    roles: [ROLE.ADMIN, ROLE.MANAGER],
+    isPublic: false,
+    layout: true,
+  },
+  {
+    path: PATHS.FEEDBACK_MANAGEMENT,
+    component: Feedback,
     roles: [ROLE.ADMIN, ROLE.MANAGER],
     isPublic: false,
     layout: true,

@@ -23,6 +23,9 @@ export const API_ENDPOINT = {
 
   GET_DASHBOARD_DATA: "dashboard/",
 
+  GET_FEEDBACKS: "feedback/all-feedback",
+  ADD_FEEDBACK: "feedback/",
+
   ORDER: {
     GET_ALL_ORDER: "order/",
     CREATE_ORDER: "order/create",

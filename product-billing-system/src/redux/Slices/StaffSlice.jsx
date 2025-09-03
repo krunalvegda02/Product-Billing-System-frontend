@@ -28,8 +28,6 @@ export const deleteStaff = createAsyncThunkHandler(
   (payload) => `${API_ENDPOINT.STAFF.DELETE_STAFF.replace(":id", payload.id)}`
 );
 
-
-
 // 🔹 Initial State
 const initialState = {
   list: [],
@@ -52,7 +50,10 @@ const staffSlice = createSlice({
       })
       .addCase(fetchStaffs.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload.data || [];
+        const waiters = action.payload.data?.waiters || [];
+        const managers = action.payload.data?.managers || [];
+        
+        state.list = [...waiters, ...managers];
       })
       .addCase(fetchStaffs.rejected, (state, action) => {
         state.loading = false;
@@ -90,29 +91,30 @@ const staffSlice = createSlice({
       .addCase(updateStaff.fulfilled, (state, action) => {
         state.actionLoading = false;
         const index = state.list.findIndex((s) => s.id === action.payload.data.id);
-        if (index !== -1) {
-          state.list[index] = action.payload.data;
-        }
-      })
-      .addCase(updateStaff.rejected, (state, action) => {
-        state.actionLoading = false;
-        state.error = action.payload;
-      })
+          if (index !== -1) {
+            state.list[index] = action.payload.data;
+          }
+        })
+        .addCase(updateStaff.rejected, (state, action) => {
+          state.actionLoading = false;
+          state.error = action.payload;
+        })
 
-      // ===================== Delete Staff =====================
-      .addCase(deleteStaff.pending, (state) => {
-        state.actionLoading = true;
-        state.error = null;
-      })
-      .addCase(deleteStaff.fulfilled, (state, action) => {
-        state.actionLoading = false;
-        state.list = state.list.filter((s) => s.id !== action.payload.data.id);
-      })
-      .addCase(deleteStaff.rejected, (state, action) => {
-        state.actionLoading = false;
-        state.error = action.payload;
-      });
-  },
-});
+        // ===================== Delete Staff =====================
+        .addCase(deleteStaff.pending, (state) => {
+          state.actionLoading = true;
+          state.error = null;
+        })
+        .addCase(deleteStaff.fulfilled, (state, action) => {
+          console.log("Delete payload:", action.payload);
+          state.actionLoading = false;
+          state.list = state.list.filter((s) => s._id !== action.payload.data._id);
+        })
+        .addCase(deleteStaff.rejected, (state, action) => {
+          state.actionLoading = false;
+          state.error = action.payload;
+        });
+    },
+  });
 
 export default staffSlice.reducer;
