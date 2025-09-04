@@ -1,21 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
 import { buildUrlWithParams } from "../../helper/helperFunction";
-import { _get } from "../ApiClient";
+import { _get } from "../../helper/ApiClient";
 import { API_ENDPOINT } from "../../constants/ApiEndPoints";
 
-// Thunks
-export const fetchBillingData = createAsyncThunkHandler(
-  API_ENDPOINT.GET_BILLING_DATA,
-  _get,
-  (params) => buildUrlWithParams(API_ENDPOINT.GET_BILLING_DATA, params) // ✅ using url builder
+// ✅ Get all billing data (with params like page, limit, search etc.)
+export const getBillingData = createAsyncThunkHandler(API_ENDPOINT.GET_BILLING_DATA, _get, (payload) =>
+  buildUrlWithParams(API_ENDPOINT.GET_BILLING_DATA, payload)
 );
 
-export const fetchInvoiceDetails = createAsyncThunkHandler("billing/fetchInvoiceDetails", _get, ({ orderId }) =>
-  API_ENDPOINT.GET_INVOICE_DETAILS(orderId)
+// ✅ Get invoice details (requires orderId)
+export const getInvoiceDetails = createAsyncThunkHandler(API_ENDPOINT.GET_INVOICE_DETAILS, _get, (payload) =>
+  API_ENDPOINT.GET_INVOICE_DETAILS.replace(":orderId", payload.id)
 );
 
-export const fetchBillingSummary = createAsyncThunkHandler("billing/fetchBillingSummary", _get, API_ENDPOINT.GET_BILLING_SUMMARY);
+// ✅ Get billing summary (no params required)
+export const getBillingSummary = createAsyncThunkHandler(API_ENDPOINT.GET_BILLING_SUMMARY, _get, API_ENDPOINT.GET_BILLING_SUMMARY);
+
 
 // Slice
 const billingSlice = createSlice({
@@ -38,43 +39,43 @@ const billingSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch Billing Data
-      .addCase(fetchBillingData.pending, (state) => {
+      .addCase(getBillingData.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchBillingData.fulfilled, (state, action) => {
+      .addCase(getBillingData.fulfilled, (state, action) => {
         state.loading = false;
-        state.bills = action.payload.data; 
+        state.bills = action.payload.data;
       })
-      .addCase(fetchBillingData.rejected, (state, action) => {
+      .addCase(getBillingData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
       // Fetch Invoice Details
-      .addCase(fetchInvoiceDetails.pending, (state) => {
+      .addCase(getInvoiceDetails.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchInvoiceDetails.fulfilled, (state, action) => {
+      .addCase(getInvoiceDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.invoiceDetails = action.payload.data;
       })
-      .addCase(fetchInvoiceDetails.rejected, (state, action) => {
+      .addCase(getInvoiceDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
       // Fetch Billing Summary
-      .addCase(fetchBillingSummary.pending, (state) => {
+      .addCase(getBillingSummary.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchBillingSummary.fulfilled, (state, action) => {
+      .addCase(getBillingSummary.fulfilled, (state, action) => {
         state.loading = false;
         state.summary = action.payload.data;
       })
-      .addCase(fetchBillingSummary.rejected, (state, action) => {
+      .addCase(getBillingSummary.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

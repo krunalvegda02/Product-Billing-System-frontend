@@ -3,17 +3,19 @@ import FeedbackView from "./FeedbackView";
 import axios from "axios";
 import { API_ENDPOINT } from "../../../constants/ApiEndPoints";
 import { useSelector } from "react-redux";
+import Loading from "../../../components/commonComponent/Loading";
 
 const Feedback = () => {
   const APIURL = import.meta.env.VITE_BASE_URL;
   const token = useSelector((state) => state.auth.accessToken);
   const [feedbackData, setFeedbackData] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const [filterRating, setFilterRating] = useState(0);
 
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`${APIURL}v1/${API_ENDPOINT.GET_FEEDBACKS}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -21,7 +23,10 @@ const Feedback = () => {
         });
         setFeedbackData(res.data);
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching feedback:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -49,6 +54,13 @@ const Feedback = () => {
   const totalReviews = feedbackData.length;
   const averageRating = (feedbackData?.reduce((acc, curr) => acc + curr.rating, 0) / totalReviews).toFixed(1);
   const fiveStarReviews = feedbackData.filter((f) => f.rating === 5).length;
+
+  if (loading)
+    return (
+      <div className="flex h-full w-full justify-center items-center">
+        <Loading />;
+      </div>
+    );
 
   return (
     <FeedbackView

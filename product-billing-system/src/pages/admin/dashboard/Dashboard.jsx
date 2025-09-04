@@ -5,6 +5,7 @@ import { THEME_CONFIG } from "../../../constants/Theme";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDashboardData, fetchDashOrders } from "../../../redux/Slices/dashboardSlice";
 import { API_ENDPOINT } from "../../../constants/ApiEndPoints";
+import Loading from "../../../components/commonComponent/Loading";
 
 const Dashboard = () => {
   const currentTheme = "GENERAL";
@@ -16,7 +17,7 @@ const Dashboard = () => {
 
   const [dashboardData, setDashboardData] = useState(null); // start with null
 
-   const categoryColors = [
+  const categoryColors = [
     "bg-gradient-to-r from-blue-500 to-indigo-600",
     "bg-gradient-to-r from-green-500 to-emerald-600",
     "bg-gradient-to-r from-amber-500 to-orange-500",
@@ -63,7 +64,7 @@ const Dashboard = () => {
             initials: p.email?.substring(0, 2).toUpperCase(),
           })) || [],
         recentOrders: orders,
-       reviews: feedbackRes.data?.slice(0, 4) || [],
+        reviews: feedbackRes.data?.slice(0, 4) || [],
       };
 
       setDashboardData(mappedData);
@@ -99,7 +100,12 @@ const Dashboard = () => {
     day: "numeric",
   });
 
-  if (!dashboardData) return <p>Loading dashboard...</p>;
+  if (!dashboardData)
+return (
+  <div className="flex items-center justify-center h-full w-full">
+    <Loading />
+  </div>
+);
 
   const viewProps = {
     theme,

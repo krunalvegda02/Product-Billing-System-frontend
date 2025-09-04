@@ -8,7 +8,6 @@ const CategoryView = ({
   openModal,
   handleDeleteClick,
   handleEditClick,
-
   sortOrder,
   setSortOrder,
   currentPage,
