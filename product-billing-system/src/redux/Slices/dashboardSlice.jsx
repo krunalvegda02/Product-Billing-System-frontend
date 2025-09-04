@@ -12,11 +12,10 @@ export const fetchDashboardData = createAsyncThunkHandler(
   _get,
   (payload) => buildUrlWithParams(API_ENDPOINT.GET_DASHBOARD_DATA, payload) // /dashboard?duration=lastMonth
 );
-
-export const fetchDashStaffData = createAsyncThunkHandler(
-  API_ENDPOINT.GET_DASHBOARD_STAFF_DATA,
+export const fetchDashOrders = createAsyncThunkHandler(
+  API_ENDPOINT.GET_DASHBOARD_ORDERS,
   _get,
-  (payload) => buildUrlWithParams(API_ENDPOINT.GET_DASHBOARD_STAFF_DATA, payload) // /dashboard/staff?duration=lastMonth
+  (payload) => buildUrlWithParams(API_ENDPOINT.GET_DASHBOARD_ORDERS, payload) // /dashboard/orders?duration=lastMonth
 );
 
 const dashboardSlice = createSlice({
