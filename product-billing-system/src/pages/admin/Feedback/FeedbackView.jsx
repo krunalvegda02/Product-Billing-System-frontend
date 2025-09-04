@@ -1,26 +1,12 @@
 import React from "react";
 import { Star, Calendar, User } from "lucide-react";
 
-const FeedbackView = ({
-  feedbackData,
-  filterRating,
-  setFilterRating,
-  formatDate,
-  totalReviews,
-  averageRating,
-  fiveStarReviews
-}) => {
+const FeedbackView = ({ feedbackData, filterRating, setFilterRating, formatDate, totalReviews, averageRating, fiveStarReviews }) => {
   // Function to render star ratings
   const renderStars = (rating) => {
     return Array(5)
       .fill(0)
-      .map((_, i) => (
-        <Star 
-          key={i} 
-          size={16} 
-          className={i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"} 
-        />
-      ));
+      .map((_, i) => <Star key={i} size={16} className={i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"} />);
   };
 
   return (
@@ -29,9 +15,7 @@ const FeedbackView = ({
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Customer Feedback</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Read what our valued customers have to say about their experience at our café.
-          </p>
+          <p className="text-gray-600 max-w-2xl mx-auto">Read what our valued customers have to say about their experience at our café.</p>
         </div>
 
         {/* Rating Filter */}
@@ -71,27 +55,27 @@ const FeedbackView = ({
         {/* Feedback Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {feedbackData.map((feedback) => (
-            <div 
-              key={feedback.id} 
-              className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300"
-            >
+            <div key={feedback.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
               <div className="p-5">
                 {/* User Info and Rating */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${feedback.avatarColor}`}>
-                      <User size={20} />
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-black border border-2 font-bold ${feedback.avatarColor}`}>
+                      {feedback.user?.Avatar ? (
+                        <img src={feedback.user.Avatar} alt={feedback.user.username} className="w-10 h-10 rounded-full object-cover" />
+                      ) : (
+                        feedback.user?.username?.substring(0, 2).toUpperCase()
+                      )}
                     </div>
                     <div className="ml-3">
-                      <h3 className="font-medium text-gray-800">{feedback.username}</h3>
-                      <div className="flex items-center mt-1">
-                        {renderStars(feedback.rating)}
-                      </div>
+                      <h3 className="font-medium text-gray-800">{feedback.user.username}</h3>
+                      <div className="flex items-center mt-1">{renderStars(feedback.rating)}</div>
                     </div>
                   </div>
+
                   <div className="flex items-center text-sm text-gray-500">
                     <Calendar size={14} className="mr-1" />
-                    {formatDate(feedback.date)}
+                    {formatDate(feedback.createdAt)}
                   </div>
                 </div>
 
@@ -105,10 +89,7 @@ const FeedbackView = ({
         {feedbackData.length === 0 && (
           <div className="text-center py-12 w-full">
             <div className="text-gray-400 mb-2 w-full">No reviews found with selected rating</div>
-            <button 
-              onClick={() => setFilterRating(0)} 
-              className="text-blue-500 hover:text-blue-600 font-medium"
-            >
+            <button onClick={() => setFilterRating(0)} className="text-blue-500 hover:text-blue-600 font-medium">
               Show all reviews
             </button>
           </div>

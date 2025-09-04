@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import FeedbackView from "./FeedbackView";
 import axios from "axios";
 import { API_ENDPOINT } from "../../../constants/ApiEndPoints";
+import { useSelector } from "react-redux";
 
 const Feedback = () => {
   const APIURL = import.meta.env.VITE_BASE_URL;
+  const token = useSelector((state) => state.auth.accessToken);
   const [feedbackData, setFeedbackData] = useState([]);
 
   const [filterRating, setFilterRating] = useState(0);
@@ -12,7 +14,11 @@ const Feedback = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const res = await axios.get(`${APIURL}v1/${API_ENDPOINT.GET_FEEDBACKS}`);
+        const res = await axios.get(`${APIURL}v1/${API_ENDPOINT.GET_FEEDBACKS}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setFeedbackData(res.data);
       } catch (error) {
         console.error("Error fetching feedback:", error);

@@ -5,12 +5,12 @@ import { PATHS } from "../../../constants/RouteNames";
 
 const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, currentDate }) => {
   return (
-    <div className={`w-full rounded-2xl mx-6 px-4 p-6 ${theme.BACKGROUND_COLOR}`}>
+    <div className={`w-full rounded-2xl mx-6 px-4 p-6 ₹{theme.BACKGROUND_COLOR}`}>
       {/* Dashboard Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className={`text-3xl font-bold ${theme.TEXT_COLOR}`}>Restaurant Management Dashboard</h1>
-          <p className={`text-lg ${theme.TEXT_SECONDARY} mt-2`}>Welcome back! Here's today's performance overview.</p>
+          <h1 className={`text-3xl font-bold ₹{theme.TEXT_COLOR}`}>Restaurant Management Dashboard</h1>
+          <p className={`text-lg ₹{theme.TEXT_SECONDARY} mt-2`}>Welcome back! Here's today's performance overview.</p>
         </div>
         <div className="flex items-center space-x-2">
           <div className={`px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-medium`}>
@@ -28,14 +28,14 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-blue-700">Total Revenue</p>
-              <h3 className="text-2xl font-bold text-blue-900 mt-1">${dashboardData.revenue.current.toLocaleString()}</h3>
+              <h3 className="text-2xl font-bold text-blue-900 mt-1">₹{dashboardData.revenue.current.toLocaleString()}</h3>
               {/* <div className="flex items-center mt-2">
                 {dashboardData.revenue.trend === "up" ? (
                   <ArrowUp size={14} className="text-green-600 mr-1" />
                 ) : (
                   <ArrowDown size={14} className="text-red-600 mr-1" />
                 )}
-                <span className={`text-sm ${dashboardData.revenue.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
+                <span className={`text-sm ₹{dashboardData.revenue.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.revenue.current, dashboardData.revenue.previous)}% from last week
                 </span>
               </div> */}
@@ -60,7 +60,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
                 ) : (
                   <ArrowDown size={14} className="text-red-600 mr-1" />
                 )}
-                <span className={`text-sm ${dashboardData.customers.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
+                <span className={`text-sm ₹{dashboardData.customers.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.customers.current, dashboardData.customers.previous)}% from last week
                 </span>
               </div> */}
@@ -85,7 +85,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
                 ) : (
                   <ArrowDown size={14} className="text-red-600 mr-1" />
                 )}
-                <span className={`text-sm ${dashboardData.orders.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
+                <span className={`text-sm ₹{dashboardData.orders.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.orders.current, dashboardData.orders.previous)}% from last week
                 </span>
               </div> */}
@@ -103,14 +103,14 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-purple-700">Avg Order Value</p>
-              <h3 className="text-2xl font-bold text-purple-900 mt-1">${dashboardData.avgOrderValue?.current.toFixed(2)}</h3>
+              <h3 className="text-2xl font-bold text-purple-900 mt-1">₹{dashboardData.avgOrderValue?.current.toFixed(2)}</h3>
               {/* <div className="flex items-center mt-2">
                 {dashboardData.avgOrderValue?.trend === "up" ? (
                   <ArrowUp size={14} className="text-green-600 mr-1" />
                 ) : (
                   <ArrowDown size={14} className="text-red-600 mr-1" />
                 )}
-                <span className={`text-sm ${dashboardData.avgOrderValue?.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
+                <span className={`text-sm ₹{dashboardData.avgOrderValue?.trend === "up" ? "text-green-600" : "text-red-600"} font-medium`}>
                   {calculateChange(dashboardData.avgOrderValue?.current, dashboardData.avgOrderValue?.previous)}% from last week
                 </span>
               </div> */}
@@ -149,7 +149,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
                   <span className="text-sm font-medium text-rose-800">{category.value}%</span>
                 </div>
                 <div className="bg-rose-100 h-2 rounded-full overflow-hidden">
-                  <div className={`h-full ${category.color} rounded-full`} style={{ width: `${category.value}%` }}></div>
+                  <div className={`h-full ₹{category.color} rounded-full`} style={{ width: `₹{category.value}%` }}></div>
                 </div>
               </div>
             ))}
@@ -203,33 +203,44 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
             <Clock size={20} className="mr-2" /> Recent Orders
           </h3>
           <div className="space-y-4">
-            {dashboardData.recentOrders.map((order) => (
-              <div
-                key={order.id}
-                className="flex justify-between items-center p-3 bg-white rounded-lg border border-indigo-100 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div>
-                  <p className="font-medium text-indigo-900">{order.customer}</p>
-                  <p className="text-sm text-indigo-600">
-                    {order.items} items • ${order.total.toFixed(2)}
-                  </p>
+            {dashboardData.recentOrders.length > 0 ? (
+              dashboardData.recentOrders.map((order) => (
+                <div
+                  key={order._id}
+                  className="flex justify-between items-center p-3 bg-white rounded-lg border border-indigo-100 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div>
+                    <p className="font-medium text-indigo-900">{order.customer?.username || "Guest"}</p>
+                    <p className="text-sm text-indigo-600">
+                      {order.itemsCount} items • ₹{order.total?.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        order.status === "SERVED"
+                          ? "bg-green-100 text-green-800 border border-green-200"
+                          : order.status === "PREPARING"
+                            ? "bg-blue-100 text-blue-800 border border-blue-200"
+                            : order.status === "PENDING"
+                              ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                              : order.status === "COMPLETED"
+                                ? "bg-purple-100 text-purple-800 border border-purple-200"
+                                : "bg-amber-100 text-amber-800 border border-amber-200"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+
+                    <p className="text-xs text-indigo-500 mt-1">
+                      {new Date(order.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      order.status === "served"
-                        ? "bg-green-100 text-green-800 border border-green-200"
-                        : order.status === "preparing"
-                          ? "bg-blue-100 text-blue-800 border border-blue-200"
-                          : "bg-amber-100 text-amber-800 border border-amber-200"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
-                  <p className="text-xs text-indigo-500 mt-1">{order.time}</p>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-indigo-500">No recent orders</p>
+            )}
           </div>
           <Link to="/admin/orders" className="block text-center mt-4 text-sm text-indigo-600 hover:text-indigo-800 font-medium hover:underline">
             View all orders
@@ -245,7 +256,7 @@ const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, curr
             {dashboardData.reviews.map((review) => (
               <div key={review.id} className="p-3 bg-white rounded-lg border border-amber-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start">
-                  <p className="font-medium text-amber-900">{review.customer}</p>
+                  <p className="font-medium text-amber-900">{review.user.username}</p>
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} size={14} className={i < review.rating ? "text-amber-500 fill-amber-500" : "text-amber-200"} />
