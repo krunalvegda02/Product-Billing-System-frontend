@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { ICONS } from "../../../constants/Icons";
 import { THEME_CONFIG } from "../../../constants/Theme";
-
-
-
+import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Search, Filter, Edit3, Trash2, IndianRupee, Menu, X } from "lucide-react";
 
 const ProductView = ({
   currentTheme,
@@ -11,7 +9,6 @@ const ProductView = ({
   openModal,
   handleDeleteClick,
   handleEditClick,
-  // New props for sorting and pagination
   sortOrder,
   setSortOrder,
   currentPage,
@@ -19,111 +16,298 @@ const ProductView = ({
   changePage,
 }) => {
   const theme = THEME_CONFIG[currentTheme] || THEME_CONFIG.GENERAL;
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
 
   return (
-    <div className={`w-full rounded-2xl mx-4 flex flex-col h-full ${theme.BACKGROUND_COLOR}`}>
-      {/* Header */}
-      <div className="flex flex-wrap justify-between items-center my-2 shrink-0">
-        <h1 className={`${theme.TEXT_COLOR} ${theme.HEADER_TEXT_SIZE} font-bold text-2xl`}>Products</h1>
-        <div className="flex items-center gap-3">
-          {/* Sorting Dropdown */}
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            className="border rounded-md px-2 py-1 text-sm"
-          >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-          <button
-            className={`rounded-full px-6 py-2 ${theme.BUTTON} transition duration-200`}
-            onClick={openModal}
-          >
-            + Add Product
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header - Redesigned for better spacing */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 sm:mb-8 p-4 sm:p-6 bg-white rounded-2xl shadow-lg">
+          <div className="w-full flex justify-between items-center mb-4 lg:mb-0">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Product Management
+              </h1>
+              <p className="text-gray-500 mt-1 text-sm sm:text-base">Manage your restaurant's menu items</p>
+            </div>
 
-      {/* Product List */}
-      <div className="flex-1 overflow-y-scroll hide-scrollbar mb-3">
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((product, index) => (
-            <div
-              key={index}
-              className={`${theme.CARD_BG} ${theme.SHADOW} ${theme.BORDER_COLOR} rounded-2xl overflow-hidden flex flex-col justify-between`}
-            >
-              {/* Thumbnail */}
-              <img
-                src={product.thumbnail || "https://via.placeholder.com/300x180?text=Category"}
-                alt={product.name}
-                className="w-full h-32 object-cover"
+            {/* Mobile menu button */}
+            <button className="lg:hidden p-2 rounded-lg bg-gray-100" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+
+          {/* Desktop controls */}
+          <div className="hidden lg:flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+            {/* Search */}
+            <div className="relative flex-1 sm:flex-initial">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search size={18} className="text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
+            </div>
 
-              {/* Content */}
-              <div className="pt-1 flex flex-col justify-between grow">
-                <div className="flex justify-between">
-                  <h3 className={`text-md font-semibold mb-2 ${theme.TEXT_COLOR}`}>
-                    {product.name || "Unnamed"}
-                  </h3>
-                  <p className={`text-md font-semibold mb-2 ${theme.BG_ACCENT} px-2 py-1 rounded-xl text-white`}>
-                    {product.price || "N/A"}
-                  </p>
+            {/* Filter */}
+            <div className="relative flex-1 sm:flex-initial">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Filter size={18} className="text-gray-400" />
+              </div>
+              <select className="pl-10 pr-8 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                <option>All Categories</option>
+                <option>Appetizers</option>
+                <option>Main Course</option>
+                <option>Desserts</option>
+                <option>Beverages</option>
+              </select>
+            </div>
+
+            {/* Sorting */}
+            <div className="relative flex-1 sm:flex-initial">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <ArrowUpDown size={18} className="text-gray-400" />
+              </div>
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="pl-10 pr-8 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              >
+                <option value="asc">A-Z</option>
+                <option value="desc">Z-A</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+              </select>
+            </div>
+
+            {/* Add Product Button */}
+            <button
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg flex-1 sm:flex-initial"
+              onClick={openModal}
+            >
+              <Plus size={20} />
+              <span className="hidden sm:block">Add Product</span>
+            </button>
+          </div>
+
+          {/* Mobile controls (shown when menu is open) */}
+          {isMobileMenuOpen && (
+            <div className="lg:hidden w-full mt-4 space-y-3">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search size={18} className="text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Filter size={18} className="text-gray-400" />
+                  </div>
+                  <select className="pl-10 pr-8 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                    <option>All Categories</option>
+                    <option>Appetizers</option>
+                    <option>Main Course</option>
+                    <option>Desserts</option>
+                    <option>Beverages</option>
+                  </select>
                 </div>
 
-                <p className={`text-sm mb-2 ${theme.TEXT_COLOR}`}>
-                  {product.description || "No description available"}
-                </p>
-
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-3 mt-auto">
-                  <button
-                    className={`${theme.SUCCESS} text-xl`}
-                    title="Edit"
-                    onClick={() => handleEditClick(product)}
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <ArrowUpDown size={18} className="text-gray-400" />
+                  </div>
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="pl-10 pr-8 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   >
-                    <ICONS.EDIT_ICON className="size-5" />
-                  </button>
-                  <button
-                    className={`${theme.ERROR} text-xl`}
-                    title="Delete"
-                    onClick={() => handleDeleteClick(product)}
-                  >
-                    <ICONS.DELETE_ICON className="size-5" />
-                  </button>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                  </select>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-center items-center gap-2 py-3">
-        <button
-          onClick={() => changePage(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-3 py-1 border rounded-md disabled:opacity-50"
-        >
-          Prev
-        </button>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => changePage(i + 1)}
-            className={`px-3 py-1 border rounded-md ${
-              currentPage === i + 1 ? "bg-blue-500 text-white" : ""
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => changePage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-3 py-1 border rounded-md disabled:opacity-50"
-        >
-          Next
-        </button>
+              <button
+                className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg w-full"
+                onClick={openModal}
+              >
+                <Plus size={20} />
+                Add Product
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Quick filter tabs for mobile */}
+        {/* <div className="flex overflow-x-auto pb-2 mb-4 lg:mb-6 hide-scrollbar">
+          <div className="flex space-x-2">
+            {["all", "available", "popular", "beverages", "main course"].map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`px-4 py-2 rounded-full text-sm whitespace-nowrap transition ${
+                  activeFilter === filter
+                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                    : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                }`}
+              >
+                {filter.charAt(0).toUpperCase() + filter.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div> */}
+
+        {/* Product Grid */}
+        <div className="mb-6 sm:mb-8">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {products.map((product, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col border border-gray-100"
+              >
+                {/* Thumbnail with overlay */}
+                <div className="relative">
+                  <img
+                    src={
+                      product.thumbnail ||
+                      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+                    }
+                    alt={product.name}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="absolute top-3 right-3 flex gap-2">
+                    <button
+                      className="p-2 bg-gradient-to-r from-green-400 to-blue-500 rounded-full text-white shadow-md hover:shadow-lg transition-all"
+                      title="Edit"
+                      onClick={() => handleEditClick(product)}
+                    >
+                      <ICONS.EDIT_ICON className="size-4" />
+                    </button>
+                    <button
+                      className="p-2 bg-gradient-to-r from-red-400 to-pink-500 rounded-full text-white shadow-md hover:shadow-lg transition-all"
+                      title="Delete"
+                      onClick={() => handleDeleteClick(product)}
+                    >
+                      <ICONS.DELETE_ICON className="size-4" />
+                    </button>
+                  </div>
+                  {product.isPopular && (
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-medium rounded-full shadow-sm">
+                        Popular
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-4 flex flex-col justify-between grow">
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">{product.name || "Unnamed Product"}</h3>
+                      <div className="flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 py-1 rounded-lg min-w-[70px] justify-center">
+                        <IndianRupee size={14} />
+                        <span className="font-bold ml-1">{product.price || "0"}</span>
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">{product.description || "No description available"}</p>
+                  </div>
+
+                  {/* Category and Status */}
+                  <div className="flex justify-between items-center pt-3 border-t border-gray-100">
+                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">{product.category || "Uncategorized"}</span>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        product.status === "available" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {product.status || "unknown"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 bg-white p-4 rounded-2xl shadow-lg">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => changePage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                <ChevronLeft size={16} />
+                <span className="hidden sm:block">Previous</span>
+              </button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  const pageNum = i + 1;
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => changePage(pageNum)}
+                      className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full transition ${
+                        currentPage === pageNum
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                          : "border border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+                {totalPages > 5 && <span className="px-2 text-gray-500">...</span>}
+              </div>
+
+              <button
+                onClick={() => changePage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                <span className="hidden sm:block">Next</span>
+                <ChevronRight size={16} />
+              </button>
+            </div>
+
+            <div className="text-sm text-gray-500">
+              Page {currentPage} of {totalPages}
+            </div>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {products.length === 0 && (
+          <div className="text-center py-8 sm:py-12 bg-white rounded-2xl shadow-lg">
+            <div className="mx-auto w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mb-4">
+              <Utensils size={30} className="text-blue-500" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">No products found</h3>
+            <p className="text-gray-600 mb-4 px-4">Try adjusting your search or filter to find what you're looking for</p>
+            <button
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg mx-auto"
+              onClick={openModal}
+            >
+              <Plus size={20} />
+              Add Your First Product
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

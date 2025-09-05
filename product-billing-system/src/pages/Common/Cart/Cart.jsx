@@ -9,6 +9,12 @@ const Cart = () => {
     orderItems={[
       { id: 1, name: "Paneer Tikka", price: 250, quantity: 2, thumbnail: "" },
       { id: 2, name: "Butter Naan", price: 40, quantity: 4, thumbnail: "" },
+      { id: 2, name: "Butter Naan", price: 40, quantity: 4, thumbnail: "" },
+
+      { id: 2, name: "Butter Naan", price: 40, quantity: 4, thumbnail: "" },
+
+      { id: 2, name: "Butter Naan", price: 40, quantity: 4, thumbnail: "" },
+
     ]}
     paymentMethods={["UPI", "Credit Card", "Cash on Delivery"]}
     onPaymentChange={(method) => console.log("Selected:", method)}

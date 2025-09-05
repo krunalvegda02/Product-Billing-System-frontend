@@ -1,23 +1,34 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { TrendingUp, Users, DollarSign, Utensils, Clock, Star, ShoppingCart, ArrowUp, ArrowDown, PieChart, UserCheck, Target } from "lucide-react";
+import { TrendingUp,ChevronRight,Calendar, Users, DollarSign, Utensils, Clock, Star, ShoppingCart, ArrowUp, ArrowDown, PieChart, UserCheck, Target } from "lucide-react";
 import { PATHS } from "../../../constants/RouteNames";
 
 const DashboardView = ({ theme, dashboardData, calculateChange, cardColors, currentDate }) => {
   return (
     <div className={`w-full rounded-2xl mx-6 px-4 p-6 ₹{theme.BACKGROUND_COLOR}`}>
       {/* Dashboard Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className={`text-3xl font-bold ₹{theme.TEXT_COLOR}`}>Restaurant Management Dashboard</h1>
-          <p className={`text-lg ₹{theme.TEXT_SECONDARY} mt-2`}>Welcome back! Here's today's performance overview.</p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className={`px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-medium`}>
-            Today: {currentDate}
+        {/* Dashboard Header */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 p-6 bg-white rounded-2xl shadow-lg">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Restaurant Dashboard
+            </h1>
+            <p className="text-gray-500 mt-2 flex items-center">
+              <span>Performance overview for </span>
+              <span className="ml-2 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-medium flex items-center">
+                <Calendar size={16} className="mr-1" />
+                {currentDate}
+              </span>
+            </p>
+          </div>
+          
+          <div className="mt-4 lg:mt-0">
+            <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg">
+              <span>Generate Report</span>
+              <ChevronRight size={18} />
+            </button>
           </div>
         </div>
-      </div>
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
