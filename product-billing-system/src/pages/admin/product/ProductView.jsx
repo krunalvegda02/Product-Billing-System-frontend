@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ICONS } from "../../../constants/Icons";
 import { THEME_CONFIG } from "../../../constants/Theme";
-import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Search, Filter, Edit3, Trash2, IndianRupee, Menu, X } from "lucide-react";
+import { Plus, ArrowUpDown, Utensils,ChevronLeft, ChevronRight, Search, Filter, Edit3, Trash2, IndianRupee, Menu, X } from "lucide-react";
 
 const ProductView = ({
   currentTheme,
