@@ -23,17 +23,27 @@ const Login = () => {
       [name]: value,
     }));
   };
-
   const submitClick = async (e) => {
     e.preventDefault();
 
-    const response = await dispatch(loginUser(loginData));
-    console.log("Login Data:", loginData, response);
+    try {
+      const response = await dispatch(loginUser(loginData)).unwrap();
+      console.log("Login Data:", response);
 
-    if (loginUser.fulfilled.match(response)) {
-      navigate(PATHS.CATEGORY_MANAGEMENT);
-    } else {
-      showToast(response.payload);
+      console.log("role",response.data.user.role);
+      
+      if (response.data.user.role === "CUSTOMER") {
+        navigate(PATHS.MENU);
+      } else if (response.data.user.role === "ADMIN") {
+        navigate(PATHS.ADMIN_DASHBOARD);
+      } else {
+        navigate(PATHS.CATEGORY_MANAGEMENT);
+      }
+      
+      showToast("Login successful!", "success");
+    } catch (err) {
+      console.error("Login failed:", err);
+      showToast(err || "Something went wrong", "error");
     }
   };
 
