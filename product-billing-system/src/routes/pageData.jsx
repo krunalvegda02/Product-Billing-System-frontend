@@ -57,7 +57,7 @@ const PageData = [
     component: ForgotPassword,
     roles: [ROLE.ADMIN, ROLE.MANAGER, ROLE.WAITER],
     isPublic: false,
-    layout: true,
+    layout: false,
   },
   {
     path: PATHS.UPDATE_PASSWORD,
@@ -76,7 +76,7 @@ const PageData = [
   {
     path: PATHS.ADMIN_DASHBOARD,
     component: AdminDashboard,
-    roles: [ROLE.ADMIN],
+    roles: [ROLE.CUSTOMER],
     isPublic: false,
     layout: true,
   },

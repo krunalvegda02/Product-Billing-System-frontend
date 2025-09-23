@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { removeNullValues } from "../../../helper/helperFunction";
 import {
-  createProduct,   // ✅ should be product, not category
+  createProduct, // ✅ should be product, not category
   updateProduct,
   deselectProduct, // ✅ same here
 } from "../../../redux/Slices/productSlice";
 import { getAllCategories, resetCategorySlice } from "../../../redux/Slices/categorySlice"; // ✅ for category dropdown
 import store from "../../../redux/Store/store";
 import CustomModal from "../../helperComponent/customModal";
+import { useToast } from "../../../context/ToastContext";
 
 const AddProductModal = ({ isOpen, onCancel, onSave }) => {
   const [formValue, setFormValue] = useState({
@@ -27,6 +28,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
   const { selectedProduct } = useSelector((state) => state.product);
   const { categories } = useSelector((state) => state.category);
   const { dispatch } = store;
+  const { showToast } = useToast();
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -95,8 +97,17 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
   // Fetch categories when modal opens
   useEffect(() => {
     if (isOpen) {
-      dispatch(resetCategorySlice())
-      dispatch(getAllCategories());
+      dispatch(resetCategorySlice());
+
+      (async () => {
+        try {
+          const categories = await dispatch(getAllCategories()).unwrap();
+          // console.log("Fetched categories:", categories);
+        } catch (err) {
+          showToast(err.message , "error")
+          console.error("Error fetching categories:", err);
+        }
+      })();
     }
   }, [isOpen, dispatch]);
 
@@ -116,8 +127,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
       newValue = checked;
     } else if (type === "number") {
       const num = Number(value);
-      newValue =
-        name === "ActiveDiscount" ? Math.min(100, Math.max(1, num)) : num;
+      newValue = name === "ActiveDiscount" ? Math.min(100, Math.max(1, num)) : num;
     } else {
       newValue = value;
     }
@@ -143,10 +153,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name */}
           <div>
-            <label
-              htmlFor="name"
-              className="block text-left text-lg font-medium text-gray-700"
-            >
+            <label htmlFor="name" className="block text-left text-lg font-medium text-gray-700">
               Name:
             </label>
             <input
@@ -162,10 +169,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
 
           {/* Price */}
           <div>
-            <label
-              htmlFor="price"
-              className="block text-left text-lg font-medium text-gray-700"
-            >
+            <label htmlFor="price" className="block text-left text-lg font-medium text-gray-700">
               Price:
             </label>
             <input
@@ -184,10 +188,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
 
         {/* Category */}
         <div>
-          <label
-            htmlFor="categoryOfProduct"
-            className="block text-left text-lg font-medium text-gray-700"
-          >
+          <label htmlFor="categoryOfProduct" className="block text-left text-lg font-medium text-gray-700">
             Category:
           </label>
           <select
@@ -208,10 +209,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
 
         {/* Description */}
         <div>
-          <label
-            htmlFor="description"
-            className="block text-left text-lg font-medium text-gray-700"
-          >
+          <label htmlFor="description" className="block text-left text-lg font-medium text-gray-700">
             Description:
           </label>
           <textarea
@@ -235,10 +233,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
               onChange={handleInputChange}
               className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label
-              htmlFor="inStock"
-              className="text-lg font-medium text-gray-700"
-            >
+            <label htmlFor="inStock" className="text-lg font-medium text-gray-700">
               In Stock
             </label>
           </div>
@@ -252,20 +247,14 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
               onChange={handleInputChange}
               className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label
-              htmlFor="isDiscountActive"
-              className="text-lg font-medium text-gray-700"
-            >
+            <label htmlFor="isDiscountActive" className="text-lg font-medium text-gray-700">
               Discount Active
             </label>
           </div>
 
           {formValue.isDiscountActive && (
             <div className="flex items-center space-x-2">
-              <label
-                htmlFor="ActiveDiscount"
-                className="text-lg font-medium text-gray-700"
-              >
+              <label htmlFor="ActiveDiscount" className="text-lg font-medium text-gray-700">
                 Discount (%):
               </label>
               <input
@@ -285,21 +274,14 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
 
         {/* Thumbnail */}
         <div>
-          <label
-            htmlFor="thumbnail"
-            className="block text-left text-lg font-medium text-gray-700"
-          >
+          <label htmlFor="thumbnail" className="block text-left text-lg font-medium text-gray-700">
             Thumbnail:
           </label>
           <div className="flex items-center justify-center w-full">
             <label className="w-full cursor-pointer">
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-500 transition-colors bg-gray-200">
                 {formValue?.thumbnailPreview ? (
-                  <img
-                    src={formValue.thumbnailPreview}
-                    alt="Preview"
-                    className="mx-auto h-32 w-32 object-cover rounded-lg"
-                  />
+                  <img src={formValue.thumbnailPreview} alt="Preview" className="mx-auto h-32 w-32 object-cover rounded-lg" />
                 ) : (
                   <div className="text-gray-500">
                     <p>Click to upload image</p>
@@ -307,13 +289,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
                   </div>
                 )}
               </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
+              <input ref={fileInputRef} type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
             </label>
           </div>
         </div>

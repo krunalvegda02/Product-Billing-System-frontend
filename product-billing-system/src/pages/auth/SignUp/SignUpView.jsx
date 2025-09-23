@@ -11,7 +11,7 @@ const SignUpView = ({ formData, handleChange, submitClick, isLoading = false, er
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Left Image - Hidden on mobile */}
       <div className="hidden lg:flex lg:w-1/2 xl:w-2/3 h-screen">
-        <div className="relative w-full h-full">
+        <div className="fixed w-2/3 h-full">
           <img 
             className="object-cover w-full h-full" 
             src={IMAGES.LOGIN.SRC} 
@@ -178,23 +178,7 @@ const SignUpView = ({ formData, handleChange, submitClick, isLoading = false, er
               <span className="text-blue-600 cursor-pointer hover:underline">Privacy Policy</span>
             </p>
           </form>
-          {/* FORM END */}
-
-          {/* Social Sign Up Options */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 text-sm mb-4">Or sign up with</p>
-            <div className="flex justify-center space-x-4">
-              <button className="p-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
-              </button>
-              <button className="p-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" alt="Facebook" className="w-5 h-5" />
-              </button>
-              <button className="p-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <img src="https://github.githubassets.com/favicons/favicon.png" alt="GitHub" className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
+    
         </div>
       </div>
     </div>

@@ -61,7 +61,9 @@ const Menu = () => {
     loadProducts();
   }, [selectedCategoryID]);
 
-  return <MenuView categories={categories} products={products} selectedCategoryID={selectedCategoryID} handleCategorySelect={handleCategorySelect} />;
+  return (
+    <MenuView categories={categories} products={products} selectedCategoryID={selectedCategoryID} handleCategorySelect={handleCategorySelect} />
+  );
 };
 
 export default Menu;

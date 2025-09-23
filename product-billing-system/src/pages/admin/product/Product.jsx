@@ -21,11 +21,14 @@ const Product = () => {
     isOpen: isDeleteOpen,
   } = useModal();
   const { showToast } = useToast();
-  const { products, selectedProduct } = useSelector((state) => state.product); // ✅ pull selected product from redux
+  const { products, selectedProduct } = useSelector((state) => state.product);
   const { dispatch } = store;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [categories, setCategories] = useState([]);
 
   const { fetchData } = usePagination(
     getAllProducts,
@@ -48,14 +51,42 @@ const Product = () => {
     fetchData();
   }, []);
 
+  // Extract unique categories
+  useEffect(() => {
+    if (products.length > 0) {
+      const uniqueCategories = [...new Set(products.map(product => product.category))];
+      setCategories(uniqueCategories);
+    }
+  }, [products]);
+
+  // Filter and Search Logic
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, searchTerm, selectedCategory]);
+
   // Sorting Logic
   const sortedProducts = useMemo(() => {
-    return [...products].sort((a, b) =>
-      sortOrder === "asc"
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name)
-    );
-  }, [products, sortOrder]);
+    return [...filteredProducts].sort((a, b) => {
+      switch(sortOrder) {
+        case "asc":
+          return a.name.localeCompare(b.name);
+        case "desc":
+          return b.name.localeCompare(a.name);
+        case "price-asc":
+          return a.price - b.price;
+        case "price-desc":
+          return b.price - a.price;
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
+  }, [filteredProducts, sortOrder]);
 
   // Pagination Logic
   const totalPages = Math.ceil(sortedProducts.length / ITEMS_PER_PAGE);
@@ -91,6 +122,12 @@ const Product = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         changePage={changePage}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={categories}
+        totalProducts={sortedProducts.length}
       />
 
       {/* ✅ Add Product Modal */}

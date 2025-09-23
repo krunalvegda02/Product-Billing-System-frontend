@@ -1,6 +1,6 @@
 import React from "react";
 import { Pencil, Trash2, UserPlus, Search, ChevronLeft, ChevronRight, Loader, Users, Mail, Phone, MoreVertical, Filter } from "lucide-react";
-import CircularLoading from "../../../components/commonComponent/CircularLoading"
+import CircularLoading from "../../../components/commonComponent/CircularLoading";
 
 const StaffManagementView = ({
   staff,
@@ -18,9 +18,11 @@ const StaffManagementView = ({
   handleEditStaff,
   handleDeleteStaff,
 }) => {
+  // console.log(staff)
+
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-50 to-purple-100 p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen  w-full bg-gradient-to-br from-indigo-50 to-purple-100 p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto ">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 p-6 bg-white rounded-2xl shadow-lg">
           <div>
@@ -44,25 +46,26 @@ const StaffManagementView = ({
         </div>
 
         {/* Controls Section */}
-    <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-white rounded-2xl shadow-lg">
-  {/* Search Box - Takes priority space */}
-  <div className="flex-1 relative min-w-0">
-    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-      <Search size={18} className="text-gray-400" />
-    </div>
-    <input
-      type="text"
-      placeholder="Search staff members..."
-      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-      value={searchTerm}
-      onChange={(e) => handleSearchChange(e.target.value)}
-    />
-  </div>
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-white rounded-2xl shadow-lg">
+          {/* Search Box - Takes priority space */}
+          <div className="flex-1 relative min-w-0">
+            <div className="absolute top-[14px] left-0 pl-3 flex items-center pointer-events-none">
+              <Search size={20} className="text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search staff members..."
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              value={searchTerm}
+              onChange={(e) => handleSearchChange(e.target.value)}
+            />
+          </div>
 
-  {/* Right side controls */}
-  <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 justify-between sm:justify-end items-stretch sm:items-center">
-    {/* Filter Button with dropdown indicator */}
-    <div className="relative">
+          {/* Right side controls */}
+          <div className="flex flex-row xs:flex-row gap-3 sm:gap-4 justify-between sm:justify-end items-stretch sm:items-center">
+            {/* Filter Button with dropdown indicator */}
+
+            {/* <div className="relative">
       <button className="flex items-center justify-center gap-2 px-4 py-2.5 h-full border border-gray-300 rounded-xl bg-white hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md min-w-[120px]">
         <Filter size={18} className="text-gray-600" />
         <span className="text-sm font-medium">Filter</span>
@@ -70,20 +73,20 @@ const StaffManagementView = ({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-    </div>
+    </div> */}
 
-    {/* Stats Card - Compact version */}
-    <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-3 rounded-xl shadow-md flex items-center justify-between min-w-[140px]">
-      <div>
-        <p className="text-xs opacity-90 font-medium">Total Staff</p>
-        <p className="text-xl font-bold">{staff.length}</p>
-      </div>
-      <div className="bg-white/20 p-2 rounded-lg">
-        <Users size={20} className="opacity-90" />
-      </div>
-    </div>
-  </div>
-</div>
+            {/* Stats Card - Compact version */}
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-3 rounded-xl shadow-md flex items-center justify-between min-w-[140px]">
+              <div>
+                <p className="text-xs opacity-90 font-medium">Total Staff</p>
+                <p className="text-xl font-bold">{staff.length}</p>
+              </div>
+              <div className="bg-white/20 p-2 rounded-lg">
+                <Users size={20} className="opacity-90" />
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Loading State */}
         {loading && (
@@ -187,15 +190,15 @@ const StaffManagementView = ({
               className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg mx-auto"
             >
               <UserPlus size={18} />
-              Add First Staff Member
+              Add Staff Member
             </button>
           </div>
         )}
 
         {/* Pagination Controls */}
         {filteredStaff.length > 0 && !loading && (
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 p-6 bg-white rounded-2xl shadow-lg">
-            <div className="text-sm text-gray-600">
+          <div className="flex flex-col  sm:flex-row justify-between items-center gap-4 mt-6 p-6 bg-white rounded-2xl shadow-lg">
+            <div className="text-sm text-gray-600 ">
               Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
               <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredStaff.length)}</span> of{" "}
               <span className="font-medium">{filteredStaff.length}</span> staff members

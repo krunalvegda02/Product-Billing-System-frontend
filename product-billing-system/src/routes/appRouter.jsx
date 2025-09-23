@@ -11,9 +11,9 @@ const Loader = () => (
   <div
     className={`flex items-center justify-center h-screen ${THEME_CONFIG[THEME.GENERAL].BACKGROUND_COLOR}`}
   >
-    <div
+    {/* <div
       className={`animate-spin rounded-full h-16 w-16 border-t-4 ${THEME_CONFIG[THEME.GENERAL].BORDER_COLOR} border-solid shadow-lg`}
-    ></div>
+    ></div> */}
     <span
       className={`ml-4 ${THEME_CONFIG[THEME.GENERAL].TEXT_COLOR} font-semibold text-lg`}
     >
@@ -101,3 +101,68 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
+
+
+
+// import { Suspense } from "react";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import pageData from "./pageData";
+// import Layout from "../components/layout/layout";
+// import MenuPageLayout from "../pages/Common/LayoutOfMenu";
+// import { THEME, THEME_CONFIG } from "../constants/Theme";
+// import Loading from "../components/commonComponent/Loading";
+// import ProtectedRoutes from "./protectedRoutes";
+
+// const Loader = () => (
+//   <div
+//     className={`flex items-center justify-center h-screen ${THEME_CONFIG[THEME.GENERAL].BACKGROUND_COLOR}`}
+//   >
+//     <div
+//       className={`animate-spin rounded-full h-16 w-16 border-t-4 ${THEME_CONFIG[THEME.GENERAL].BORDER_COLOR} border-solid shadow-lg`}
+//     ></div>
+//     <span
+//       className={`ml-4 ${THEME_CONFIG[THEME.GENERAL].TEXT_COLOR} font-semibold text-lg`}
+//     >
+//       <Loading />
+//     </span>
+//   </div>
+// );
+
+// const AppRouter = () => {
+//   return (
+//     <Router>
+//       <Suspense fallback={<Loader />}>
+//         <Routes>
+//           {pageData.map((page, index) => {
+//             let element = <page.component />;
+
+//             // if page has layout → wrap it
+//             if (page.layout) {
+//               element = (
+//                 <Layout>
+//                   <page.component />
+//                 </Layout>
+//               );
+//             }
+
+//             // if page has MenuLayout → wrap it
+//             if (page.MenuLayout) {
+//               element = <MenuPageLayout>{element}</MenuPageLayout>;
+//             }
+
+//             return (
+//               <Route
+//                 key={index}
+//                 path={page.path}
+//                 element={<ProtectedRoutes page={page}>{element}</ProtectedRoutes>}
+//               />
+//             );
+//           })}
+//         </Routes>
+//       </Suspense>
+//     </Router>
+//   );
+// };
+
+// export default AppRouter;
+

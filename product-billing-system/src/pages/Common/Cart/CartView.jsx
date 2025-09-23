@@ -8,17 +8,16 @@ import {
   Phone,
   ArrowRight,
   CheckCircle,
-  Sparkles,
   Package,
-  Clock,
-  MapPin,
   ShieldCheck,
   BadgeCheck,
+  MapPin,
 } from "lucide-react";
 
 const CartView = ({ user, orderItems = [], paymentMethods = [], onPaymentChange, onConfirmPayment, paymentCompleted = false }) => {
+  console.log("user", user);
+
   const [selectedPayment, setSelectedPayment] = useState(paymentMethods[0] || "");
-  // const [deliveryOption, setDeliveryOption] = useState("standard"); // Added delivery option
 
   const totalAmount = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -74,6 +73,7 @@ const CartView = ({ user, orderItems = [], paymentMethods = [], onPaymentChange,
                 <p className="text-gray-800">{user?.username || "Guest User"}</p>
                 <p className="text-gray-600 text-sm mt-1">{user?.email || "Not provided"}</p>
                 <p className="text-gray-600 text-sm">{user?.contact || "Not provided"}</p>
+                {user?.address && <p className="text-gray-600 text-sm">{user.address}</p>}
               </div>
 
               <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
@@ -135,30 +135,31 @@ const CartView = ({ user, orderItems = [], paymentMethods = [], onPaymentChange,
                 </h3>
 
                 <div className="space-y-3 text-sm">
+                  {/* Email */}
                   <div className="flex items-center text-gray-700 p-3 bg-white/70 rounded-lg">
                     <div className="p-1.5 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full mr-3">
                       <Mail size={14} className="text-white" />
                     </div>
                     <span className="truncate">{user?.email || "Not provided"}</span>
                   </div>
+
+                  {/* Contact */}
                   <div className="flex items-center text-gray-700 p-3 bg-white/70 rounded-lg">
                     <div className="p-1.5 bg-gradient-to-r from-green-400 to-green-500 rounded-full mr-3">
                       <Phone size={14} className="text-white" />
                     </div>
                     <span>{user?.contact || "Not provided"}</span>
                   </div>
-                  <div className="flex items-center text-gray-700 p-3 bg-white/70 rounded-lg">
-                    <div className="p-1.5 bg-gradient-to-r from-green-400 to-green-500 rounded-full mr-3">
-                      <Phone size={14} className="text-white" />
+
+                  {/* Optional Address */}
+                  {user?.address && (
+                    <div className="flex items-center text-gray-700 p-3 bg-white/70 rounded-lg">
+                      <div className="p-1.5 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full mr-3">
+                        <MapPin size={14} className="text-white" />
+                      </div>
+                      <span>{user.address}</span>
                     </div>
-                    <span>{user?.contact || "Not provided"}</span>
-                  </div>
-                  <div className="flex items-center text-gray-700 p-3 bg-white/70 rounded-lg">
-                    <div className="p-1.5 bg-gradient-to-r from-green-400 to-green-500 rounded-full mr-3">
-                      <Phone size={14} className="text-white" />
-                    </div>
-                    <span>{user?.contact || "Not provided"}</span>
-                  </div>
+                  )}
                 </div>
               </div>
 

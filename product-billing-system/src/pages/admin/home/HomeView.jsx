@@ -1,225 +1,281 @@
-import { THEME_CONFIG } from "../../../constants/Theme";
 import { Link } from "react-router-dom";
 
-const HomeView = ({ 
-  theme = "GENERAL", 
-  popularDishes = [], 
-  customerFeedback = [],
-  showAllFeedback = false,
-  onShowMoreFeedback 
-}) => {
-  const themeConfig = THEME_CONFIG[theme];
-  
+const HomeView = () => {
   return (
-    <div className={`${themeConfig.BACKGROUND_GRADIENT} min-h-screen p-6`}>
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-16 py-12">
-          <div className="inline-block p-3 rounded-full bg-white shadow-lg mb-6">
-            <div className="text-4xl">☕</div>
-          </div>
-          <h1 className={`${themeConfig.TEXT_COLOR} text-4xl md:text-5xl font-bold mb-6 ${themeConfig.FONT_PRIMARY}`}>
-            Welcome to <span className="text-[#FF6877]">Roast & Relax</span> Café
-          </h1>
-          <p className={`${themeConfig.TEXT_COLOR} text-lg md:text-xl max-w-2xl mx-auto mb-10 ${themeConfig.FONT_SECONDARY}`}>
-            Experience authentic Indian cuisine in a warm and inviting atmosphere
-          </p>
-          
-          <Link to="/menu" className="inline-block">
-            <button className={`${themeConfig.BUTTON} px-10 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 ${themeConfig.SHADOW} flex items-center mx-auto`}>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-lg">R</span>
+              </div>
+              <span className="text-2xl font-light text-slate-800">Roast & Relax</span>
+            </div>
+            
+            <div className="hidden md:flex space-x-8">
+              {['Home', 'Menu', 'About', 'Contact'].map((item) => (
+                <a key={item} href={`#${item.toLowerCase()}`} className="text-slate-700 hover:text-rose-500 transition-colors font-medium">
+                  {item}
+                </a>
+              ))}
+            </div>
+            
+            <Link to="/menu" className="bg-gradient-to-r from-rose-500 to-amber-500 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
               Order Now
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
-          </Link>
-        </div>
-
-        {/* Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className={`${themeConfig.CARD_BG} p-6 rounded-2xl text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-xl`}>
-            <div className={`${themeConfig.BG_ACCENT} w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <span className="text-white text-2xl">☕</span>
-            </div>
-            <h3 className={`${themeConfig.TEXT_COLOR} text-xl font-semibold mb-3`}>Premium Coffee</h3>
-            <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE}`}>Freshly brewed from select Indian coffee beans</p>
-          </div>
-          
-          <div className={`${themeConfig.CARD_BG} p-6 rounded-2xl text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-xl`}>
-            <div className={`${themeConfig.BG_ACCENT} w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <span className="text-white text-2xl">🍛</span>
-            </div>
-            <h3 className={`${themeConfig.TEXT_COLOR} text-xl font-semibold mb-3`}>Authentic Cuisine</h3>
-            <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE}`}>Traditional recipes passed down through generations</p>
-          </div>
-          
-          <div className={`${themeConfig.CARD_BG} p-6 rounded-2xl text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-xl`}>
-            <div className={`${themeConfig.BG_ACCENT} w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <span className="text-white text-2xl">🌿</span>
-            </div>
-            <h3 className={`${themeConfig.TEXT_COLOR} text-xl font-semibold mb-3`}>Cozy Ambiance</h3>
-            <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE}`}>Relax and unwind in our comfortable setting</p>
+            </Link>
           </div>
         </div>
+      </nav>
 
-        {/* Accent Element */}
-        <div className={`${themeConfig.BG_ACCENT} p-8 rounded-2xl mb-16 text-center ${themeConfig.SHADOW} relative overflow-hidden`}>
-          <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-white opacity-10"></div>
-          <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-white opacity-10"></div>
-          <p className={`text-white text-xl md:text-2xl font-medium ${themeConfig.FONT_SECONDARY} relative z-10`}>
-            "Enjoy the best flavors of India with a cozy atmosphere."
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-rose-50/20 to-amber-50/20"></div>
+        <div className="absolute top-1/4 left-10 w-72 h-72 bg-rose-200/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl"></div>
+        
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
+          <div className="inline-flex items-center space-x-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 mb-8 border border-slate-200">
+            <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
+            <span className="text-slate-600 text-sm font-medium">Now serving authentic Indian cuisine</span>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-light mb-6 text-slate-800 leading-tight">
+            Where <span className="font-serif italic">Flavor</span> Meets
+            <span className="block bg-gradient-to-r from-rose-500 to-amber-500 bg-clip-text text-transparent">Serenity</span>
+          </h1>
+          
+          <p className="text-xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Experience the perfect blend of aromatic coffees, authentic Indian delicacies, 
+            and a tranquil ambiance designed for your ultimate relaxation.
           </p>
-        </div>
-
-        {/* Popular Dishes with Images */}
-        <div className="mb-16">
-          <h2 className={`${themeConfig.TEXT_COLOR} text-3xl font-bold mb-10 text-center ${themeConfig.FONT_PRIMARY}`}>
-            Our <span className="text-[#FF6877]">Popular</span> Dishes
-          </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {popularDishes.map((dish, index) => (
-              <div key={index} className={`${themeConfig.CARD_BG} rounded-xl overflow-hidden ${themeConfig.SHADOW} transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg`}>
-                <div className="relative h-40 bg-gradient-to-r from-amber-400 to-orange-500 overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-4xl text-white">{dish.emoji}</span>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link to="/menu" className="group bg-slate-800 text-white px-8 py-4 rounded-full font-medium hover:bg-slate-900 transition-all duration-300 flex items-center space-x-2">
+              <span>Explore Our Menu</span>
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+            <button className="group border border-slate-300 text-slate-700 px-8 py-4 rounded-full font-medium hover:border-slate-400 transition-all duration-300 flex items-center space-x-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Watch Story</span>
+            </button>
+          </div>
+        </div>
+        
+        <div className="absolute bottom-10 animate-bounce">
+          <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-rose-500 font-semibold tracking-wider">EXPERIENCE</span>
+            <h2 className="text-4xl font-light text-slate-800 mt-2">The Roast & Relax Difference</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: "☕",
+                title: "Artisan Coffee Blends",
+                description: "Single-origin beans roasted to perfection, delivering rich flavors and aromatic experiences in every cup.",
+                color: "from-amber-500 to-orange-500"
+              },
+              {
+                icon: "🍛",
+                title: "Authentic Indian Cuisine",
+                description: "Traditional recipes crafted with modern techniques, using locally sourced, fresh ingredients daily.",
+                color: "from-rose-500 to-pink-500"
+              },
+              {
+                icon: "🌿",
+                title: "Sustainable Practices",
+                description: "Eco-friendly packaging, zero-waste initiatives, and support for local farmers and communities.",
+                color: "from-emerald-500 to-teal-500"
+              }
+            ].map((feature, index) => (
+              <div key={index} className="group relative">
+                <div className="relative z-10 bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-500 h-full">
+                  <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    {feature.icon}
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                    <h3 className="text-white text-sm font-semibold truncate">{dish.name}</h3>
-                  </div>
+                  <h3 className="text-xl font-semibold text-slate-800 mb-4">{feature.title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{feature.description}</p>
                 </div>
-                <div className="p-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className={`${themeConfig.TEXT_COLOR} font-semibold text-sm truncate`}>{dish.name}</span>
-                    <span className={`${themeConfig.BG_ACCENT} text-white px-2 py-1 rounded-full text-xs font-bold`}>{dish.price}</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-rose-50 to-amber-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Atmosphere Section */}
+      <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900 text-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <span className="text-amber-400 font-semibold tracking-wider">ATMOSPHERE</span>
+              <h2 className="text-4xl font-light mt-2 mb-6">Designed for Peaceful Moments</h2>
+              <p className="text-slate-300 text-lg leading-relaxed mb-8">
+                Our space is carefully curated to provide a sanctuary from the hustle of daily life. 
+                With comfortable seating, soft lighting, and subtle aromas, every corner invites you 
+                to unwind and savor the moment.
+              </p>
+              
+              <div className="space-y-4">
+                {[
+                  "Comfortable lounge seating with privacy partitions",
+                  "Soft, warm lighting for relaxed ambiance",
+                  "Curated background music at perfect volume",
+                  "Free high-speed Wi-Fi for digital nomads",
+                  "Power outlets at every table"
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-slate-300">{item}</span>
                   </div>
-                  <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE} mb-3 line-clamp-2`}>
-                    {dish.description}
-                  </p>
-                  <button className={`${themeConfig.BUTTON} w-full py-1.5 rounded-lg text-xs font-semibold`}>
-                    Add to Order
+                ))}
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-br from-amber-500 to-rose-500 h-64 rounded-2xl"></div>
+                  <div className="bg-gradient-to-br from-slate-700 to-slate-600 h-32 rounded-2xl"></div>
+                </div>
+                <div className="space-y-4 pt-8">
+                  <div className="bg-gradient-to-br from-slate-600 to-slate-700 h-32 rounded-2xl"></div>
+                  <div className="bg-gradient-to-br from-rose-500 to-amber-500 h-64 rounded-2xl"></div>
+                </div>
+              </div>
+              
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Signature Items */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-rose-500 font-semibold tracking-wider">SPECIALTIES</span>
+            <h2 className="text-4xl font-light text-slate-800 mt-2">Our Signature Creations</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: "Masala Chai Latte", emoji: "🫖", price: "₹180", desc: "Spiced tea with steamed milk" },
+              { name: "Filter Coffee", emoji: "☕", price: "₹150", desc: "Traditional South Indian brew" },
+              { name: "Butter Chicken", emoji: "🍗", price: "₹420", desc: "Creamy tomato-based curry" },
+              { name: "Gulab Jamun", emoji: "🍮", price: "₹160", desc: "Sweet milk dumplings" }
+            ].map((item, index) => (
+              <div key={index} className="group relative bg-slate-50 rounded-2xl p-6 hover:bg-gradient-to-br hover:from-rose-50 hover:to-amber-50 transition-all duration-500">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{item.emoji}</div>
+                <h3 className="font-semibold text-slate-800 mb-1">{item.name}</h3>
+                <p className="text-slate-600 text-sm mb-3">{item.desc}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-rose-600 font-bold">{item.price}</span>
+                  <button className="text-slate-400 hover:text-rose-500 transition-colors">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
                   </button>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="text-center mt-10">
-            <Link to="/menu" className={`inline-flex items-center ${themeConfig.LINK} font-semibold text-sm`}>
-              View Full Menu
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+      {/* Contact CTA */}
+      <section className="py-20 bg-gradient-to-br from-rose-500 to-amber-500">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <h2 className="text-4xl font-light text-white mb-6">Ready to Experience Serenity?</h2>
+          <p className="text-rose-100 text-lg mb-8 max-w-2xl mx-auto">
+            Visit us today and discover why Roast & Relax is more than just a café—it's an experience.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/contact" className="bg-white text-rose-600 px-8 py-4 rounded-full font-semibold hover:shadow-lg transition-all duration-300">
+              Make a Reservation
             </Link>
+            <button className="border border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-all duration-300">
+              Call Us: +91 12345 67890
+            </button>
           </div>
         </div>
+      </section>
 
-        {/* Customer Feedback Section */}
-        <div className="mb-16">
-          <h2 className={`${themeConfig.TEXT_COLOR} text-3xl font-bold mb-10 text-center ${themeConfig.FONT_PRIMARY}`}>
-            Customer <span className="text-[#FF6877]">Feedback</span>
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {customerFeedback.slice(0, showAllFeedback ? customerFeedback.length : 2).map((feedback, index) => (
-              <div key={index} className={`${themeConfig.CARD_BG} p-5 rounded-xl ${themeConfig.SHADOW}`}>
-                <div className="flex items-start mb-3">
-                  <div className="w-10 h-10 bg-[#FF6877] rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
-                    {feedback.initials}
-                  </div>
-                  <div>
-                    <h4 className={`${themeConfig.TEXT_COLOR} font-semibold text-sm`}>{feedback.customerName}</h4>
-                    <div className="flex text-amber-400">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-400">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-rose-500 to-amber-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">R</span>
                 </div>
-                <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE} italic text-xs`}>
-                  "{feedback.comment}"
-                </p>
+                <span className="text-white text-xl font-light">Roast & Relax</span>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Where every cup tells a story and every meal creates a memory.
+              </p>
+            </div>
+            
+            {[
+              {
+                title: "Hours",
+                items: ["Mon-Fri: 8AM - 11PM", "Sat-Sun: 8AM - 1AM", "Holidays: 9AM - 10PM"]
+              },
+              {
+                title: "Contact",
+                items: ["123 Spice Street", "Mumbai, India", "info@roastrelax.com"]
+              },
+              {
+                title: "Follow Us",
+                items: ["Instagram", "Facebook", "Twitter"]
+              }
+            ].map((section, index) => (
+              <div key={index}>
+                <h4 className="text-white font-semibold mb-4">{section.title}</h4>
+                <ul className="space-y-2">
+                  {section.items.map((item, itemIndex) => (
+                    <li key={itemIndex} className="text-sm hover:text-white transition-colors cursor-pointer">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
           
-          {customerFeedback.length > 2 && (
-            <div className="text-center mt-8">
-              <button 
-                onClick={onShowMoreFeedback}
-                className={`${themeConfig.BUTTON} px-6 py-2 rounded-full text-sm font-semibold`}
-              >
-                {showAllFeedback ? 'Show Less' : `Show More (${customerFeedback.length - 2})`}
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Cafe Information Section */}
-        <div className={`${themeConfig.CARD_BG} rounded-xl p-6 mb-12 ${themeConfig.SHADOW}`}>
-          <h2 className={`${themeConfig.TEXT_COLOR} text-xl font-bold mb-5 text-center`}>
-            Visit Us Today
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="text-center">
-              <div className={`${themeConfig.BG_ACCENT} w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3`}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h3 className={`${themeConfig.TEXT_COLOR} font-semibold mb-1 text-sm`}>Location</h3>
-              <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE}`}>
-                123 Spice Street<br />
-                Mumbai, India
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className={`${themeConfig.BG_ACCENT} w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3`}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className={`${themeConfig.TEXT_COLOR} font-semibold mb-1 text-sm`}>Opening Hours</h3>
-              <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE}`}>
-                Mon-Sun: 8AM - 11PM<br />
-                Weekend: 8AM - 1AM
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className={`${themeConfig.BG_ACCENT} w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3`}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-              </div>
-              <h3 className={`${themeConfig.TEXT_COLOR} font-semibold mb-1 text-sm`}>Contact Us</h3>
-              <p className={`${themeConfig.TEXT_COLOR} ${themeConfig.BODY_TEXT_SIZE}`}>
-                +91 1234567890<br />
-                info@roastrelax.com
-              </p>
-            </div>
+          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm">
+            <p>© 2024 Roast & Relax Café. All rights reserved.</p>
           </div>
         </div>
-
-        {/* Special Offers Section */}
-        <div className={`${themeConfig.BG_ACCENT} rounded-xl p-6 mb-12 text-center ${themeConfig.SHADOW} relative overflow-hidden`}>
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white opacity-10"></div>
-          <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-white opacity-10"></div>
-          
-          <h2 className="text-white text-xl md:text-2xl font-bold mb-3">Special Weekend Offer!</h2>
-          <p className="text-white text-sm mb-4 max-w-2xl mx-auto">
-            Enjoy 15% off on all beverages and desserts every Friday & Saturday evening from 6PM to 9PM.
-          </p>
-          <button className="bg-white text-[#FF6877] px-6 py-2 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors">
-            Learn More
-          </button>
-        </div>
-      </div>
+      </footer>
     </div>
   );
 };

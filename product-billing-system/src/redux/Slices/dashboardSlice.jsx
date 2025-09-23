@@ -12,6 +12,7 @@ export const fetchDashboardData = createAsyncThunkHandler(
   _get,
   (payload) => buildUrlWithParams(API_ENDPOINT.GET_DASHBOARD_DATA, payload) // /dashboard?duration=lastMonth
 );
+
 export const fetchDashOrders = createAsyncThunkHandler(
   API_ENDPOINT.GET_DASHBOARD_ORDERS,
   _get,

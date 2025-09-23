@@ -2,11 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { API_ENDPOINT } from "../../constants/ApiEndPoints";
 import { _get, _post } from "../../helper/ApiClient";
 import { createAsyncThunkHandler } from "../../helper/createAsyncThunkHandler";
+import { updateUserProfile, updateAvatar } from "./profileSlice";
 
 // Async thunks
 export const loginUser = createAsyncThunkHandler("auth/login", _post, API_ENDPOINT.LOGIN);
 export const signUpUser = createAsyncThunkHandler("auth/register", _post, API_ENDPOINT.SIGNUP);
 export const logoutUser = createAsyncThunkHandler("auth/logout", _post, API_ENDPOINT.LOGOUT);
+
+// export const forgotPassword = createAsyncThunkHandler();
 
 const initialState = {
   isAuthenticated: false,
@@ -40,6 +43,26 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // listen for updateUserProfile success
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.user = {
+          ...state.user,
+          ...action.payload.data,
+        };
+        if (action.payload.data.refreshToken) {
+          state.refreshToken = action.payload.data.refreshToken;
+        }
+      })
+      // Add avatar on upate avatar
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        state.user = {
+          ...state.user,
+          ...action.payload.data,
+        };
+        if (action.payload.data.refreshToken) {
+          state.refreshToken = action.payload.data.refreshToken;
+        }
+      })
       // Login
       .addCase(loginUser.pending, (state) => {
         state.isAuthenticated = false;
@@ -90,5 +113,5 @@ const authSlice = createSlice({
 });
 
 // Export actions and reducer
-export const { login, logout, signUp   } = authSlice.actions;
+export const { login, logout, signUp } = authSlice.actions;
 export default authSlice.reducer;

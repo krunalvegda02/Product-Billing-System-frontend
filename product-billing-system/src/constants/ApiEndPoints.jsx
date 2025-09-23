@@ -2,8 +2,12 @@ export const API_ENDPOINT = {
   LOGIN: "users/login",
   LOGOUT: "users/logout",
   SIGNUP: "users/register",
+
   FORGOT_PASSWORD: "users/forgot_password",
-  CHANGE_PASSWORD: "users/change_password",
+  CHANGE_PASSWORD: "users/change-password",
+
+  UPDATE_PROFILE: "users/update-profile",
+  UPDATE_AVATAR: "users/update-avatar",
 
   CREATE_CATEGORY: "category/create",
   GET_ALL_CATEGORY: "category/",

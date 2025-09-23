@@ -139,7 +139,7 @@ const Order = () => {
     <>
       <OrderView orderItems={orderItems} placeOrder={handleCreateOrderModel} totalAmount={totalAmount} clearOrderItems={clearOrderItems} />
 
-      {createdOrderId && (
+      {/* {createdOrderId && (
         <div className="flex gap-2 mt-4">
           <button onClick={handleCancelOrder} className="bg-red-500 text-white px-4 py-2 rounded">
             Cancel Order
@@ -148,7 +148,7 @@ const Order = () => {
             Update Order
           </button>
         </div>
-      )}
+      )} */}
 
       <CustomModal isOpen={isOpen} onCancel={closeModal} onSubmit={handleFinalOrderSubmit} title="Confirm Order">
         <div className="space-y-4">
