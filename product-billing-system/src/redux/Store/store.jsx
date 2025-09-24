@@ -11,6 +11,7 @@ import staffReducer from "../Slices/StaffSlice";
 import dashboardReducer from "../Slices/dashboardSlice";
 import billingReducer from "../Slices/billingSlice";
 import paymentReducer from "../Slices/paymentSlice";
+import modalReducer from "../Slices/modalSlice";
 
 // Persist only the auth slice for clarity
 const persistConfig = {
@@ -31,6 +32,7 @@ const store = configureStore({
     dashboard: dashboardReducer,
     billing: billingReducer,
     payment: paymentReducer,
+    modal: modalReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

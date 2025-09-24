@@ -37,7 +37,7 @@ const Login = () => {
       } else if (response.data.user.role === "ADMIN") {
         navigate(PATHS.ADMIN_DASHBOARD);
       } else {
-        navigate(PATHS.CATEGORY_MANAGEMENT);
+        navigate(PATHS.ORDER_MANAGEMENT);
       }
       
       showToast("Login successful!", "success");

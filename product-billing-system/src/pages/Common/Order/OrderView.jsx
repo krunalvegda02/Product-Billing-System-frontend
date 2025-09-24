@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { ShoppingBag, Trash2, CheckCircle, Sparkles, ChevronRight, X } from "lucide-react";
-import FeedBackModal from "../../../components/helperComponent/FeedBackModal";
 
-const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }) => {
-  const [isFeedbackModalOpen, setFeedbackModalOpen] = useState(false);
-
+const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount, openFeedback }) => {
   return (
     <div className="w-full bg-gradient-to-b from-white to-blue-50/30 rounded-lg">
       {/* Header */}
@@ -16,12 +13,12 @@ const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }
           <h3 className="text-lg font-semibold text-gray-800">Your Order</h3>
           {orderItems.length > 0 && (
             <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-1 rounded-full">
-              {orderItems.length} {orderItems.length === 1 ? 'item' : 'items'}
+              {orderItems.length} {orderItems.length === 1 ? "item" : "items"}
             </span>
           )}
         </div>
         {orderItems.length > 0 && (
-          <button 
+          <button
             onClick={clearOrderItems}
             className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors duration-200"
             title="Clear order"
@@ -44,25 +41,20 @@ const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }
         ) : (
           <div className="space-y-3">
             {orderItems.map((item) => (
-              <div 
-                key={item.id} 
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-200 group"
-              >
+              <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50/50 transition-colors duration-200 group">
                 <div className="relative flex-shrink-0">
-                  <img 
-                    src={item.thumbnail} 
-                    alt={item.name} 
-                    className="w-12 h-12 object-cover rounded-lg shadow-sm" 
-                  />
+                  <img src={item.thumbnail} alt={item.name} className="w-12 h-12 object-cover rounded-lg shadow-sm" />
                   <div className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500 text-white text-xs font-bold rounded-full shadow-sm">
                     {item.quantity}
                   </div>
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-gray-800 truncate">{item.name}</p>
                   <div className="flex items-center justify-between mt-1">
-                    <span className="text-sm text-gray-600">₹{item.price} × {item.quantity}</span>
+                    <span className="text-sm text-gray-600">
+                      ₹{item.price} × {item.quantity}
+                    </span>
                     <span className="font-semibold text-blue-600">₹{item.quantity * item.price}</span>
                   </div>
                 </div>
@@ -80,12 +72,12 @@ const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }
               <span className="text-sm text-gray-600">Subtotal</span>
               <span className="font-medium text-gray-800">₹{totalAmount}</span>
             </div>
-            
+
             {/* <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Delivery Fee</span>
               <span className="text-sm text-gray-600">{totalAmount > 300 ? 'Free' : '₹40'}</span>
             </div> */}
-            
+
             <div className="flex justify-between items-center pt-2">
               <span className="font-semibold text-gray-800">Total Amount</span>
               <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -93,13 +85,13 @@ const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }
               </span>
             </div>
 
-            {totalAmount < 300 && (
+            {/* {totalAmount < 300 && (
               <div className="mt-2 p-2 bg-amber-50 rounded-lg border border-amber-200/50">
                 <p className="text-xs text-amber-700 text-center">
                   Add ₹{300 - totalAmount} more for free delivery!
                 </p>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Actions */}
@@ -114,8 +106,8 @@ const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }
             </button>
 
             <div className="mt-3 text-center">
-              <button 
-                onClick={() => setFeedbackModalOpen(true)} 
+              <button
+                onClick={openFeedback}
                 className="text-xs text-blue-500 hover:text-blue-700 transition-colors duration-200 inline-flex items-center gap-1"
               >
                 <Sparkles size={12} />
@@ -125,8 +117,6 @@ const OrderView = ({ orderItems = [], placeOrder, clearOrderItems, totalAmount }
           </div>
         </>
       )}
-
-      <FeedBackModal isOpen={isFeedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
     </div>
   );
 };

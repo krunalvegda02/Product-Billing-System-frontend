@@ -76,7 +76,7 @@ const PageData = [
   {
     path: PATHS.ADMIN_DASHBOARD,
     component: AdminDashboard,
-    roles: [ROLE.CUSTOMER],
+    roles: [ROLE.ADMIN],
     isPublic: false,
     layout: true,
   },

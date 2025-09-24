@@ -5,8 +5,9 @@ import { THEME_CONFIG } from "../../constants/Theme";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/Slices/authSlice";
 import { Bell, Search, User, LogOut, Menu, X } from "lucide-react";
+import { Manager } from "socket.io-client";
 
-const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
+const Layout = ({ children, currentTheme = "GENERAL", role = "ADMIN" }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
@@ -50,7 +51,7 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
   const theme = THEME_CONFIG[currentTheme];
 
   const menus = {
-    admin: [
+    ADMIN: [
       { path: PATHS.ADMIN_DASHBOARD, label: "Dashboard", icon: "📊" },
       { path: PATHS.CATEGORY_MANAGEMENT, label: "Categories", icon: "🗂️" },
       { path: PATHS.PRODUCT_MANAGEMENT, label: "Menu Items", icon: "🍽️" },
@@ -59,7 +60,7 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
       { path: PATHS.BILLING_MANAGEMENT, label: "Billing", icon: "💰" },
       { path: PATHS.FEEDBACK_MANAGEMENT, label: "Feedback", icon: "💬" },
     ],
-    manager: [
+    MANAGER: [
       { path: PATHS.CATEGORY_MANAGEMENT, label: "Categories", icon: "🗂️" },
       { path: PATHS.PRODUCT_MANAGEMENT, label: "Menu Items", icon: "🍽️" },
       { path: PATHS.ADD_STAFF, label: "Staff Management", icon: "👥" },
@@ -67,13 +68,16 @@ const Layout = ({ children, currentTheme = "GENERAL", role = "admin" }) => {
       { path: PATHS.BILLING_MANAGEMENT, label: "Billing", icon: "💰" },
       { path: PATHS.FEEDBACK_MANAGEMENT, label: "Feedback", icon: "💬" },
     ],
-    waiter: [{ path: "/waiter/orders", label: "Orders to Serve", icon: "🛎️" }],
+    WAITER: [
+      { path: PATHS.ORDER_MANAGEMENT, label: "Orders to Serve", icon: "🛎️" },
+      { path: PATHS.BILLING_MANAGEMENT, label: "Billing", icon: "💰" },
+    ],
   };
 
   const titleMap = {
-    admin: "Admin Panel",
-    manager: "Manager Panel",
-    waiter: "Waiter Panel",
+    ADMIN: "Admin Panel",
+    MANAGER: "Manager Panel",
+    WAITER: "Waiter Panel",
   };
 
   // Toggle mobile sidebar
