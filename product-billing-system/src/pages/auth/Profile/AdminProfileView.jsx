@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../constants/RouteNames";
+import { useTheme } from "../../../context/ThemeContext"; // Import theme context
 
 const AdminProfileView = ({
   UpdateProfileData,
@@ -17,18 +18,19 @@ const AdminProfileView = ({
   successMessage,
 }) => {
   const navigate = useNavigate();
+  const { theme } = useTheme(); // Get current theme
 
   return (
-    <div className="min-h-screen mx-auto mt-12 bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-2xl border border-blue-200">
+    <div className={`min-h-screen mx-auto mt-12 ${theme.BACKGROUND_GRADIENT} py-8 px-4 flex items-center justify-center`}>
+      <div className={`${theme.CARD_BG} p-8 rounded-2xl ${theme.SHADOW} w-full max-w-2xl border ${theme.BORDER_COLOR}`}>
         {/* Avatar */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
           <div className="relative">
-            <div className="w-32 h-32 rounded-full border-4 border-blue-100 shadow-lg overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100">
+            <div className={`w-32 h-32 rounded-full border-4 ${theme.BORDER_COLOR} ${theme.SHADOW} overflow-hidden ${theme.BACKGROUND_GRADIENT}`}>
               {avatarPreview ? (
                 <img src={avatarPreview} alt="Admin Avatar" className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-blue-400">
+                <div className={`w-full h-full flex items-center justify-center ${theme.ICON_COLOR}`}>
                   <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
                   </svg>
@@ -37,7 +39,7 @@ const AdminProfileView = ({
             </div>
             <label
               htmlFor="avatar-upload"
-              className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-md cursor-pointer hover:bg-blue-700 transition-colors"
+              className={`absolute bottom-0 right-0 ${theme.BG_ACCENT} text-white p-2 rounded-full ${theme.SHADOW} cursor-pointer ${theme.HOVER_SECONDARY_ACCENT} transition-colors`}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -53,14 +55,22 @@ const AdminProfileView = ({
           </div>
 
           <div className="text-center md:text-left">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Profile</h1>
-            <p className="text-gray-600">Manage and update your profile information</p>
+            <h1 className={`text-3xl font-bold ${theme.TITLE_TEXT} mb-2`}>Admin Profile</h1>
+            <p className={theme.TEXT_SECONDARY}>Manage and update your profile information</p>
           </div>
         </div>
 
         {/* Status Messages */}
-        {errorMessage && <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{errorMessage}</div>}
-        {successMessage && <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">{successMessage}</div>}
+        {errorMessage && (
+          <div className={`mb-6 p-4 ${theme.ERROR_BG} border ${theme.BORDER_COLOR} rounded-lg ${theme.ERROR}`}>
+            {errorMessage}
+          </div>
+        )}
+        {successMessage && (
+          <div className={`mb-6 p-4 ${theme.SUCCESS_BG} border ${theme.BORDER_COLOR} rounded-lg ${theme.SUCCESS}`}>
+            {successMessage}
+          </div>
+        )}
 
         {/* Form */}
         <form
@@ -72,7 +82,7 @@ const AdminProfileView = ({
         >
           {/* Email */}
           <div>
-            <label className="block text-gray-700 mb-2 font-medium">
+            <label className={`block ${theme.TEXT_COLOR} mb-2 font-medium`}>
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -82,16 +92,18 @@ const AdminProfileView = ({
               onChange={handleChange}
               onBlur={handleBlur}
               className={`w-full px-4 py-3 rounded-lg border focus:outline-none ${
-                formErrors.email && touched.email ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                formErrors.email && touched.email 
+                  ? `${theme.INPUT_ERROR}` 
+                  : `${theme.INPUT} ${theme.FOCUS_RING}`
               }`}
               placeholder="Enter email"
             />
-            {formErrors.email && touched.email && <p className="text-sm text-red-500 mt-1">{formErrors.email}</p>}
+            {formErrors.email && touched.email && <p className={`text-sm ${theme.ERROR} mt-1`}>{formErrors.email}</p>}
           </div>
 
           {/* Contact */}
           <div>
-            <label className="block text-gray-700 mb-2 font-medium">
+            <label className={`block ${theme.TEXT_COLOR} mb-2 font-medium`}>
               Contact <span className="text-red-500">*</span>
             </label>
             <input
@@ -101,16 +113,18 @@ const AdminProfileView = ({
               onChange={handleChange}
               onBlur={handleBlur}
               className={`w-full px-4 py-3 rounded-lg border focus:outline-none ${
-                formErrors.contact && touched.contact ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                formErrors.contact && touched.contact 
+                  ? `${theme.INPUT_ERROR}` 
+                  : `${theme.INPUT} ${theme.FOCUS_RING}`
               }`}
               placeholder="Enter contact"
             />
-            {formErrors.contact && touched.contact && <p className="text-sm text-red-500 mt-1">{formErrors.contact}</p>}
+            {formErrors.contact && touched.contact && <p className={`text-sm ${theme.ERROR} mt-1`}>{formErrors.contact}</p>}
           </div>
 
           {/* DOB */}
           <div>
-            <label className="block text-gray-700 mb-2 font-medium">
+            <label className={`block ${theme.TEXT_COLOR} mb-2 font-medium`}>
               Date of Birth <span className="text-red-500">*</span>
             </label>
             <input
@@ -120,10 +134,12 @@ const AdminProfileView = ({
               onChange={handleChange}
               onBlur={handleBlur}
               className={`w-full px-4 py-3 rounded-lg border focus:outline-none ${
-                formErrors.dob && touched.dob ? "border-red-500" : "border-gray-300 focus:border-blue-500"
+                formErrors.dob && touched.dob 
+                  ? `${theme.INPUT_ERROR}` 
+                  : `${theme.INPUT} ${theme.FOCUS_RING}`
               }`}
             />
-            {formErrors.dob && touched.dob && <p className="text-sm text-red-500 mt-1">{formErrors.dob}</p>}
+            {formErrors.dob && touched.dob && <p className={`text-sm ${theme.ERROR} mt-1`}>{formErrors.dob}</p>}
           </div>
 
           {/* Buttons */}
@@ -131,8 +147,10 @@ const AdminProfileView = ({
             <button
               type="submit"
               disabled={isLoading || !isFormValid()}
-              className={`w-full py-3 px-4 rounded-lg font-semibold ${
-                isLoading || !isFormValid() ? "bg-gray-400 text-gray-200 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+              className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors duration-200 ${
+                isLoading || !isFormValid() 
+                  ? "bg-gray-400 text-gray-200 cursor-not-allowed" 
+                  : `${theme.BUTTON} ${theme.SHADOW}`
               }`}
             >
               {isLoading ? "Updating..." : "Update Profile"}
@@ -141,7 +159,7 @@ const AdminProfileView = ({
             <button
               type="button"
               onClick={() => navigate(PATHS.UPDATE_PASSWORD)}
-              className="w-full py-3 px-4 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50"
+              className={`w-full py-3 px-4 border ${theme.BORDER_COLOR} ${theme.TEXT_COLOR} font-semibold rounded-lg ${theme.BUTTON_SECONDARY} transition-colors duration-200`}
             >
               Change Password
             </button>

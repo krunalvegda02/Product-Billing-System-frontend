@@ -18,6 +18,7 @@ export const API_ENDPOINT = {
 
   CREATE_PRODUCT: "products/create",
   GET_ALL_PRODUCT: "products/all",
+  ALL_PRODUCTS_NAME: "products/all/name",
   GET_PRODUCT: "products/",
   UPDATE_PRODUCT: "products/update",
   DELETE_PRODUCT: "products/delete",

@@ -1,14 +1,18 @@
 import React from "react";
 import MenuHeader from "../../../components/commonComponent/MenuHeader";
-import Menu from "../Menu/Menu";
 import { Outlet } from "react-router-dom";
 
 const MenuPageLayout_view = ({ onAvatarClick, onCartClick, onFavoritesClick, hotelName }) => {
   return (
     <>
-      <MenuHeader onAvatarClick={onAvatarClick} onCartClick={onCartClick} onFavoritesClick={onFavoritesClick} hotelName={hotelName} />
+      <MenuHeader
+        onAvatarClick={onAvatarClick}
+        onCartClick={onCartClick}
+        onFavoritesClick={onFavoritesClick}
+        hotelName={hotelName}
+      />
+      {/* Render the nested route/component here */}
       <Outlet />
-      {/* <Menu /> */}
     </>
   );
 };

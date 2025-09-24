@@ -1,4 +1,3 @@
-
 export const THEME = {
   DARK: "DARK",
   LIGHT: "LIGHT",
@@ -14,7 +13,7 @@ export const THEME_CONFIG = {
     TEXT_SECONDARY: "text-[#5a524a]",
     BG_HEADER: "bg-[#ffffff]",
     BG_ASIDE: "bg-[#ffffff]",
-    
+
     // Restaurant Theme Colors (Warm & Inviting)
     BG_ACCENT: "bg-[#d97706]", // Warm orange
     BG_SECONDARY_ACCENT: "bg-[#b45309]",
@@ -32,7 +31,8 @@ export const THEME_CONFIG = {
     TITLE_TEXT: "text-[#2c2520] font-semibold",
 
     // Input Styles
-    INPUT: "bg-white border border-[#d1d5db] placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] transition-colors",
+    INPUT:
+      "bg-white border border-[#d1d5db] placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] transition-colors",
     INPUT_ERROR: "border-[#ef4444] focus:ring-[#ef4444]",
 
     // Badge Styles
@@ -73,6 +73,8 @@ export const THEME_CONFIG = {
     // Navigation
     NAV_ACTIVE: "bg-[#fef7ed] text-[#d97706] border-r-2 border-[#d97706]",
     NAV_INACTIVE: "text-[#6b7280] hover:bg-[#f9fafb] hover:text-[#2c2520]",
+
+    FOCUS_RING: "focus:ring-[#d97706]",
   },
 
   [THEME.LIGHT]: {
@@ -83,7 +85,7 @@ export const THEME_CONFIG = {
     TEXT_SECONDARY: "text-[#6b7280]",
     BG_HEADER: "bg-[#ffffff]",
     BG_ASIDE: "bg-[#ffffff]",
-    
+
     // Clean Professional Colors
     BG_ACCENT: "bg-[#3b82f6]", // Professional blue
     BG_SECONDARY_ACCENT: "bg-[#1d4ed8]",
@@ -101,7 +103,8 @@ export const THEME_CONFIG = {
     TITLE_TEXT: "text-[#1f2937] font-semibold",
 
     // Input Styles
-    INPUT: "bg-white border border-[#e2e8f0] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] transition-colors",
+    INPUT:
+      "bg-white border border-[#e2e8f0] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] transition-colors",
     INPUT_ERROR: "border-[#ef4444] focus:ring-[#ef4444]",
 
     // Badge Styles
@@ -142,6 +145,9 @@ export const THEME_CONFIG = {
     // Navigation
     NAV_ACTIVE: "bg-[#eff6ff] text-[#3b82f6] border-r-2 border-[#3b82f6]",
     NAV_INACTIVE: "text-[#6b7280] hover:bg-[#f8fafc] hover:text-[#1f2937]",
+
+    // Add to THEME.LIGHT:
+    FOCUS_RING: "focus:ring-[#3b82f6]",
   },
 
   [THEME.DARK]: {
@@ -152,7 +158,7 @@ export const THEME_CONFIG = {
     TEXT_SECONDARY: "text-[#cbd5e1]",
     BG_HEADER: "bg-[#1e293b]",
     BG_ASIDE: "bg-[#1e293b]",
-    
+
     // Dark Theme Colors
     BG_ACCENT: "bg-[#f59e0b]", // Warm amber for dark theme
     BG_SECONDARY_ACCENT: "bg-[#d97706]",
@@ -170,7 +176,8 @@ export const THEME_CONFIG = {
     TITLE_TEXT: "text-[#f1f5f9] font-semibold",
 
     // Input Styles
-    INPUT: "bg-[#334155] border border-[#475569] text-[#f1f5f9] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#f59e0b] focus:border-[#f59e0b] transition-colors",
+    INPUT:
+      "bg-[#334155] border border-[#475569] text-[#f1f5f9] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#f59e0b] focus:border-[#f59e0b] transition-colors",
     INPUT_ERROR: "border-[#ef4444] focus:ring-[#ef4444]",
 
     // Badge Styles
@@ -211,5 +218,8 @@ export const THEME_CONFIG = {
     // Navigation
     NAV_ACTIVE: "bg-[#374151] text-[#f59e0b] border-r-2 border-[#f59e0b]",
     NAV_INACTIVE: "text-[#9ca3af] hover:bg-[#374151] hover:text-[#f1f5f9]",
+
+    // Add to THEME.DARK:
+    FOCUS_RING: "focus:ring-[#f59e0b]",
   },
 };

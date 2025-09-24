@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
 import { useToast } from "../../../context/ToastContext";
 import CustomModal from "../../helperComponent/customModal";
+import { THEME, THEME_CONFIG } from "../../../constants/Theme"; 
+import { useTheme } from "../../../context/ThemeContext";
 
-const AddCategoryModal = ({ isOpen, onCancel, onSave }) => {
+const AddCategoryModal = ({ isOpen, onCancel, onSave, currentTheme = THEME.GENERAL }) => {
   const [categoryName, setCategoryName] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -10,6 +12,9 @@ const AddCategoryModal = ({ isOpen, onCancel, onSave }) => {
 
   const { showToast } = useToast();
   const fileInputRef = useRef(null);
+
+  // Get the current theme configuration
+  const { theme } = useTheme();
 
   const handleFileChange = (e) => {
     const file = e.target?.files[0];
@@ -69,7 +74,7 @@ const AddCategoryModal = ({ isOpen, onCancel, onSave }) => {
       isOpen={isOpen}
       onCancel={handleCloseCategory}
       onSubmit={handleSubmitCategory}
-      title={<p className="font-sans font-semibold text-2xl">Add New Category</p>}
+      title={<p className={`font-sans font-semibold text-2xl ${theme.TEXT_COLOR}`}>Add New Category</p>}
       okDisabled={!categoryName || !thumbnail || loading}
       okText={
         loading ? (
@@ -84,11 +89,15 @@ const AddCategoryModal = ({ isOpen, onCancel, onSave }) => {
           "Save"
         )
       }
+      modalClassName={theme.MODAL_BG}
+      overlayClassName={theme.MODAL_OVERLAY}
+      buttonPrimaryClassName={theme.BUTTON}
+      buttonSecondaryClassName={theme.BUTTON_SECONDARY}
     >
       <div className="space-y-4 my-4">
         {/* Name Input */}
         <div>
-          <label htmlFor="categoryName" className="block text-left text-lg font-medium text-gray-700">
+          <label htmlFor="categoryName" className={`block text-left text-lg font-medium ${theme.TEXT_COLOR}`}>
             Name:
           </label>
           <input
@@ -97,28 +106,28 @@ const AddCategoryModal = ({ isOpen, onCancel, onSave }) => {
             placeholder="Enter category name"
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
-            className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+            className={`mt-2 block w-full border-b-2 ${theme.INPUT} placeholder:${theme.TEXT_SECONDARY} py-1 transition-colors`}
           />
         </div>
 
         {/* Thumbnail Input */}
         <div>
-          <label htmlFor="categoryThumbnail" className="block text-left text-lg font-medium text-gray-700">
+          <label htmlFor="categoryThumbnail" className={`block text-left text-lg font-medium ${theme.TEXT_COLOR}`}>
             Thumbnail:
           </label>
           <div className="flex items-center justify-center w-full">
             <label className="w-full cursor-pointer">
               <div
-                className={`border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-500 transition-colors ${
-                  imagePreview ? "bg-gray-200" : ""
+                className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
+                  imagePreview ? theme.BG_SECONDARY_ACCENT : `${theme.BORDER_COLOR} hover:${theme.BG_ACCENT} hover:bg-opacity-10`
                 }`}
               >
                 {imagePreview ? (
-                  <div className="bg-gray-200">
+                  <div className={theme.BG_SECONDARY_ACCENT}>
                     <img src={imagePreview} alt="Preview" className="mx-auto h-32 w-32 object-cover rounded-lg" />
                   </div>
                 ) : (
-                  <div className="text-gray-500">
+                  <div className={theme.TEXT_SECONDARY}>
                     <p>Click to upload image</p>
                     <p className="text-sm">PNG, JPG, JPEG up to 10MB</p>
                   </div>

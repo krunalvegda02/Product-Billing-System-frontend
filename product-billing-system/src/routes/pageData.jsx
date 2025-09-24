@@ -129,7 +129,7 @@ const PageData = [
     path: PATHS.MENU,
     component: menu,
     isPublic: true,
-    layout: true,
+    layout: false,
     MenuLayout: true,
   },
   {

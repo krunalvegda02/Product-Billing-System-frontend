@@ -61,7 +61,7 @@ const BillingManagement = () => {
       case "Card":
         return { text: "Credit Card", icon: "💳" };
       case "UPI":
-        return { text: "PayPal", icon: "📱" };
+        return { text: "Razorpay", icon: "📱" };
       case "Cash":
         return { text: "Cash", icon: "💵" };
       case "Other":

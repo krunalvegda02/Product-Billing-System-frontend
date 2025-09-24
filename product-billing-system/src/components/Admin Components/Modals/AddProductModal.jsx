@@ -1,17 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { removeNullValues } from "../../../helper/helperFunction";
-import {
-  createProduct, // ✅ should be product, not category
-  updateProduct,
-  deselectProduct, // ✅ same here
-} from "../../../redux/Slices/productSlice";
-import { getAllCategories, resetCategorySlice } from "../../../redux/Slices/categorySlice"; // ✅ for category dropdown
+import { createProduct, updateProduct, deselectProduct } from "../../../redux/Slices/productSlice";
+import { getAllCategories, resetCategorySlice } from "../../../redux/Slices/categorySlice";
 import store from "../../../redux/Store/store";
 import CustomModal from "../../helperComponent/customModal";
 import { useToast } from "../../../context/ToastContext";
+import { THEME, THEME_CONFIG } from "../../../constants/Theme";
+import { useTheme } from "../../../context/ThemeContext";
 
-const AddProductModal = ({ isOpen, onCancel, onSave }) => {
+const AddProductModal = ({ isOpen, onCancel, onSave, currentTheme = THEME.GENERAL }) => {
   const [formValue, setFormValue] = useState({
     id: null,
     name: "",
@@ -20,7 +18,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
     inStock: true,
     thumbnail: null,
     thumbnailPreview: null,
-    categoryOfProduct: "", // ✅ now single category instead of array
+    categoryOfProduct: "",
     isDiscountActive: false,
     ActiveDiscount: null,
   });
@@ -30,6 +28,9 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
   const { dispatch } = store;
   const { showToast } = useToast();
   const fileInputRef = useRef(null);
+
+  // Get the current theme configuration
+  const { theme } = useTheme();
 
   const handleFileChange = (e) => {
     const file = e.target?.files[0];
@@ -87,7 +88,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
         inStock: selectedProduct.inStock ?? true,
         thumbnail: null,
         thumbnailPreview: selectedProduct.thumbnail || null,
-        categoryOfProduct: selectedProduct.categoryOfProduct?._id || "", // ✅ pre-fill category
+        categoryOfProduct: selectedProduct.categoryOfProduct?._id || "",
         isDiscountActive: selectedProduct.isDiscountActive ?? false,
         ActiveDiscount: selectedProduct.ActiveDiscount || null,
       }));
@@ -102,9 +103,8 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
       (async () => {
         try {
           const categories = await dispatch(getAllCategories()).unwrap();
-          // console.log("Fetched categories:", categories);
         } catch (err) {
-          showToast(err.message , "error")
+          showToast(err.message, "error");
           console.error("Error fetching categories:", err);
         }
       })();
@@ -145,15 +145,19 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
       isOpen={isOpen}
       onCancel={handleCancelModal}
       onSubmit={handleSaveModal}
-      title={<p className="font-sans font-semibold text-2xl">Add New Product</p>}
+      title={<p className={`font-sans font-semibold text-2xl ${theme.TEXT_COLOR}`}>Add New Product</p>}
       okDisabled={false}
+      modalClassName={theme.MODAL_BG}
+      overlayClassName={theme.MODAL_OVERLAY}
+      buttonPrimaryClassName={theme.BUTTON}
+      buttonSecondaryClassName={theme.BUTTON_SECONDARY}
     >
       <div className="space-y-6 my-4">
         {/* Product Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-left text-lg font-medium text-gray-700">
+            <label htmlFor="name" className={`block text-left text-lg font-medium ${theme.TEXT_COLOR}`}>
               Name:
             </label>
             <input
@@ -163,13 +167,13 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
               placeholder="Enter product name"
               value={formValue.name}
               onChange={handleInputChange}
-              className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+              className={`mt-2 block w-full border-b-2 ${theme.INPUT} placeholder:${theme.TEXT_SECONDARY} py-1 transition-colors`}
             />
           </div>
 
           {/* Price */}
           <div>
-            <label htmlFor="price" className="block text-left text-lg font-medium text-gray-700">
+            <label htmlFor="price" className={`block text-left text-lg font-medium ${theme.TEXT_COLOR}`}>
               Price:
             </label>
             <input
@@ -181,14 +185,14 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
               placeholder="Enter price"
               value={formValue.price}
               onChange={handleInputChange}
-              className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+              className={`mt-2 block w-full border-b-2 ${theme.INPUT} placeholder:${theme.TEXT_SECONDARY} py-1 transition-colors`}
             />
           </div>
         </div>
 
         {/* Category */}
         <div>
-          <label htmlFor="categoryOfProduct" className="block text-left text-lg font-medium text-gray-700">
+          <label htmlFor="categoryOfProduct" className={`block text-left text-lg font-medium ${theme.TEXT_COLOR}`}>
             Category:
           </label>
           <select
@@ -196,7 +200,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
             name="categoryOfProduct"
             value={formValue.categoryOfProduct}
             onChange={handleInputChange}
-            className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 py-1 hover:border-blue-400"
+            className={`mt-2 block w-full border-b-2 ${theme.INPUT} placeholder:${theme.TEXT_SECONDARY} py-1 transition-colors`}
           >
             <option value="">-- Select Category --</option>
             {categories?.map((cat) => (
@@ -209,7 +213,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-left text-lg font-medium text-gray-700">
+          <label htmlFor="description" className={`block text-left text-lg font-medium ${theme.TEXT_COLOR}`}>
             Description:
           </label>
           <textarea
@@ -218,7 +222,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
             placeholder="Enter product description"
             value={formValue.description}
             onChange={handleInputChange}
-            className="mt-2 block w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+            className={`mt-2 block w-full border-b-2 ${theme.INPUT} placeholder:${theme.TEXT_SECONDARY} py-1 transition-colors`}
           />
         </div>
 
@@ -231,9 +235,9 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
               type="checkbox"
               checked={formValue.inStock}
               onChange={handleInputChange}
-              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className={`w-5 h-5 ${theme.ICON_COLOR} border-gray-300 rounded focus:ring-2 focus:ring-${theme.ICON_COLOR.split("text-")[1]}`}
             />
-            <label htmlFor="inStock" className="text-lg font-medium text-gray-700">
+            <label htmlFor="inStock" className={`text-lg font-medium ${theme.TEXT_COLOR}`}>
               In Stock
             </label>
           </div>
@@ -245,16 +249,16 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
               type="checkbox"
               checked={formValue.isDiscountActive}
               onChange={handleInputChange}
-              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className={`w-5 h-5 ${theme.ICON_COLOR} border-gray-300 rounded focus:ring-2 focus:ring-${theme.ICON_COLOR.split("text-")[1]}`}
             />
-            <label htmlFor="isDiscountActive" className="text-lg font-medium text-gray-700">
+            <label htmlFor="isDiscountActive" className={`text-lg font-medium ${theme.TEXT_COLOR}`}>
               Discount Active
             </label>
           </div>
 
           {formValue.isDiscountActive && (
             <div className="flex items-center space-x-2">
-              <label htmlFor="ActiveDiscount" className="text-lg font-medium text-gray-700">
+              <label htmlFor="ActiveDiscount" className={`text-lg font-medium ${theme.TEXT_COLOR}`}>
                 Discount (%):
               </label>
               <input
@@ -266,7 +270,7 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
                 placeholder="Discount"
                 value={formValue.ActiveDiscount || ""}
                 onChange={handleInputChange}
-                className="block w-24 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 placeholder:text-base py-1 hover:border-blue-400"
+                className={`block w-24 border-b-2 ${theme.INPUT} placeholder:${theme.TEXT_SECONDARY} py-1 transition-colors`}
               />
             </div>
           )}
@@ -274,16 +278,20 @@ const AddProductModal = ({ isOpen, onCancel, onSave }) => {
 
         {/* Thumbnail */}
         <div>
-          <label htmlFor="thumbnail" className="block text-left text-lg font-medium text-gray-700">
+          <label htmlFor="thumbnail" className={`block text-left text-lg font-medium ${theme.TEXT_COLOR}`}>
             Thumbnail:
           </label>
           <div className="flex items-center justify-center w-full">
             <label className="w-full cursor-pointer">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-500 transition-colors bg-gray-200">
+              <div
+                className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
+                  formValue?.thumbnailPreview ? theme.BG_SECONDARY_ACCENT : `${theme.BORDER_COLOR} hover:${theme.BG_ACCENT} hover:bg-opacity-10`
+                }`}
+              >
                 {formValue?.thumbnailPreview ? (
                   <img src={formValue.thumbnailPreview} alt="Preview" className="mx-auto h-32 w-32 object-cover rounded-lg" />
                 ) : (
-                  <div className="text-gray-500">
+                  <div className={theme.TEXT_SECONDARY}>
                     <p>Click to upload image</p>
                     <p className="text-sm">PNG, JPG, JPEG up to 10MB</p>
                   </div>

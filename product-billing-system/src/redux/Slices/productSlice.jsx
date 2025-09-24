@@ -11,6 +11,10 @@ export const getAllProducts = createAsyncThunkHandler(API_ENDPOINT.GET_ALL_PRODU
   buildUrlWithParams(API_ENDPOINT.GET_ALL_PRODUCT, payload)
 );
 
+export const getAllProductsNames = createAsyncThunkHandler(API_ENDPOINT.ALL_PRODUCTS_NAME, _get, (payload) =>
+  buildUrlWithParams(API_ENDPOINT.ALL_PRODUCTS_NAME, payload)
+);
+
 export const getCategoryById = createAsyncThunkHandler(API_ENDPOINT.GET_PRODUCT, _get, (payload) => `${API_ENDPOINT.GET_PRODUCT}/${payload.id}`);
 
 export const fetchCategoryProducts = createAsyncThunkHandler(

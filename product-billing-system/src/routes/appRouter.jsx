@@ -103,7 +103,6 @@
 // export default AppRouter;
 
 
-
 import { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import pageData from "./pageData";
@@ -134,27 +133,35 @@ const AppRouter = () => {
       <Suspense fallback={<Loader />}>
         <Routes>
           {pageData.map((page, index) => {
-            let element = <page.component />;
+            // Protected route wrapper
+            const protectedElement = <ProtectedRoutes page={page} />;
 
-            // if page has layout → wrap it
-            if (page.layout) {
-              element = (
-                <Layout>
-                  <page.component />
-                </Layout>
+            // Case 1: MenuLayout pages → use nested route
+            if (page.MenuLayout) {
+              return (
+                <Route
+                  key={index}
+                  path={page.path}
+                  element={<MenuPageLayout />}
+                >
+                  {/* nested route renders the actual component inside Outlet */}
+                  <Route index element={protectedElement} />
+                </Route>
               );
             }
 
-            // if page has MenuLayout → wrap it
-            if (page.MenuLayout) {
-              element = <MenuPageLayout>{element}</MenuPageLayout>;
+            // Case 2: Regular layout pages
+            let element = protectedElement;
+
+            if (page.layout) {
+              element = <Layout>{element}</Layout>;
             }
 
             return (
               <Route
                 key={index}
                 path={page.path}
-                element={<ProtectedRoutes page={page}>{element}</ProtectedRoutes>}
+                element={element}
               />
             );
           })}
@@ -165,4 +172,3 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
-

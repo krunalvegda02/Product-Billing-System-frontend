@@ -9,7 +9,6 @@ import CategoryView from "./CategoryView";
 import store from "../../../redux/Store/store";
 import CategoryModal from "./categoryModal";
 import DeleteCategory from "./DeleteCategory";
-import CategoryDetailModal from "./CategoryDetails/CategoryDetailsModal";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -107,14 +106,6 @@ const Category = () => {
 
       <CategoryModal isOpen={isOpen} onCancel={closeModal} fetchCategoryData={fetchData} mode={selectedCategory ? "edit" : "add"} />
       <DeleteCategory isOpen={isDeleteOpen} onCancel={closeDeleteModal} fetchCategoryData={fetchData} />
-      <CategoryDetailModal
-        isOpen={isDetailOpen}
-        onCancel={closeDetailModal}
-        category={selectedCategory}
-        products={categoryProducts}
-        handleEditClick={handleEditClick}
-        handleDeleteClick={handleDeleteClick}
-      />
     </>
   );
 };

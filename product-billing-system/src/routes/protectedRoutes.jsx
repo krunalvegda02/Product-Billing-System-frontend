@@ -22,6 +22,8 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import Layout from "../components/layout/layout";
+import { Menu } from "lucide-react";
+import MenuPageLayout from "../pages/Common/LayoutOfMenu";
 
 const ProtectedRoutes = ({ page }) => {
   console.log("page", page);
@@ -45,11 +47,16 @@ const ProtectedRoutes = ({ page }) => {
 
   // 4. Authenticated and allowed → render component with layout if needed
   if (page.layout) {
-    console.log(user.role)
     return (
       <Layout role={user.role}>
         <page.component />
       </Layout>
+    );
+  } else if (page.MenuLayout) {
+    return (
+      <MenuPageLayout>
+        <page.component />
+      </MenuPageLayout>
     );
   }
 
