@@ -10,12 +10,12 @@ import { useTheme } from "../../context/ThemeContext";
 const ProductCard = ({ product = {} }) => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
+  
+  // Use theme context
+  const { theme } = useTheme();
+  const themeStyles = theme?.styles || {};
 
   const userId = useSelector((state) => state.auth.user?._id);
-  const currentTheme = useSelector((state) => state.theme.currentTheme) || THEME.GENERAL;
-
-  // Get theme configuration
-  const theme = useTheme();
 
   // Local state
   const [liked, setLiked] = useState(false);
@@ -62,7 +62,7 @@ const ProductCard = ({ product = {} }) => {
 
   if (!product || !product._id) {
     return (
-      <div className={`p-4 border rounded-lg bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border-red-200 shadow-sm ${theme.FONT_PRIMARY}`}>
+      <div className={`p-4 border rounded-lg ${themeStyles.ERROR_BG} ${themeStyles.ERROR} border-red-200 shadow-sm ${themeStyles.FONT_PRIMARY}`}>
         Invalid Product Data
       </div>
     );
@@ -70,7 +70,7 @@ const ProductCard = ({ product = {} }) => {
 
   return (
     <>
-      <div className={`${theme.CARD_BG} ${theme.CARD_HOVER} rounded-2xl overflow-hidden border group ${theme.FONT_PRIMARY}`}>
+      <div className={`${themeStyles.CARD_BG} ${themeStyles.CARD_HOVER} rounded-2xl overflow-hidden border group ${themeStyles.FONT_PRIMARY}`}>
         {/* Image Container */}
         <div className="relative overflow-hidden">
           <img
@@ -88,14 +88,14 @@ const ProductCard = ({ product = {} }) => {
           {/* Loading Skeleton */}
           {!imageLoaded && (
             <div
-              className={`absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse h-48 ${currentTheme === THEME.DARK ? "from-gray-700 to-gray-800" : ""}`}
+              className={`absolute inset-0 animate-pulse h-48 ${themeStyles.TABLE_ROW}`}
             ></div>
           )}
 
           {/* Favorite Button */}
           <button
             onClick={handleLikeToggle}
-            className={`absolute top-3 right-3 p-2 ${theme.BG_ACCENT} rounded-full text-white ${theme.HOVER_SECONDARY_ACCENT} transition-all duration-300 hover:scale-110 ${theme.SHADOW}`}
+            className={`absolute top-3 right-3 p-2 ${themeStyles.BG_ACCENT} rounded-full text-white ${themeStyles.HOVER_SECONDARY_ACCENT} transition-all duration-300 hover:scale-110 ${themeStyles.SHADOW}`}
           >
             <Heart size={18} fill={liked ? "white" : "transparent"} stroke="white" />
           </button>
@@ -103,7 +103,7 @@ const ProductCard = ({ product = {} }) => {
           {/* Rating Badge */}
           {product.rating && (
             <div
-              className={`absolute top-3 left-3 flex items-center gap-1 backdrop-blur-sm px-2 py-1 rounded-full ${currentTheme === THEME.DARK ? "bg-gray-800/90 text-gray-200" : "bg-white/90 text-gray-700"}`}
+              className={`absolute top-3 left-3 flex items-center gap-1 backdrop-blur-sm px-2 py-1 rounded-full ${themeStyles.CARD_BG} ${themeStyles.TEXT_COLOR}`}
             >
               <Star size={14} className="text-yellow-400 fill-yellow-400" />
               <span className="text-sm font-medium">{product.rating}</span>
@@ -113,38 +113,49 @@ const ProductCard = ({ product = {} }) => {
 
         {/* Content Container */}
         <div className="p-5">
-          <h3 className={`text-lg font-semibold ${theme.TEXT_COLOR} mb-2 line-clamp-1 group-hover:${theme.LINK} transition-colors`}>
+          <h3 className={`text-lg font-semibold ${themeStyles.TEXT_COLOR} mb-2 line-clamp-1 group-hover:${themeStyles.LINK} transition-colors`}>
             {product.name}
           </h3>
 
-          {product.description && <p className={`${theme.TEXT_SECONDARY} text-sm mb-3 line-clamp-2`}>{product.description}</p>}
+          {product.description && (
+            <p className={`${themeStyles.TEXT_SECONDARY} text-sm mb-3 line-clamp-2`}>
+              {product.description}
+            </p>
+          )}
 
           <div className="flex items-center justify-between mt-4">
             <div>
-              <p className={`font-bold text-xl ${theme.LINK}`}>₹{product.price}</p>
+              <p className={`font-bold text-xl ${themeStyles.LINK}`}>
+                ₹{product.price}
+              </p>
               {product.originalPrice && product.originalPrice > product.price && (
-                <p className={`${theme.TEXT_SECONDARY} text-sm line-through`}>₹{product.originalPrice}</p>
+                <p className={`${themeStyles.TEXT_SECONDARY} text-sm line-through`}>
+                  ₹{product.originalPrice}
+                </p>
               )}
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={decrement}
-                className={`p-2 rounded-full transition-all duration-300 ${theme.SHADOW} ${
+                className={`p-2 rounded-full transition-all duration-300 ${themeStyles.SHADOW} ${
                   quantity === 0
-                    ? `${currentTheme === THEME.DARK ? "bg-gray-700 text-gray-400" : "bg-gray-100 text-gray-400"} cursor-not-allowed`
-                    : `${theme.BUTTON_SECONDARY} hover:${theme.SHADOW}`
+                    ? `${themeStyles.TABLE_ROW} ${themeStyles.TEXT_SECONDARY} cursor-not-allowed`
+                    : `${themeStyles.BUTTON_SECONDARY} hover:${themeStyles.SHADOW}`
                 }`}
                 disabled={quantity === 0}
               >
                 <Minus size={16} />
               </button>
 
-              <span className={`text-lg font-semibold ${theme.TEXT_COLOR} min-w-[24px] text-center`}>
-                {quantity > 0 ? quantity : <ShoppingCart size={16} className={`${theme.ICON_SECONDARY} mx-auto`} />}
+              <span className={`text-lg font-semibold ${themeStyles.TEXT_COLOR} min-w-[24px] text-center`}>
+                {quantity > 0 ? quantity : <ShoppingCart size={16} className={`${themeStyles.ICON_SECONDARY} mx-auto`} />}
               </span>
 
-              <button onClick={increment} className={`p-2 ${theme.BUTTON} rounded-full transition-all duration-300 hover:scale-105`}>
+              <button 
+                onClick={increment} 
+                className={`p-2 ${themeStyles.BUTTON} rounded-full transition-all duration-300 hover:scale-105`}
+              >
                 <Plus size={16} />
               </button>
             </div>

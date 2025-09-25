@@ -1,6 +1,7 @@
 import React from "react";
 import { COMMON } from "../../../constants/Common";
 import { THEME_CONFIG } from "../../../constants/Theme"; // Import theme config
+import { useTheme } from "../../../context/ThemeContext";
 
 const DashboardOrdersView = ({
   currentOrders,
@@ -21,29 +22,25 @@ const DashboardOrdersView = ({
   status,
   handleSubmit,
   isLoading,
-  theme = "GENERAL" // Add theme prop with default value
 }) => {
-  // console.log(currentOrders);
-
-  // Get the current theme configuration
-  const currentTheme = THEME_CONFIG[theme] || THEME_CONFIG.GENERAL;
+  const { theme } = useTheme();
 
   return (
-    <div className={`p-4 min-h-screen w-full ${currentTheme.BACKGROUND_COLOR}`}>
+    <div className={`p-4 min-h-screen w-full ${theme.BACKGROUND_COLOR}`}>
       <div className="w-full mx-auto">
-        <div className={`flex justify-between items-center mb-4 p-4 rounded-xl ${currentTheme.CARD_BG}`}>
-          <h2 className={`text-2xl font-bold ${currentTheme.TITLE_TEXT}`}>Kitchen Orders</h2>
+        <div className={`flex justify-between items-center mb-4 p-4 rounded-xl ${theme.CARD_BG}`}>
+          <h2 className={`text-2xl font-bold ${theme.TITLE_TEXT}`}>Kitchen Orders</h2>
 
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
-              <label htmlFor="sort-order" className={`mr-2 text-sm font-medium ${currentTheme.TEXT_SECONDARY}`}>
+              <label htmlFor="sort-order" className={`mr-2 text-sm font-medium ${theme.TEXT_SECONDARY}`}>
                 Sort:
               </label>
               <select
                 id="sort-order"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className={`${currentTheme.INPUT} rounded-lg px-3 py-2 text-sm`}
+                className={`${theme.INPUT} rounded-lg px-3 py-2 text-sm`}
               >
                 <option value="desc">Newest First</option>
                 <option value="asc">Oldest First</option>
@@ -52,10 +49,10 @@ const DashboardOrdersView = ({
           </div>
         </div>
 
-        <div className={`rounded-lg shadow overflow-hidden w-full ${currentTheme.CARD_BG} ${currentTheme.CARD_HOVER}`}>
+        <div className={`rounded-lg shadow overflow-hidden w-full ${theme.CARD_BG} ${theme.CARD_HOVER}`}>
           <div className="overflow-x-auto w-full">
             <table className="min-w-full w-full divide-y divide-gray-200">
-              <thead className={currentTheme.TABLE_HEADER}>
+              <thead className={theme.TABLE_HEADER}>
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider w-1/12">ID</th>
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider w-3/12">Item</th>
@@ -66,14 +63,14 @@ const DashboardOrdersView = ({
                   <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider w-2/12">Actions</th>
                 </tr>
               </thead>
-              <tbody className={`divide-y ${currentTheme.TABLE_BORDER}`}>
+              <tbody className={`divide-y ${theme.TABLE_BORDER}`}>
                 <>
                   {isLoading && (
                     <tr>
                       <td colSpan="7" className="text-center py-8">
                         <div className="flex justify-center items-center space-x-2">
-                          <div className={`animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 ${currentTheme.BG_ACCENT}`}></div>
-                          <span className={currentTheme.TEXT_SECONDARY}>Loading orders...</span>
+                          <div className={`animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 ${theme.BG_ACCENT}`}></div>
+                          <span className={theme.TEXT_SECONDARY}>Loading orders...</span>
                         </div>
                       </td>
                     </tr>
@@ -82,34 +79,29 @@ const DashboardOrdersView = ({
                     <tr>
                       <td colSpan="7" className="text-center py-8">
                         <div className="flex flex-col items-center justify-center">
-                          <div className={`text-4xl mb-2 ${currentTheme.ICON_SECONDARY}`}>📦</div>
-                          <p className={`text-lg font-medium ${currentTheme.TEXT_COLOR}`}>No orders found</p>
-                          <p className={`text-sm ${currentTheme.TEXT_SECONDARY}`}>There are no orders matching your criteria</p>
+                          <div className={`text-4xl mb-2 ${theme.ICON_SECONDARY}`}>📦</div>
+                          <p className={`text-lg font-medium ${theme.TEXT_COLOR}`}>No orders found</p>
+                          <p className={`text-sm ${theme.TEXT_SECONDARY}`}>There are no orders matching your criteria</p>
                         </div>
                       </td>
                     </tr>
                   )}
                   {!isLoading &&
                     currentOrders.map((order) => (
-                      <tr 
-                        key={order._id} 
-                        className={`${currentTheme.TABLE_ROW} ${currentTheme.TABLE_ROW_HOVER}`}
-                      >
-                        <td className={`px-4 py-4 whitespace-nowrap text-sm font-medium w-1/12 ${currentTheme.TEXT_COLOR}`}>
-                          {order.orderId}
-                        </td>
+                      <tr key={order._id} className={`${theme.TABLE_ROW} ${theme.TABLE_ROW_HOVER}`}>
+                        <td className={`px-4 py-4 whitespace-nowrap text-sm font-medium w-1/12 ${theme.TEXT_COLOR}`}>{order.orderId}</td>
 
-                        <td className={`px-4 py-4 whitespace-nowrap text-sm w-3/12 ${currentTheme.TEXT_COLOR}`}>
+                        <td className={`px-4 py-4 whitespace-nowrap text-sm w-3/12 ${theme.TEXT_COLOR}`}>
                           {order.menuItems.map((item, idx) => (
                             <div key={idx} className="flex items-center gap-2 mb-1 last:mb-0">
                               <span className="font-medium">{item.productId?.name}</span>
-                              <span className={`text-xs ${currentTheme.TEXT_SECONDARY}`}>× {item.quantity}</span>
+                              <span className={`text-xs ${theme.TEXT_SECONDARY}`}>× {item.quantity}</span>
                             </div>
                           ))}
                         </td>
 
-                        <td className={`px-4 py-4 whitespace-nowrap text-sm w-1/12 ${currentTheme.TEXT_COLOR}`}>
-                          <span className={`font-medium ${currentTheme.BADGE} px-2 py-1 rounded-full`}>
+                        <td className={`px-4 py-4 whitespace-nowrap text-sm w-1/12 ${theme.TEXT_COLOR}`}>
+                          <span className={`font-medium ${theme.BADGE} px-2 py-1 rounded-full`}>
                             {order.menuItems.reduce((sum, item) => sum + item.quantity, 0)}
                           </span>
                         </td>
@@ -120,10 +112,10 @@ const DashboardOrdersView = ({
                             onChange={(e) => {
                               onUpdateStatus(order._id, e.target.value);
                             }}
-                            className={`${currentTheme.INPUT} rounded-lg px-3 py-2 text-sm w-full focus:ring-2 transition-colors`}
+                            className={`${theme.INPUT} rounded-lg px-3 py-2 text-sm w-full focus:ring-2 transition-colors`}
                           >
                             {Object.entries(statusOptions).map(([key, label]) => (
-                              <option key={key} value={key} className={`${currentTheme.TEXT_COLOR}`}>
+                              <option key={key} value={key} className={`${theme.TEXT_COLOR}`}>
                                 {label.charAt(0) + label.slice(1).toLowerCase()}
                               </option>
                             ))}
@@ -138,7 +130,7 @@ const DashboardOrdersView = ({
                               const selectedStaff = staffList.find((s) => s._id === staffId);
                               onAssignStaff(order._id, staffId, selectedStaff?.username);
                             }}
-                            className={`${currentTheme.INPUT} rounded-lg px-3 py-2 text-sm w-full focus:ring-2 transition-colors`}
+                            className={`${theme.INPUT} rounded-lg px-3 py-2 text-sm w-full focus:ring-2 transition-colors`}
                           >
                             <option value="">Unassigned</option>
                             {staffList.map((staff) => (
@@ -149,10 +141,8 @@ const DashboardOrdersView = ({
                           </select>
                         </td>
 
-                        <td className={`px-4 py-4 whitespace-nowrap text-sm font-medium w-2/12 ${currentTheme.TEXT_COLOR}`}>
-                          <span className={`${currentTheme.BADGE_SUCCESS} px-3 py-1 rounded-full`}>
-                            ₹{order.total?.toFixed(2) || "0.00"}
-                          </span>
+                        <td className={`px-4 py-4 whitespace-nowrap text-sm font-medium w-2/12 ${theme.TEXT_COLOR}`}>
+                          <span className={`${theme.BADGE_SUCCESS} px-3 py-1 rounded-full`}>₹{order.total?.toFixed(2) || "0.00"}</span>
                         </td>
 
                         {/* Actions */}
@@ -160,7 +150,7 @@ const DashboardOrdersView = ({
                           <div className="flex space-x-2">
                             <button
                               onClick={() => handleSubmit(order._id)}
-                              className={`px-4 py-2 ${currentTheme.BUTTON} rounded-lg text-sm font-medium transition-colors duration-200`}
+                              className={`px-4 py-2 ${theme.BUTTON} rounded-lg text-sm font-medium transition-colors duration-200`}
                             >
                               Assign
                             </button>
@@ -174,13 +164,13 @@ const DashboardOrdersView = ({
           </div>
 
           {/* Pagination */}
-          <div className={`px-4 py-3 flex items-center justify-between border-t ${currentTheme.TABLE_BORDER} w-full`}>
+          <div className={`px-4 py-3 flex items-center justify-between border-t ${theme.TABLE_BORDER} w-full`}>
             <div className="flex-1 flex items-center justify-between">
               <div>
-                <p className={`text-sm ${currentTheme.TEXT_SECONDARY}`}>
-                  Showing <span className={`font-medium ${currentTheme.TEXT_COLOR}`}>{indexOfFirstOrder + 1}</span> to{" "}
-                  <span className={`font-medium ${currentTheme.TEXT_COLOR}`}>{Math.min(indexOfLastOrder, totalOrders)}</span> of{" "}
-                  <span className={`font-medium ${currentTheme.TEXT_COLOR}`}>{totalOrders}</span> results
+                <p className={`text-sm ${theme.TEXT_SECONDARY}`}>
+                  Showing <span className={`font-medium ${theme.TEXT_COLOR}`}>{indexOfFirstOrder + 1}</span> to{" "}
+                  <span className={`font-medium ${theme.TEXT_COLOR}`}>{Math.min(indexOfLastOrder, totalOrders)}</span> of{" "}
+                  <span className={`font-medium ${theme.TEXT_COLOR}`}>{totalOrders}</span> results
                 </p>
               </div>
               <div>
@@ -189,9 +179,7 @@ const DashboardOrdersView = ({
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                     className={`relative inline-flex items-center px-2 py-2 rounded-l-md border text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
-                      currentPage === 1 
-                        ? `${currentTheme.BUTTON_SECONDARY} border-gray-300 text-gray-500` 
-                        : `${currentTheme.BUTTON_SECONDARY} hover:bg-gray-50`
+                      currentPage === 1 ? `${theme.BUTTON_SECONDARY} border-gray-300 text-gray-500` : `${theme.BUTTON_SECONDARY} hover:bg-gray-50`
                     }`}
                   >
                     <span className="sr-only">Previous</span>
@@ -222,8 +210,8 @@ const DashboardOrdersView = ({
                         onClick={() => handlePageChange(pageNum)}
                         className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors ${
                           currentPage === pageNum
-                            ? `z-10 ${currentTheme.BG_ACCENT} ${currentTheme.TEXT_COLOR} border-${currentTheme.BORDER_COLOR}`
-                            : `${currentTheme.BUTTON_SECONDARY} hover:bg-gray-50`
+                            ? `z-10 ${theme.BG_ACCENT} ${theme.TEXT_COLOR} border-${theme.BORDER_COLOR}`
+                            : `${theme.BUTTON_SECONDARY} hover:bg-gray-50`
                         }`}
                       >
                         {pageNum}
@@ -235,9 +223,9 @@ const DashboardOrdersView = ({
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                     className={`relative inline-flex items-center px-2 py-2 rounded-r-md border text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
-                      currentPage === totalPages 
-                        ? `${currentTheme.BUTTON_SECONDARY} border-gray-300 text-gray-500` 
-                        : `${currentTheme.BUTTON_SECONDARY} hover:bg-gray-50`
+                      currentPage === totalPages
+                        ? `${theme.BUTTON_SECONDARY} border-gray-300 text-gray-500`
+                        : `${theme.BUTTON_SECONDARY} hover:bg-gray-50`
                     }`}
                   >
                     <span className="sr-only">Next</span>

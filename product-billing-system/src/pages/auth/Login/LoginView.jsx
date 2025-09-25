@@ -3,12 +3,10 @@ import React, { useState } from "react";
 import { IMAGES } from "../../../constants/Images";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../constants/RouteNames";
-import { useTheme } from "../../../context/ThemeContext";
 
 const LoginView = ({ loginData, handleChange, submitClick, isLoading = false, errorMessage = "" }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { theme } = useTheme(); // use theme if needed
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-amber-50 to-rose-50">

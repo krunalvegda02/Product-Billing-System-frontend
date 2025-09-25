@@ -21,7 +21,6 @@ const StaffManagementView = ({
   handleAddStaff,
   handleEditStaff,
   handleDeleteStaff,
-  currentTheme = THEME.GENERAL, // Default to GENERAL theme
 }) => {
   // Get the current theme configuration
   const {theme} = useTheme()

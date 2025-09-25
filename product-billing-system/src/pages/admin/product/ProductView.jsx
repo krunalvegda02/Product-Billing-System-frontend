@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ICONS } from "../../../constants/Icons";
 import { THEME_CONFIG, THEME } from "../../../constants/Theme";
 import { Plus, ArrowUpDown, Utensils, ChevronLeft, ChevronRight, Search, Filter, Edit3, Trash2, IndianRupee, Menu, X } from "lucide-react";
+import { useTheme } from "../../../context/ThemeContext";
 
 const ProductView = ({
   currentTheme = THEME.GENERAL,
@@ -19,32 +20,27 @@ const ProductView = ({
   selectedCategory,
   setSelectedCategory,
   categories,
-  totalProducts
+  totalProducts,
 }) => {
-  const theme = THEME_CONFIG[currentTheme] || THEME_CONFIG[THEME.GENERAL];
+  const { theme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <div className={`min-h-screen ${theme.BACKGROUND_GRADIENT} p-4 sm:p-6 mx-auto`}>
       <div className="max-w-7xl mx-auto">
         {/* Header - Redesigned for better spacing */}
-        <div className={`flex flex-col lg:flex-row justify-between lg:items-center mb-6 sm:mb-8 p-4 sm:p-6 ${theme.CARD_BG} rounded-2xl ${theme.SHADOW}`}>
+        <div
+          className={`flex flex-col lg:flex-row justify-between lg:items-center mb-6 sm:mb-8 p-4 sm:p-6 ${theme.CARD_BG} rounded-2xl ${theme.SHADOW}`}
+        >
           {/* Left Section: Title + Mobile Toggle */}
           <div className="flex justify-between items-center w-full lg:w-auto mb-4 lg:mb-0">
             <div>
-              <h1 className={`text-2xl sm:text-3xl font-bold ${theme.TITLE_TEXT}`}>
-                Product Management
-              </h1>
-              <p className={`${theme.TEXT_SECONDARY} mt-1 text-sm sm:text-base`}>
-                {totalProducts} products found
-              </p>
+              <h1 className={`text-2xl sm:text-3xl font-bold ${theme.TITLE_TEXT}`}>Product Management</h1>
+              <p className={`${theme.TEXT_SECONDARY} mt-1 text-sm sm:text-base`}>{totalProducts} products found</p>
             </div>
 
             {/* Mobile menu button */}
-            <button
-              className="lg:hidden p-2 rounded-lg bg-gray-100 ml-3"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
+            <button className="lg:hidden p-2 rounded-lg bg-gray-100 ml-3" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -70,14 +66,16 @@ const ProductView = ({
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Filter size={18} className={theme.ICON_SECONDARY} />
               </div>
-              <select 
-                value={selectedCategory} 
+              <select
+                value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className={`pl-10 pr-8 py-2 w-full ${theme.INPUT} rounded-lg transition`}
               >
                 <option value="all">All Categories</option>
                 {categories.map((category, index) => (
-                  <option key={index} value={category}>{category}</option>
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
                 ))}
               </select>
             </div>
@@ -132,14 +130,16 @@ const ProductView = ({
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Filter size={18} className={theme.ICON_SECONDARY} />
                   </div>
-                  <select 
-                    value={selectedCategory} 
+                  <select
+                    value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className={`pl-10 pr-8 py-2 w-full ${theme.INPUT} rounded-lg transition`}
                   >
                     <option value="all">All Categories</option>
                     {categories.map((category, index) => (
-                      <option key={index} value={category}>{category}</option>
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -215,9 +215,7 @@ const ProductView = ({
                   </div>
                   {product.isPopular && (
                     <div className="absolute top-3 left-3">
-                      <span className={`px-2 py-1 ${theme.BADGE_WARNING} text-white text-xs font-medium rounded-full shadow-sm`}>
-                        Popular
-                      </span>
+                      <span className={`px-2 py-1 ${theme.BADGE_WARNING} text-white text-xs font-medium rounded-full shadow-sm`}>Popular</span>
                     </div>
                   )}
                 </div>
@@ -241,9 +239,7 @@ const ProductView = ({
                     <span className={`text-xs px-2 py-1 ${theme.INFO_BG} ${theme.INFO} rounded-full`}>{product.category || "Uncategorized"}</span>
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
-                        product.status === "available" 
-                          ? `${theme.SUCCESS_BG} ${theme.SUCCESS}` 
-                          : `${theme.ERROR_BG} ${theme.ERROR}`
+                        product.status === "available" ? `${theme.SUCCESS_BG} ${theme.SUCCESS}` : `${theme.ERROR_BG} ${theme.ERROR}`
                       }`}
                     >
                       {product.status || "unknown"}
@@ -276,9 +272,7 @@ const ProductView = ({
                       key={i}
                       onClick={() => changePage(pageNum)}
                       className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full transition ${
-                        currentPage === pageNum
-                          ? `${theme.BUTTON} ${theme.SHADOW}`
-                          : `border ${theme.TABLE_BORDER} hover:${theme.BACKGROUND_COLOR}`
+                        currentPage === pageNum ? `${theme.BUTTON} ${theme.SHADOW}` : `border ${theme.TABLE_BORDER} hover:${theme.BACKGROUND_COLOR}`
                       }`}
                     >
                       {pageNum}

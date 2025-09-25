@@ -144,6 +144,7 @@ const PageData = [
     component: favouriteProducts,
     roles: [ROLE.CUSTOMER],
     isPublic: false,
+    layout:false,
     MenuLayout: true,
   },
   {

@@ -102,48 +102,42 @@
 
 // export default AppRouter;
 
+// AppRouter.jsx
 import { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import pageData from "./pageData";
-import Layout from "../components/layout/layout";
 import MenuPageLayout from "../pages/Common/LayoutOfMenu";
-import { THEME, THEME_CONFIG } from "../constants/Theme";
-import Loading from "../components/commonComponent/Loading";
 import ProtectedRoutes from "./protectedRoutes";
-
-const Loader = () => (
-  <div className={`flex items-center justify-center h-screen ${THEME_CONFIG[THEME.GENERAL].BACKGROUND_COLOR}`}>
-    <div className={`animate-spin rounded-full h-16 w-16 border-t-4 ${THEME_CONFIG[THEME.GENERAL].BORDER_COLOR} border-solid shadow-lg`}></div>
-    <span className={`ml-4 ${THEME_CONFIG[THEME.GENERAL].TEXT_COLOR} font-semibold text-lg`}>
-      <Loading />
-    </span>
-  </div>
-);
+import Loading from "../components/commonComponent/Loading";
 
 const AppRouter = () => {
+  const menuPages = pageData.filter(p => p.MenuLayout);
+  const otherPages = pageData.filter(p => !p.MenuLayout);
+
   return (
     <Router>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loading />}>
         <Routes>
-          {pageData.map((page, index) => {
-            // Protected route wrapper
-            const protectedElement = <ProtectedRoutes page={page} />;
+          {/* Apply Menu layout once */}
+          <Route element={<MenuPageLayout />}>
+            {menuPages.map((page, idx) => (
+              <Route
+                key={`menu-${idx}`}
+                path={page.path}
+                // IMPORTANT: guard must return ONLY the leaf component for Menu pages
+                element={<ProtectedRoutes page={{ ...page, layout: false, MenuLayout: false }} />}
+              />
+            ))}
+          </Route>
 
-            // Case 1: MenuLayout pages → use nested route
-            if (page.MenuLayout) {
-              return (
-                <Route key={index} path={page.path} element={<MenuPageLayout />}>
-                  {/* nested route renders the actual component inside Outlet */}
-                  <Route index element={protectedElement} />
-                </Route>
-              );
-            }
-
-            // Case 2: Regular layout pages
-            let element = protectedElement;
-
-            return <Route key={index} path={page.path} element={element} />;
-          })}
+          {/* All other pages */}
+          {otherPages.map((page, idx) => (
+            <Route
+              key={`other-${idx}`}
+              path={page.path}
+              element={<ProtectedRoutes page={page} />}
+            />
+          ))}
         </Routes>
       </Suspense>
     </Router>
@@ -151,3 +145,4 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
+
