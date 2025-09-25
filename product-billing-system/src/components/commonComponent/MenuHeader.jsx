@@ -2,41 +2,50 @@ import React from "react";
 import { ShoppingCart, Heart, User } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
+import { THEME } from "../../constants/Theme";
 
-
-// ! This component is for top header for customer/ user ,
-//  including login, favorites, cart, and profile avatar.
-
-
-
-
-
-const MenuHeader = ({ hotelName = "My Hotel", onCartClick, onFavoritesClick, onAvatarClick }) => {
+const MenuHeader = ({ 
+  hotelName = "Roast & Relax", 
+  onCartClick, 
+  onFavoritesClick, 
+  onAvatarClick,
+  currentTheme = THEME.GENERAL 
+}) => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { theme } = useTheme();
+
   console.log(user, isAuthenticated);
 
-  const navigate = useNavigate();
-
   return (
-    <header className="flex items-center justify-between px-6 py-4 bg-white shadow-md border-b">
+    <header className={`flex items-center justify-between px-6 py-4 ${theme.BG_HEADER} ${theme.SHADOW} border-b ${theme.BORDER_COLOR}`}>
       {/* Left: Logo or Hotel Name */}
-      <div className="text-2xl font-bold text-green-700">{hotelName}</div>
+      <div className={`text-2xl font-bold ${theme.TEXT_COLOR}`}>{hotelName}</div>
 
-      {/* Right: */}
+      {/* Right: Action Buttons */}
       <div className="flex items-center gap-6">
         {isAuthenticated ? (
           <>
-            <button onClick={onFavoritesClick} className="text-gray-600 hover:text-red-500 transition" title="Favorites">
+            <button 
+              onClick={onFavoritesClick} 
+              className={`${theme.TEXT_SECONDARY} hover:${theme.ERROR} transition-all duration-200 p-2 rounded-lg hover:${theme.ERROR_BG}`}
+              title="Favorites"
+            >
               <Heart size={24} />
             </button>
 
-            <button onClick={onCartClick} className="text-gray-600 hover:text-green-500 transition" title="Cart">
+            <button 
+              onClick={onCartClick} 
+              className={`${theme.TEXT_SECONDARY} hover:${theme.SUCCESS} transition-all duration-200 p-2 rounded-lg hover:${theme.SUCCESS_BG}`}
+              title="Cart"
+            >
               <ShoppingCart size={24} />
             </button>
 
             <button
               onClick={onAvatarClick}
-              className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 hover:bg-gray-300 transition"
+              className={`w-9 h-9 rounded-full ${theme.BG_SECONDARY_ACCENT} flex items-center justify-center ${theme.TEXT_COLOR} hover:${theme.BG_ACCENT} transition-all duration-200 shadow-md`}
               title="Profile"
             >
               <User size={20} />
@@ -45,7 +54,7 @@ const MenuHeader = ({ hotelName = "My Hotel", onCartClick, onFavoritesClick, onA
         ) : (
           <button
             onClick={() => navigate("/login")}
-            className="px-4 py-2 bg-gradient-to-l from-green-600 to-green-400 text-white rounded-lg hover:from-green-700 hover:to-green-500 transition font-medium shadow-md"
+            className={`${theme.BUTTON} px-6 py-2 rounded-xl font-medium shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105`}
           >
             Login
           </button>

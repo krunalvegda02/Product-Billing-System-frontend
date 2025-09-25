@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useToast } from "../../context/ToastContext";
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants/ApiEndPoints";
-import { useTheme } from "../../context/ThemeContext"; // Import theme context
+import { useTheme } from "../../context/ThemeContext"; 
 
 const FeedBackModal = ({ isOpen, onClose }) => {
   const { showToast } = useToast();

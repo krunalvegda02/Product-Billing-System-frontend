@@ -5,12 +5,17 @@ import { toggleProductLiked } from "../../redux/Slices/productSlice";
 import { Heart, Plus, Minus, ShoppingCart, Star } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
 import LoginPromptModal from "../helperComponent/LoginPromptModal";
+import { useTheme } from "../../context/ThemeContext";
 
 const ProductCard = ({ product = {} }) => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
   const userId = useSelector((state) => state.auth.user?._id);
+  const currentTheme = useSelector((state) => state.theme.currentTheme) || THEME.GENERAL;
+
+  // Get theme configuration
+  const theme = useTheme();
 
   // Local state
   const [liked, setLiked] = useState(false);
@@ -56,85 +61,90 @@ const ProductCard = ({ product = {} }) => {
   };
 
   if (!product || !product._id) {
-    return <div className="p-4 border rounded-lg bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border-red-200 shadow-sm">Invalid Product Data</div>;
+    return (
+      <div className={`p-4 border rounded-lg bg-gradient-to-r from-red-50 to-pink-50 text-red-700 border-red-200 shadow-sm ${theme.FONT_PRIMARY}`}>
+        Invalid Product Data
+      </div>
+    );
   }
 
   return (
     <>
-      <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+      <div className={`${theme.CARD_BG} ${theme.CARD_HOVER} rounded-2xl overflow-hidden border group ${theme.FONT_PRIMARY}`}>
         {/* Image Container */}
         <div className="relative overflow-hidden">
           <img
-            src={imageError ? "https://via.placeholder.com/300x200?text=No+Image" : product.thumbnail || "https://via.placeholder.com/300x200?text=No+Image"}
+            src={
+              imageError
+                ? "https://via.placeholder.com/300x200?text=No+Image"
+                : product.thumbnail || "https://via.placeholder.com/300x200?text=No+Image"
+            }
             alt={product.name}
-            className={`w-full h-48 object-cover transition-all duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            className={`w-full h-48 object-cover transition-all duration-500 group-hover:scale-105 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageError(true)}
           />
-          
+
           {/* Loading Skeleton */}
           {!imageLoaded && (
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse h-48"></div>
+            <div
+              className={`absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse h-48 ${currentTheme === THEME.DARK ? "from-gray-700 to-gray-800" : ""}`}
+            ></div>
           )}
-          
+
           {/* Favorite Button */}
           <button
             onClick={handleLikeToggle}
-            className="absolute top-3 right-3 p-2 bg-gradient-to-r from-pink-400 to-red-500 rounded-full text-white hover:from-pink-500 hover:to-red-600 transition-all duration-300 hover:scale-110 shadow-md"
+            className={`absolute top-3 right-3 p-2 ${theme.BG_ACCENT} rounded-full text-white ${theme.HOVER_SECONDARY_ACCENT} transition-all duration-300 hover:scale-110 ${theme.SHADOW}`}
           >
-            <Heart
-              size={18}
-              fill={liked ? "white" : "transparent"}
-              stroke="white"
-            />
+            <Heart size={18} fill={liked ? "white" : "transparent"} stroke="white" />
           </button>
-          
+
           {/* Rating Badge */}
           {product.rating && (
-            <div className="absolute top-3 left-3 flex items-center gap-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full">
+            <div
+              className={`absolute top-3 left-3 flex items-center gap-1 backdrop-blur-sm px-2 py-1 rounded-full ${currentTheme === THEME.DARK ? "bg-gray-800/90 text-gray-200" : "bg-white/90 text-gray-700"}`}
+            >
               <Star size={14} className="text-yellow-400 fill-yellow-400" />
-              <span className="text-sm font-medium text-gray-700">{product.rating}</span>
+              <span className="text-sm font-medium">{product.rating}</span>
             </div>
           )}
         </div>
 
         {/* Content Container */}
         <div className="p-5">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">{product.name}</h3>
-          
-          {product.description && (
-            <p className="text-gray-500 text-sm mb-3 line-clamp-2">{product.description}</p>
-          )}
-          
+          <h3 className={`text-lg font-semibold ${theme.TEXT_COLOR} mb-2 line-clamp-1 group-hover:${theme.LINK} transition-colors`}>
+            {product.name}
+          </h3>
+
+          {product.description && <p className={`${theme.TEXT_SECONDARY} text-sm mb-3 line-clamp-2`}>{product.description}</p>}
+
           <div className="flex items-center justify-between mt-4">
             <div>
-              <p className="text-green-600 font-bold text-xl bg-gradient-to-r from-green-500 to-teal-500 bg-clip-text text-transparent">₹{product.price}</p>
+              <p className={`font-bold text-xl ${theme.LINK}`}>₹{product.price}</p>
               {product.originalPrice && product.originalPrice > product.price && (
-                <p className="text-gray-400 text-sm line-through">₹{product.originalPrice}</p>
+                <p className={`${theme.TEXT_SECONDARY} text-sm line-through`}>₹{product.originalPrice}</p>
               )}
             </div>
-            
+
             <div className="flex items-center gap-2">
               <button
                 onClick={decrement}
-                className={`p-2 rounded-full transition-all duration-300 shadow-sm ${
+                className={`p-2 rounded-full transition-all duration-300 ${theme.SHADOW} ${
                   quantity === 0
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-600 hover:from-blue-200 hover:to-indigo-200 hover:shadow-md"
+                    ? `${currentTheme === THEME.DARK ? "bg-gray-700 text-gray-400" : "bg-gray-100 text-gray-400"} cursor-not-allowed`
+                    : `${theme.BUTTON_SECONDARY} hover:${theme.SHADOW}`
                 }`}
                 disabled={quantity === 0}
               >
                 <Minus size={16} />
               </button>
-              
-              <span className="text-lg font-semibold text-gray-700 min-w-[24px] text-center">
-                {quantity > 0 ? quantity : <ShoppingCart size={16} className="text-gray-400 mx-auto" />}
+
+              <span className={`text-lg font-semibold ${theme.TEXT_COLOR} min-w-[24px] text-center`}>
+                {quantity > 0 ? quantity : <ShoppingCart size={16} className={`${theme.ICON_SECONDARY} mx-auto`} />}
               </span>
-              
-              <button
-                onClick={increment}
-                className="p-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full hover:from-green-600 hover:to-teal-600 transition-all duration-300 hover:shadow-lg hover:scale-105"
-              >
+
+              <button onClick={increment} className={`p-2 ${theme.BUTTON} rounded-full transition-all duration-300 hover:scale-105`}>
                 <Plus size={16} />
               </button>
             </div>

@@ -1,16 +1,9 @@
 import React from "react";
-import { 
-  Plus, 
-  Edit2, 
-  Trash2, 
-  ChevronLeft, 
-  ChevronRight, 
-  Folder 
-} from "lucide-react"; // Lucide icons
+import { Plus, Edit2, Trash2, ChevronLeft, ChevronRight, Folder } from "lucide-react"; // Lucide icons
 import { THEME_CONFIG } from "../../../constants/Theme";
+import { useTheme } from "../../../context/ThemeContext";
 
 const CategoryView = ({
-  currentTheme,
   categories,
   openModal,
   handleDeleteClick,
@@ -20,9 +13,9 @@ const CategoryView = ({
   currentPage,
   totalPages,
   changePage,
-  handleCategoryClick
+  handleCategoryClick,
 }) => {
-  const theme = THEME_CONFIG[currentTheme] || THEME_CONFIG.GENERAL;
+  const {theme} = useTheme();
 
   return (
     <div className={`min-h-screen p-6 ${theme.BACKGROUND_COLOR}`}>
@@ -70,10 +63,7 @@ const CategoryView = ({
               <Folder size={64} className={`mx-auto mb-4 ${theme.ICON_SECONDARY}`} />
               <h3 className={`text-xl font-semibold mb-2 ${theme.TEXT_COLOR}`}>No categories found</h3>
               <p className={`mb-6 ${theme.TEXT_SECONDARY}`}>Get started by creating your first category</p>
-              <button
-                onClick={openModal}
-                className={`${theme.BUTTON} px-6 py-3 rounded-lg font-medium`}
-              >
+              <button onClick={openModal} className={`${theme.BUTTON} px-6 py-3 rounded-lg font-medium`}>
                 Create First Category
               </button>
             </div>
@@ -87,7 +77,10 @@ const CategoryView = ({
                 >
                   <div className="relative">
                     <img
-                      src={category.categoryThumbnail || "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"}
+                      src={
+                        category.categoryThumbnail ||
+                        "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                      }
                       alt={category.categoryName}
                       className="w-full h-40 object-cover"
                     />
@@ -116,16 +109,10 @@ const CategoryView = ({
                   </div>
 
                   <div className="p-4 flex flex-col justify-between grow">
-                    <h3 className={`text-lg font-semibold mb-2 ${theme.TEXT_COLOR}`}>
-                      {category.categoryName || "Unnamed Category"}
-                    </h3>
+                    <h3 className={`text-lg font-semibold mb-2 ${theme.TEXT_COLOR}`}>{category.categoryName || "Unnamed Category"}</h3>
                     <div className={`mt-4 pt-3 border-t flex justify-between items-center ${theme.TABLE_BORDER}`}>
-                      <span className={`text-xs ${theme.TEXT_SECONDARY}`}>
-                        Products: {category.productCount || 0}
-                      </span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${theme.BADGE}`}>
-                        {category.status || "Active"}
-                      </span>
+                      <span className={`text-xs ${theme.TEXT_SECONDARY}`}>Products: {category.productCount || 0}</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${theme.BADGE}`}>{category.status || "Active"}</span>
                     </div>
                   </div>
                 </div>

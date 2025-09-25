@@ -4,7 +4,7 @@ import CustomModal from "../../helperComponent/customModal";
 import { THEME, THEME_CONFIG } from "../../../constants/Theme"; 
 import { useTheme } from "../../../context/ThemeContext";
 
-const AddCategoryModal = ({ isOpen, onCancel, onSave, currentTheme = THEME.GENERAL }) => {
+const AddCategoryModal = ({ isOpen, onCancel, onSave }) => {
   const [categoryName, setCategoryName] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);

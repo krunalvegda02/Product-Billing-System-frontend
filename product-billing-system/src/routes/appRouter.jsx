@@ -102,7 +102,6 @@
 
 // export default AppRouter;
 
-
 import { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import pageData from "./pageData";
@@ -113,15 +112,9 @@ import Loading from "../components/commonComponent/Loading";
 import ProtectedRoutes from "./protectedRoutes";
 
 const Loader = () => (
-  <div
-    className={`flex items-center justify-center h-screen ${THEME_CONFIG[THEME.GENERAL].BACKGROUND_COLOR}`}
-  >
-    <div
-      className={`animate-spin rounded-full h-16 w-16 border-t-4 ${THEME_CONFIG[THEME.GENERAL].BORDER_COLOR} border-solid shadow-lg`}
-    ></div>
-    <span
-      className={`ml-4 ${THEME_CONFIG[THEME.GENERAL].TEXT_COLOR} font-semibold text-lg`}
-    >
+  <div className={`flex items-center justify-center h-screen ${THEME_CONFIG[THEME.GENERAL].BACKGROUND_COLOR}`}>
+    <div className={`animate-spin rounded-full h-16 w-16 border-t-4 ${THEME_CONFIG[THEME.GENERAL].BORDER_COLOR} border-solid shadow-lg`}></div>
+    <span className={`ml-4 ${THEME_CONFIG[THEME.GENERAL].TEXT_COLOR} font-semibold text-lg`}>
       <Loading />
     </span>
   </div>
@@ -139,11 +132,7 @@ const AppRouter = () => {
             // Case 1: MenuLayout pages → use nested route
             if (page.MenuLayout) {
               return (
-                <Route
-                  key={index}
-                  path={page.path}
-                  element={<MenuPageLayout />}
-                >
+                <Route key={index} path={page.path} element={<MenuPageLayout />}>
                   {/* nested route renders the actual component inside Outlet */}
                   <Route index element={protectedElement} />
                 </Route>
@@ -153,17 +142,7 @@ const AppRouter = () => {
             // Case 2: Regular layout pages
             let element = protectedElement;
 
-            if (page.layout) {
-              element = <Layout>{element}</Layout>;
-            }
-
-            return (
-              <Route
-                key={index}
-                path={page.path}
-                element={element}
-              />
-            );
+            return <Route key={index} path={page.path} element={element} />;
           })}
         </Routes>
       </Suspense>
